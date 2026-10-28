@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fusion_core/fusion_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../design_system/tokens.dart';
+
 /// Loads the bundled SMT IV data once.
 final gameDataProvider = FutureProvider<GameData>((ref) async {
   const base = 'assets/data/smt4';
@@ -37,21 +39,29 @@ final rulesProvider = Provider<Smt4Rules?>((ref) {
 class AppSettings {
   const AppSettings({
     this.themeMode = ThemeMode.dark,
+    this.palette = Palette.strangeJourney,
     this.disabledDemons = const {},
     this.loaded = false,
   });
 
   final ThemeMode themeMode;
+  final Palette palette;
   final Set<String> disabledDemons;
   final bool loaded;
 
   FusionSettings get fusion => FusionSettings(disabledDemons: disabledDemons);
 
-  AppSettings copyWith({ThemeMode? themeMode, Set<String>? disabledDemons, bool? loaded}) => AppSettings(
-        themeMode: themeMode ?? this.themeMode,
-        disabledDemons: disabledDemons ?? this.disabledDemons,
-        loaded: loaded ?? this.loaded,
-      );
+  AppSettings copyWith({
+    ThemeMode? themeMode,
+    Palette? palette,
+    Set<String>? disabledDemons,
+    bool? loaded,
+  }) => AppSettings(
+    themeMode: themeMode ?? this.themeMode,
+    palette: palette ?? this.palette,
+    disabledDemons: disabledDemons ?? this.disabledDemons,
+    loaded: loaded ?? this.loaded,
+  );
 }
 
 class SettingsNotifier extends Notifier<AppSettings> {
@@ -74,6 +84,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
     final j = jsonDecode(raw) as Map<String, dynamic>;
     state = AppSettings(
       themeMode: ThemeMode.values.byName(j['themeMode'] as String? ?? 'dark'),
+      palette: Palette.values.byName(j['palette'] as String? ?? Palette.strangeJourney.name),
       disabledDemons: ((j['disabledDemons'] as List?) ?? const []).cast<String>().toSet(),
       loaded: true,
     );
@@ -85,6 +96,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
       _key,
       jsonEncode({
         'themeMode': state.themeMode.name,
+        'palette': state.palette.name,
         'disabledDemons': state.disabledDemons.toList(),
       }),
     );
@@ -92,6 +104,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   void setThemeMode(ThemeMode mode) {
     state = state.copyWith(themeMode: mode);
+    _save();
+  }
+
+  void setPalette(Palette palette) {
+    state = state.copyWith(palette: palette);
     _save();
   }
 
@@ -144,14 +161,13 @@ class CompendiumFilter {
     int? Function()? maxLevel,
     String? Function()? skill,
     bool? showDisabled,
-  }) =>
-      CompendiumFilter(
-        query: query ?? this.query,
-        races: races ?? this.races,
-        maxLevel: maxLevel != null ? maxLevel() : this.maxLevel,
-        skill: skill != null ? skill() : this.skill,
-        showDisabled: showDisabled ?? this.showDisabled,
-      );
+  }) => CompendiumFilter(
+    query: query ?? this.query,
+    races: races ?? this.races,
+    maxLevel: maxLevel != null ? maxLevel() : this.maxLevel,
+    skill: skill != null ? skill() : this.skill,
+    showDisabled: showDisabled ?? this.showDisabled,
+  );
 }
 
 class CompendiumFilterNotifier extends Notifier<CompendiumFilter> {
@@ -172,8 +188,9 @@ class CompendiumFilterNotifier extends Notifier<CompendiumFilter> {
   void clear() => state = CompendiumFilter(query: state.query);
 }
 
-final compendiumFilterProvider =
-    NotifierProvider<CompendiumFilterNotifier, CompendiumFilter>(CompendiumFilterNotifier.new);
+final compendiumFilterProvider = NotifierProvider<CompendiumFilterNotifier, CompendiumFilter>(
+  CompendiumFilterNotifier.new,
+);
 
 /// Demons matching the current filter, sorted by level.
 final filteredDemonsProvider = Provider<List<Demon>>((ref) {
@@ -189,7 +206,7 @@ final filteredDemonsProvider = Provider<List<Demon>>((ref) {
           (f.races.isEmpty || f.races.contains(d.race)) &&
           (f.maxLevel == null || d.level <= f.maxLevel!) &&
           (f.skill == null || d.skills.any((s) => s.name == f.skill)))
-        d
+        d,
   ];
 });
 
@@ -203,10 +220,10 @@ class TreePrefs {
   final int? maxLevel;
 
   TreePrefs copyWith({RecipeSort? sort, bool? hideElement, int? Function()? maxLevel}) => TreePrefs(
-        sort: sort ?? this.sort,
-        hideElement: hideElement ?? this.hideElement,
-        maxLevel: maxLevel != null ? maxLevel() : this.maxLevel,
-      );
+    sort: sort ?? this.sort,
+    hideElement: hideElement ?? this.hideElement,
+    maxLevel: maxLevel != null ? maxLevel() : this.maxLevel,
+  );
 }
 
 class TreePrefsNotifier extends Notifier<TreePrefs> {

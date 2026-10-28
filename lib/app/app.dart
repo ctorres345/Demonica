@@ -18,17 +18,15 @@ final _router = GoRouter(
       builder: (context, state, child) => AppShell(location: state.uri.path, child: child),
       routes: [
         GoRoute(path: '/', redirect: (_, _) => '/smt4/demons'),
-        GoRoute(
-          path: '/smt4/demons',
-          builder: (context, state) => const _CompendiumRoute(),
-        ),
+        GoRoute(path: '/smt4/demons', builder: (context, state) => const _CompendiumRoute()),
         GoRoute(
           path: '/smt4/demon/:id',
           builder: (context, state) => _CompendiumRoute(demonId: state.pathParameters['id']),
           routes: [
             GoRoute(
               path: 'tree',
-              builder: (context, state) => _CompendiumRoute(demonId: state.pathParameters['id'], tree: true),
+              builder: (context, state) =>
+                  _CompendiumRoute(demonId: state.pathParameters['id'], tree: true),
             ),
           ],
         ),
@@ -45,11 +43,12 @@ class DemonicaApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(settingsProvider.select((s) => s.themeMode));
+    final palette = ref.watch(settingsProvider.select((s) => s.palette));
     return MaterialApp.router(
       title: 'Demonica',
       debugShowCheckedModeBanner: false,
-      theme: demonicaTheme(Brightness.light),
-      darkTheme: demonicaTheme(Brightness.dark),
+      theme: demonicaTheme(Brightness.light, palette: palette),
+      darkTheme: demonicaTheme(Brightness.dark, palette: palette),
       themeMode: mode,
       routerConfig: _router,
     );
@@ -91,7 +90,8 @@ class AppShell extends StatelessWidget {
               ),
               onDestinationSelected: (i) => context.go(_tabs[i].path),
               destinations: [
-                for (final t in _tabs) NavigationRailDestination(icon: Icon(t.icon), label: Text(t.label)),
+                for (final t in _tabs)
+                  NavigationRailDestination(icon: Icon(t.icon), label: Text(t.label)),
               ],
             ),
             VerticalDivider(width: 1, color: dc.outline),
@@ -135,11 +135,14 @@ class _CompendiumRoute extends StatelessWidget {
         Expanded(
           child: demonId == null
               ? Center(
-                  child: Text('Pick a demon to see its stats and recipes.', style: context.tt.bodySmall),
+                  child: Text(
+                    'Pick a demon to see its stats and recipes.',
+                    style: context.tt.bodySmall,
+                  ),
                 )
               : tree
-                  ? RecipeTreeScreen(demonId: demonId!, embedded: true)
-                  : DemonDetailScreen(demonId: demonId!, embedded: true),
+              ? RecipeTreeScreen(demonId: demonId!, embedded: true)
+              : DemonDetailScreen(demonId: demonId!, embedded: true),
         ),
       ],
     );

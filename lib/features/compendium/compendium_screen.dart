@@ -94,28 +94,36 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
                     label: filter.skill == null ? 'Skill' : 'Skill: ${filter.skill}',
                     selected: filter.skill != null,
                     onTap: () => showSkillPicker(context, ref),
-                    onClear: filter.skill == null ? null : () => ref.read(compendiumFilterProvider.notifier).setSkill(null),
+                    onClear: filter.skill == null
+                        ? null
+                        : () => ref.read(compendiumFilterProvider.notifier).setSkill(null),
                   ),
                   _chip(
                     label: filter.maxLevel == null ? 'Level' : 'Lv ≤ ${filter.maxLevel}',
                     selected: filter.maxLevel != null,
                     onTap: () => showLevelPicker(context, ref, filter.maxLevel),
-                    onClear: filter.maxLevel == null ? null : () => ref.read(compendiumFilterProvider.notifier).setMaxLevel(null),
+                    onClear: filter.maxLevel == null
+                        ? null
+                        : () => ref.read(compendiumFilterProvider.notifier).setMaxLevel(null),
                   ),
                   _chip(
                     label: filter.races.isEmpty
                         ? 'Race'
                         : filter.races.length == 1
-                            ? filter.races.first
-                            : '${filter.races.length} races',
+                        ? filter.races.first
+                        : '${filter.races.length} races',
                     selected: filter.races.isNotEmpty,
                     onTap: () => showRacePicker(context, ref, gd.races),
-                    onClear: filter.races.isEmpty ? null : () => ref.read(compendiumFilterProvider.notifier).setRaces({}),
+                    onClear: filter.races.isEmpty
+                        ? null
+                        : () => ref.read(compendiumFilterProvider.notifier).setRaces({}),
                   ),
                   _chip(
                     label: 'Show disabled',
                     selected: filter.showDisabled,
-                    onTap: () => ref.read(compendiumFilterProvider.notifier).setShowDisabled(!filter.showDisabled),
+                    onTap: () => ref
+                        .read(compendiumFilterProvider.notifier)
+                        .setShowDisabled(!filter.showDisabled),
                   ),
                 ],
               ),
@@ -124,7 +132,10 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
               padding: const EdgeInsets.fromLTRB(Space.x4, Space.x1, Space.x4, Space.x1),
               child: Row(
                 children: [
-                  Text('${demons.length} demons · sorted by level'.toUpperCase(), style: context.tt.labelSmall),
+                  Text(
+                    '${demons.length} demons · sorted by level'.toUpperCase(),
+                    style: context.tt.labelSmall,
+                  ),
                   const Spacer(),
                   if (filter.isActive)
                     TextButton(
@@ -139,7 +150,10 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
                   ? Center(
                       child: Padding(
                         padding: const EdgeInsets.all(Space.x6),
-                        child: Text('No demon matches. Try fewer filters.', style: context.tt.bodySmall),
+                        child: Text(
+                          'No demon matches. Try fewer filters.',
+                          style: context.tt.bodySmall,
+                        ),
                       ),
                     )
                   : ListView.builder(
@@ -170,7 +184,12 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
     return d.race;
   }
 
-  Widget _chip({required String label, required bool selected, required VoidCallback onTap, VoidCallback? onClear}) {
+  Widget _chip({
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+    VoidCallback? onClear,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(right: Space.x2),
       child: FilterChip(

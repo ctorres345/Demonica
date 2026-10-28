@@ -22,7 +22,10 @@ class DemonDetailScreen extends ConsumerWidget {
     }
     final demon = data.demonsById[demonId];
     if (demon == null) {
-      return Scaffold(appBar: AppBar(), body: Center(child: Text('No demon called "$demonId".')));
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(child: Text('No demon called "$demonId".')),
+      );
     }
     final dc = context.dc;
     final settings = ref.watch(settingsProvider);
@@ -33,12 +36,20 @@ class DemonDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: embedded ? null : BackButton(onPressed: () => context.canPop() ? context.pop() : context.go('/smt4/demons')),
+        leading: embedded
+            ? null
+            : BackButton(
+                onPressed: () => context.canPop() ? context.pop() : context.go('/smt4/demons'),
+              ),
         automaticallyImplyLeading: !embedded,
-        title: Text.rich(TextSpan(children: [
-          TextSpan(text: 'Compendium / ', style: context.tt.labelMedium),
-          TextSpan(text: demon.name),
-        ])),
+        title: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: 'Compendium / ', style: context.tt.labelMedium),
+              TextSpan(text: demon.name),
+            ],
+          ),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, Space.x8),
@@ -64,8 +75,12 @@ class DemonDetailScreen extends ConsumerWidget {
             const SizedBox(height: Space.x2),
             _AilmentLine(demon.ailments),
           ],
-          SectionHeader('Skills',
-              trailing: demon.isEnemyOnly ? null : '${demon.innateSkillCount} innate · $freeSlots free slots'),
+          SectionHeader(
+            'Skills',
+            trailing: demon.isEnemyOnly
+                ? null
+                : '${demon.innateSkillCount} innate · $freeSlots free slots',
+          ),
           for (final s in demon.skills)
             Padding(
               padding: const EdgeInsets.only(bottom: Space.x1),
@@ -85,7 +100,9 @@ class DemonDetailScreen extends ConsumerWidget {
               child: _Note(demon.prereq!),
             ),
           if (demon.fusion == FusionKind.accident)
-            const _Note('Fusion accidents are random. They cannot be planned, so this demon has no recipe tree.')
+            const _Note(
+              'Fusion accidents are random. They cannot be planned, so this demon has no recipe tree.',
+            )
           else if (demon.isEnemyOnly)
             const _Note('This demon only appears as an enemy. It cannot be fused or recruited.')
           else if (recipes.isEmpty)
@@ -99,7 +116,10 @@ class DemonDetailScreen extends ConsumerWidget {
             if (recipes.length > 5)
               Padding(
                 padding: const EdgeInsets.only(top: Space.x1, bottom: Space.x2),
-                child: Text('+${recipes.length - 5} more in the tree', style: context.tt.labelMedium?.copyWith(color: dc.accent)),
+                child: Text(
+                  '+${recipes.length - 5} more in the tree',
+                  style: context.tt.labelMedium?.copyWith(color: dc.accent),
+                ),
               ),
             const SizedBox(height: Space.x2),
             FilledButton.icon(
@@ -111,14 +131,22 @@ class DemonDetailScreen extends ConsumerWidget {
           if (demon.evolvesFrom != null || demon.evolvesTo != null) ...[
             const SectionHeader('Evolution'),
             if (demon.evolvesFrom != null)
-              _LinkLine('Evolves from ${demon.evolvesFrom}', () => context.go('/smt4/demon/${slugify(demon.evolvesFrom!)}')),
+              _LinkLine(
+                'Evolves from ${demon.evolvesFrom}',
+                () => context.go('/smt4/demon/${slugify(demon.evolvesFrom!)}'),
+              ),
             if (demon.evolvesTo != null)
-              _LinkLine('Evolves into ${demon.evolvesTo} at level ${demon.evolvesAtLevel}',
-                  () => context.go('/smt4/demon/${slugify(demon.evolvesTo!)}')),
+              _LinkLine(
+                'Evolves into ${demon.evolvesTo} at level ${demon.evolvesAtLevel}',
+                () => context.go('/smt4/demon/${slugify(demon.evolvesTo!)}'),
+              ),
           ],
           if (!demon.isEnemyOnly) ...[
             const SectionHeader('Used in fusions'),
-            Text('$usedIn fusions use ${demon.name} as an ingredient.', style: context.tt.bodySmall),
+            Text(
+              '$usedIn fusions use ${demon.name} as an ingredient.',
+              style: context.tt.bodySmall,
+            ),
           ],
           const SizedBox(height: Space.x4),
           Text('Re-summon from Compendium: ${macca(demon.price)}', style: context.tt.labelMedium),
@@ -128,11 +156,11 @@ class DemonDetailScreen extends ConsumerWidget {
   }
 
   String? _howToGetTrailing(Demon d, int count) => switch (d.fusion) {
-        FusionKind.special => 'special fusion',
-        FusionKind.accident => 'fusion accident',
-        FusionKind.enemy => null,
-        FusionKind.normal => '$count recipes',
-      };
+    FusionKind.special => 'special fusion',
+    FusionKind.accident => 'fusion accident',
+    FusionKind.enemy => null,
+    FusionKind.normal => '$count recipes',
+  };
 }
 
 class _StatsGrid extends StatelessWidget {
@@ -142,7 +170,15 @@ class _StatsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dc = context.dc;
-    final cells = [('HP', s.hp), ('MP', s.mp), ('ST', s.st), ('DX', s.dx), ('MA', s.ma), ('AG', s.ag), ('LU', s.lu)];
+    final cells = [
+      ('HP', s.hp),
+      ('MP', s.mp),
+      ('ST', s.st),
+      ('DX', s.dx),
+      ('MA', s.ma),
+      ('AG', s.ag),
+      ('LU', s.lu),
+    ];
     return Row(
       children: [
         for (final (label, v) in cells)
@@ -151,11 +187,23 @@ class _StatsGrid extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                decoration: BoxDecoration(color: dc.surface, border: Border.all(color: dc.outline), borderRadius: Radii.borderSmall),
+                decoration: BoxDecoration(
+                  color: dc.surface,
+                  border: Border.all(color: dc.outline),
+                  borderRadius: Radii.borderSmall,
+                ),
                 child: Column(
                   children: [
                     Text(label, style: context.tt.labelSmall?.copyWith(fontSize: 9)),
-                    Text('$v', style: TextStyle(fontFamily: Fonts.mono, fontSize: 14, fontWeight: FontWeight.w500, color: dc.text)),
+                    Text(
+                      '$v',
+                      style: TextStyle(
+                        fontFamily: Fonts.mono,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: dc.text,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -193,13 +241,13 @@ class _Note extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          border: Border.all(color: context.dc.outline, style: BorderStyle.solid),
-          borderRadius: Radii.borderSmall,
-        ),
-        child: Text(text, style: context.tt.bodySmall),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+    decoration: BoxDecoration(
+      border: Border.all(color: context.dc.outline, style: BorderStyle.solid),
+      borderRadius: Radii.borderSmall,
+    ),
+    child: Text(text, style: context.tt.bodySmall),
+  );
 }
 
 class _LinkLine extends StatelessWidget {
@@ -209,13 +257,15 @@ class _LinkLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(children: [
-            Expanded(child: Text(text, style: context.tt.bodyMedium)),
-            Icon(Icons.chevron_right, size: 18, color: context.dc.textMuted),
-          ]),
-        ),
-      );
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Expanded(child: Text(text, style: context.tt.bodyMedium)),
+          Icon(Icons.chevron_right, size: 18, color: context.dc.textMuted),
+        ],
+      ),
+    ),
+  );
 }

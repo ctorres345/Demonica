@@ -17,7 +17,10 @@ Future<void> showRacePicker(BuildContext context, WidgetRef ref, List<String> ra
           final selected = ref.watch(compendiumFilterProvider).races;
           return Column(
             children: [
-              _SheetHeader('Race', onClear: () => ref.read(compendiumFilterProvider.notifier).setRaces({})),
+              _SheetHeader(
+                'Race',
+                onClear: () => ref.read(compendiumFilterProvider.notifier).setRaces({}),
+              ),
               Expanded(
                 child: ListView(
                   controller: scroll,
@@ -31,7 +34,8 @@ Future<void> showRacePicker(BuildContext context, WidgetRef ref, List<String> ra
                           FilterChip(
                             label: Text(r),
                             selected: selected.contains(r),
-                            onSelected: (_) => ref.read(compendiumFilterProvider.notifier).toggleRace(r),
+                            onSelected: (_) =>
+                                ref.read(compendiumFilterProvider.notifier).toggleRace(r),
                           ),
                       ],
                     ),
@@ -49,7 +53,10 @@ Future<void> showRacePicker(BuildContext context, WidgetRef ref, List<String> ra
 Future<void> showLevelPicker(BuildContext context, WidgetRef ref, int? current) {
   return showModalBottomSheet(
     context: context,
-    builder: (ctx) => _LevelSheet(initial: current ?? 99, onChanged: ref.read(compendiumFilterProvider.notifier).setMaxLevel),
+    builder: (ctx) => _LevelSheet(
+      initial: current ?? 99,
+      onChanged: ref.read(compendiumFilterProvider.notifier).setMaxLevel,
+    ),
   );
 }
 
@@ -71,10 +78,13 @@ class _LevelSheetState extends State<_LevelSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SheetHeader('Max level', onClear: () {
-            widget.onChanged(null);
-            Navigator.pop(context);
-          }),
+          _SheetHeader(
+            'Max level',
+            onClear: () {
+              widget.onChanged(null);
+              Navigator.pop(context);
+            },
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Space.x4),
             child: Row(
@@ -95,8 +105,10 @@ class _LevelSheetState extends State<_LevelSheet> {
           ),
           Padding(
             padding: const EdgeInsets.all(Space.x4),
-            child: Text('Shows demons at or below this level. Set it to your current level to see what you can fuse now.',
-                style: context.tt.bodySmall),
+            child: Text(
+              'Shows demons at or below this level. Set it to your current level to see what you can fuse now.',
+              style: context.tt.bodySmall,
+            ),
           ),
         ],
       ),
@@ -132,14 +144,18 @@ class _SkillSheetState extends ConsumerState<_SkillSheet> {
     final data = ref.watch(gameDataProvider).value;
     if (data == null) return const SizedBox.shrink();
     final q = _q.toLowerCase();
-    final skills = data.skills.values.where((s) => q.isEmpty || s.name.toLowerCase().contains(q)).toList()
-      ..sort((a, b) => a.name.compareTo(b.name));
+    final skills =
+        data.skills.values.where((s) => q.isEmpty || s.name.toLowerCase().contains(q)).toList()
+          ..sort((a, b) => a.name.compareTo(b.name));
     return Column(
       children: [
-        _SheetHeader('Who learns this skill?', onClear: () {
-          ref.read(compendiumFilterProvider.notifier).setSkill(null);
-          Navigator.pop(context);
-        }),
+        _SheetHeader(
+          'Who learns this skill?',
+          onClear: () {
+            ref.read(compendiumFilterProvider.notifier).setSkill(null);
+            Navigator.pop(context);
+          },
+        ),
         Padding(
           padding: const EdgeInsets.fromLTRB(Space.x4, 0, Space.x4, Space.x2),
           child: TextField(
@@ -155,7 +171,9 @@ class _SkillSheetState extends ConsumerState<_SkillSheet> {
             itemCount: skills.length,
             itemBuilder: (ctx, i) {
               final s = skills[i];
-              final learners = data.demons.values.where((d) => d.skills.any((x) => x.name == s.name)).length;
+              final learners = data.demons.values
+                  .where((d) => d.skills.any((x) => x.name == s.name))
+                  .length;
               return Padding(
                 padding: const EdgeInsets.only(bottom: Space.x1),
                 child: SkillRow(

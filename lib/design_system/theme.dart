@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'tokens.dart';
 
-ThemeData demonicaTheme(Brightness brightness) {
+ThemeData demonicaTheme(Brightness brightness, {Palette palette = Palette.strangeJourney}) {
   final dark = brightness == Brightness.dark;
-  final c = dark ? DemonicaColors.dark : DemonicaColors.light;
+  final c = DemonicaColors.of(palette, brightness);
   final e = dark ? ElementColors.dark : ElementColors.light;
 
   final scheme = ColorScheme(
@@ -35,13 +35,13 @@ ThemeData demonicaTheme(Brightness brightness) {
   );
 
   TextStyle display(double size, {FontWeight weight = FontWeight.w600}) => TextStyle(
-        fontFamily: Fonts.display,
-        fontSize: size,
-        fontWeight: weight,
-        color: c.text,
-        letterSpacing: 0.2,
-        height: 1.1,
-      );
+    fontFamily: Fonts.display,
+    fontSize: size,
+    fontWeight: weight,
+    color: c.text,
+    letterSpacing: 0.2,
+    height: 1.1,
+  );
 
   return base.copyWith(
     scaffoldBackgroundColor: c.bg,
@@ -102,9 +102,18 @@ ThemeData demonicaTheme(Brightness brightness) {
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       hintStyle: TextStyle(fontFamily: Fonts.mono, fontSize: 13, color: c.textMuted),
-      border: OutlineInputBorder(borderRadius: Radii.borderSmall, borderSide: BorderSide(color: c.outline)),
-      enabledBorder: OutlineInputBorder(borderRadius: Radii.borderSmall, borderSide: BorderSide(color: c.outline)),
-      focusedBorder: OutlineInputBorder(borderRadius: Radii.borderSmall, borderSide: BorderSide(color: c.accent, width: 1.5)),
+      border: OutlineInputBorder(
+        borderRadius: Radii.borderSmall,
+        borderSide: BorderSide(color: c.outline),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: Radii.borderSmall,
+        borderSide: BorderSide(color: c.outline),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: Radii.borderSmall,
+        borderSide: BorderSide(color: c.accent, width: 1.5),
+      ),
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: c.bg,
@@ -114,7 +123,10 @@ ThemeData demonicaTheme(Brightness brightness) {
         TextStyle(fontFamily: Fonts.mono, fontSize: 10.5, letterSpacing: 0.6, color: c.textMuted),
       ),
       iconTheme: WidgetStateProperty.resolveWith(
-        (s) => IconThemeData(color: s.contains(WidgetState.selected) ? c.accent : c.textMuted, size: 22),
+        (s) => IconThemeData(
+          color: s.contains(WidgetState.selected) ? c.accent : c.textMuted,
+          size: 22,
+        ),
       ),
     ),
     navigationRailTheme: NavigationRailThemeData(
@@ -123,7 +135,11 @@ ThemeData demonicaTheme(Brightness brightness) {
       selectedIconTheme: IconThemeData(color: c.accent),
       unselectedIconTheme: IconThemeData(color: c.textMuted),
       selectedLabelTextStyle: TextStyle(fontFamily: Fonts.mono, fontSize: 10.5, color: c.accent),
-      unselectedLabelTextStyle: TextStyle(fontFamily: Fonts.mono, fontSize: 10.5, color: c.textMuted),
+      unselectedLabelTextStyle: TextStyle(
+        fontFamily: Fonts.mono,
+        fontSize: 10.5,
+        color: c.textMuted,
+      ),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
@@ -148,9 +164,11 @@ ThemeData demonicaTheme(Brightness brightness) {
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? c.onAccent : c.textMuted),
+        (s) => s.contains(WidgetState.selected) ? c.onAccent : c.textMuted,
+      ),
       trackColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? c.accent : c.surfaceHigh),
+        (s) => s.contains(WidgetState.selected) ? c.accent : c.surfaceHigh,
+      ),
       trackOutlineColor: WidgetStatePropertyAll(c.outline),
     ),
     bottomSheetTheme: BottomSheetThemeData(

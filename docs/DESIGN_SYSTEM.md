@@ -1,20 +1,22 @@
-# Design system: "Terminal"
+# Design system: "Demonica"
 
-Dark-first Material 3 with a light twin. Tokens live in `lib/design_system/tokens.dart`, the `ThemeData` in `theme.dart`, components in `components.dart`. Screens read colors through `context.dc` (DemonicaColors) and `context.ec` (ElementColors), never as literals, so a direction swap is one file.
+Dark-first Material 3 with a light twin. The dark palette is modelled on the Strange Journey and SMT I menus: deep navy panels, light-blue outlines, white text, red for danger, orange/green for HP/MP style accents. Tokens live in `lib/design_system/tokens.dart`, the `ThemeData` in `theme.dart`, components in `components.dart`. Screens read colors through `context.dc` (DemonicaColors) and `context.ec` (ElementColors), never as literals, so a direction swap is one file.
 
 ## Color
 
+Two palettes, picked in Settings and saved on the device (`Palette` in tokens.dart): **Strange Journey** (default, table below) and **SMT IV** (bg #0D0D0D, surface #1E1E1E, outline #4A4A4A, accent orange #F7941D, danger red #D8232F, ok green #6FD621). Both have a dark and a light variant.
+
 | Token | Dark | Light | Use |
 | --- | --- | --- | --- |
-| bg | #0B0D10 | #F4F6F8 | page |
-| surface | #12161B | #FFFFFF | cards, inputs, rows |
-| surfaceHigh | #1A2028 | #ECEFF3 | selected rows |
-| outline | #2A323D | #D6DCE3 | 1px borders (no shadows) |
-| text | #E6EDF3 | #14181D | |
-| textMuted | #8B98A5 | #5B6672 | captions, mono labels |
-| accent | #3DDCFF | #0A7EA4 | the one accent: selection, primary button, tree root |
-| danger | #FF4D6D | #C62F3F | weaknesses, accidents |
-| ok | #3DDC97 | #2F7D4F | owned / recruitable (v0.2+) |
+| bg | #050B16 | #EEF3FA | page |
+| surface | #0C1C36 | #FFFFFF | cards, inputs, rows |
+| surfaceHigh | #173159 | #DCE7F5 | selected rows |
+| outline | #3F74B4 | #9DB7D8 | 1px borders (no shadows) |
+| text | #F4F7FF | #0A1A33 | |
+| textMuted | #92B4E0 | #4A6A94 | captions, mono labels |
+| accent | #5CC8FF | #1F6FD0 | the one accent: selection, primary button, tree root |
+| danger | #E63946 | #C8252C | weaknesses, accidents |
+| ok | #4FE06A | #1F8A3A | owned / recruitable (v0.2+) |
 | law / neutral / chaos | blue / grey / red | | alignment tags |
 
 Element colors (phys, gun, fire, ice, elec, force, light, dark, almighty, ailment, recovery, support, passive) are defined for both themes and always appear next to a text label.
@@ -49,4 +51,4 @@ Below 840dp: bottom navigation (Demons, Skills, Settings) and push navigation. A
 
 ## Prototypes
 
-The three explored directions (Terminal, Gauntlet, Codex) are in the "Demonica Prototypes" artifact shared in the project thread. Terminal is implemented; the other two are token swaps.
+The three explored directions (Terminal, Gauntlet, Codex) are in the "Demonica Prototypes" artifact shared in the project thread. The implemented palette started from Terminal and was retuned to the Strange Journey / SMT I colors; the other two are token swaps.

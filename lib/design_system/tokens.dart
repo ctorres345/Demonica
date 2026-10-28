@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens for the "Terminal" direction (dark-first) and its light twin.
+/// Design tokens for the "Demonica" direction (dark-first) and its light twin.
+/// The dark palette follows the Strange Journey / SMT I menus: deep navy
+/// panels, light-blue outlines, white text, red for the selected command,
+/// orange HP and green MP.
 /// Screens never use these directly; they read [DemonicaColors] and
 /// [ElementColors] from the theme so a direction swap is one file.
 abstract final class Fonts {
@@ -29,6 +32,20 @@ abstract final class Radii {
 /// Layout breakpoint: at or above this width the app uses a rail and two panes.
 const double wideBreakpoint = 840;
 
+/// Which game's menu colors the app imitates. Each palette has a dark and a
+/// light variant; the theme mode picks between them.
+enum Palette {
+  /// Strange Journey / SMT I: navy panels, light-blue outlines, white text.
+  strangeJourney('Strange Journey'),
+
+  /// SMT IV: black and grey panels, orange headers, yellow stat labels,
+  /// green bars, a red line under the selected item.
+  smt4('SMT IV');
+
+  const Palette(this.label);
+  final String label;
+}
+
 @immutable
 class DemonicaColors extends ThemeExtension<DemonicaColors> {
   const DemonicaColors({
@@ -52,35 +69,75 @@ class DemonicaColors extends ThemeExtension<DemonicaColors> {
   final Color law, neutral, chaos;
 
   static const dark = DemonicaColors(
-    bg: Color(0xFF0B0D10),
-    surface: Color(0xFF12161B),
-    surfaceHigh: Color(0xFF1A2028),
-    outline: Color(0xFF2A323D),
-    text: Color(0xFFE6EDF3),
-    textMuted: Color(0xFF8B98A5),
-    accent: Color(0xFF3DDCFF),
-    onAccent: Color(0xFF061A20),
-    danger: Color(0xFFFF4D6D),
-    ok: Color(0xFF3DDC97),
-    law: Color(0xFF5B8DEF),
-    neutral: Color(0xFF9AA7B4),
-    chaos: Color(0xFFFF6B57),
+    bg: Color(0xFF050B16),
+    surface: Color(0xFF0C1C36),
+    surfaceHigh: Color(0xFF173159),
+    outline: Color(0xFF3F74B4),
+    text: Color(0xFFF4F7FF),
+    textMuted: Color(0xFF92B4E0),
+    accent: Color(0xFF5CC8FF),
+    onAccent: Color(0xFF03101F),
+    danger: Color(0xFFE63946),
+    ok: Color(0xFF4FE06A),
+    law: Color(0xFF6FA3FF),
+    neutral: Color(0xFFA9C0DE),
+    chaos: Color(0xFFFF7A4A),
   );
 
-  static const light = DemonicaColors(
-    bg: Color(0xFFF4F6F8),
+  static const smt4Dark = DemonicaColors(
+    bg: Color(0xFF0D0D0D),
+    surface: Color(0xFF1E1E1E),
+    surfaceHigh: Color(0xFF333333),
+    outline: Color(0xFF4A4A4A),
+    text: Color(0xFFFAFAFA),
+    textMuted: Color(0xFFA9A9A9),
+    accent: Color(0xFFF7941D),
+    onAccent: Color(0xFF1A0E00),
+    danger: Color(0xFFD8232F),
+    ok: Color(0xFF6FD621),
+    law: Color(0xFF7AA6FF),
+    neutral: Color(0xFFBDBDBD),
+    chaos: Color(0xFFFF6A3D),
+  );
+
+  static const smt4Light = DemonicaColors(
+    bg: Color(0xFFF2F2F2),
     surface: Color(0xFFFFFFFF),
-    surfaceHigh: Color(0xFFECEFF3),
-    outline: Color(0xFFD6DCE3),
-    text: Color(0xFF14181D),
-    textMuted: Color(0xFF5B6672),
-    accent: Color(0xFF0A7EA4),
+    surfaceHigh: Color(0xFFE3E3E3),
+    outline: Color(0xFFBDBDBD),
+    text: Color(0xFF141414),
+    textMuted: Color(0xFF5F5F5F),
+    accent: Color(0xFFD97706),
     onAccent: Color(0xFFFFFFFF),
-    danger: Color(0xFFC62F3F),
-    ok: Color(0xFF2F7D4F),
+    danger: Color(0xFFB91C1C),
+    ok: Color(0xFF2E8B1E),
     law: Color(0xFF2F5FD0),
-    neutral: Color(0xFF6B7684),
+    neutral: Color(0xFF6B6B6B),
     chaos: Color(0xFFC8451F),
+  );
+
+  static DemonicaColors of(Palette palette, Brightness brightness) {
+    final dark = brightness == Brightness.dark;
+    return switch (palette) {
+      Palette.strangeJourney => dark ? DemonicaColors.dark : DemonicaColors.light,
+      Palette.smt4 => dark ? smt4Dark : smt4Light,
+    };
+  }
+
+  static const light = DemonicaColors(
+    bg: Color(0xFFEEF3FA),
+    surface: Color(0xFFFFFFFF),
+    surfaceHigh: Color(0xFFDCE7F5),
+    outline: Color(0xFF9DB7D8),
+    text: Color(0xFF0A1A33),
+    textMuted: Color(0xFF4A6A94),
+    accent: Color(0xFF1F6FD0),
+    onAccent: Color(0xFFFFFFFF),
+    danger: Color(0xFFC8252C),
+    ok: Color(0xFF1F8A3A),
+    law: Color(0xFF2F5FD0),
+    neutral: Color(0xFF5E7596),
+    chaos: Color(0xFFC84A1F),
   );
 
   Color alignmentColor(String alignment) {
@@ -140,7 +197,7 @@ class ElementColors extends ThemeExtension<ElementColors> {
     'ail': Color(0xFFE08AD6),
     'sup': Color(0xFF9FB4FF),
     'spe': Color(0xFF9FB4FF),
-    'pas': Color(0xFF8B98A5),
+    'pas': Color(0xFF92B4E0),
   });
 
   static const light = ElementColors({
@@ -168,7 +225,7 @@ class ElementColors extends ThemeExtension<ElementColors> {
     if (other == null) return this;
     return ElementColors({
       for (final e in colors.entries)
-        e.key: Color.lerp(e.value, other.colors[e.key] ?? e.value, t)!
+        e.key: Color.lerp(e.value, other.colors[e.key] ?? e.value, t)!,
     });
   }
 }

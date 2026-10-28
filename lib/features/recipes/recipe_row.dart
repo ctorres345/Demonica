@@ -37,17 +37,26 @@ class RecipeRow extends StatelessWidget {
       if (i > 0) {
         spans.add(TextSpan(text: '  ×  ', style: context.tt.labelMedium));
       }
-      spans.add(WidgetSpan(
-        alignment: PlaceholderAlignment.middle,
-        child: InkWell(
-          onTap: onIngredientTap == null ? null : () => onIngredientTap!(name),
-          child: Text.rich(TextSpan(children: [
-            TextSpan(text: name, style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-            if (d != null)
-              TextSpan(text: ' ${d.race} ${d.level}', style: context.tt.labelMedium),
-          ])),
+      spans.add(
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: InkWell(
+            onTap: onIngredientTap == null ? null : () => onIngredientTap!(name),
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: name,
+                    style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  if (d != null)
+                    TextSpan(text: ' ${d.race} ${d.level}', style: context.tt.labelMedium),
+                ],
+              ),
+            ),
+          ),
         ),
-      ));
+      );
     }
     final kindTag = switch (recipe.kind) {
       RecipeKind.special => Tag('Special', color: dc.accent),
@@ -71,9 +80,14 @@ class RecipeRow extends StatelessWidget {
             if (expanded != null) ...[
               SizedBox(
                 width: 18,
-                child: Text(expanded! ? '▾' : '▸',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontFamily: Fonts.mono, color: expanded! ? dc.accent : dc.textMuted)),
+                child: Text(
+                  expanded! ? '▾' : '▸',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: Fonts.mono,
+                    color: expanded! ? dc.accent : dc.textMuted,
+                  ),
+                ),
               ),
               const SizedBox(width: 6),
             ],

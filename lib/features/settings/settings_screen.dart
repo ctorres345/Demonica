@@ -30,6 +30,19 @@ class SettingsScreen extends ConsumerWidget {
             selected: {settings.themeMode},
             onSelectionChanged: (s) => notifier.setThemeMode(s.first),
           ),
+          const SectionHeader('Palette'),
+          Text(
+            'Which game\'s menu colors the app uses. Works with dark and light.',
+            style: context.tt.bodySmall,
+          ),
+          const SizedBox(height: Space.x2),
+          SegmentedButton<Palette>(
+            segments: [
+              for (final p in Palette.values) ButtonSegment(value: p, label: Text(p.label)),
+            ],
+            selected: {settings.palette},
+            onSelectionChanged: (s) => notifier.setPalette(s.first),
+          ),
           const SectionHeader('Demons that count for fusion'),
           Text(
             'Turn off demons you have not unlocked yet. They disappear from recipes and from the tree.',
@@ -43,11 +56,15 @@ class SettingsScreen extends ConsumerWidget {
                   children: [
                     Expanded(child: Text(cat.category, style: context.tt.titleMedium)),
                     TextButton(
-                      onPressed: () => notifier.setDemonsEnabled([for (final e in cat.entries) ...e.demons], true),
+                      onPressed: () => notifier.setDemonsEnabled([
+                        for (final e in cat.entries) ...e.demons,
+                      ], true),
                       child: const Text('All on'),
                     ),
                     TextButton(
-                      onPressed: () => notifier.setDemonsEnabled([for (final e in cat.entries) ...e.demons], false),
+                      onPressed: () => notifier.setDemonsEnabled([
+                        for (final e in cat.entries) ...e.demons,
+                      ], false),
                       child: const Text('All off'),
                     ),
                   ],

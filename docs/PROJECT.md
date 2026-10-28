@@ -11,7 +11,7 @@ Make fusing a specific demon in SMT IV easy: pick the target, filter by the skil
 | Game scope | SMT IV only in v1, behind `GameRules` so SMT IV Apocalypse, SMT V and Persona can be added with one adapter and one import script each |
 | Platforms | Web first (GitHub Pages, installable PWA, which is also the iOS path), Android APK on GitHub Releases, iOS IPA best effort. No app stores |
 | Player state | On the device only, no accounts. Save slots come in v0.2 |
-| Visual style | "Terminal": dark-first Material 3, one cyan accent, 1px outlines, Chakra Petch + Inter + JetBrains Mono. Light theme mirrors it |
+| Visual style | Strange Journey / SMT I inspired: dark-first Material 3, navy panels, light-blue outlines, one blue accent, Chakra Petch + Inter + JetBrains Mono. Light theme mirrors it |
 | Data | Upstream JSON at a pinned commit, decoded by `tool/import_smt4.dart`. Our own curated `locations.json` later |
 | Tracker | Jira project DEM |
 

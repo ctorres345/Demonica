@@ -21,18 +21,27 @@ class RecipeTreeScreen extends ConsumerWidget {
     if (data == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
     final demon = data.demonsById[demonId];
     if (demon == null) {
-      return Scaffold(appBar: AppBar(), body: Center(child: Text('No demon called "$demonId".')));
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(child: Text('No demon called "$demonId".')),
+      );
     }
     final prefs = ref.watch(treePrefsProvider);
     final notifier = ref.read(treePrefsProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(onPressed: () => context.canPop() ? context.pop() : context.go('/smt4/demon/${demon.id}')),
-        title: Text.rich(TextSpan(children: [
-          TextSpan(text: 'Tree / ', style: context.tt.labelMedium),
-          TextSpan(text: demon.name),
-        ])),
+        leading: BackButton(
+          onPressed: () => context.canPop() ? context.pop() : context.go('/smt4/demon/${demon.id}'),
+        ),
+        title: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: 'Tree / ', style: context.tt.labelMedium),
+              TextSpan(text: demon.name),
+            ],
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: 'Open demon page',
@@ -49,11 +58,25 @@ class RecipeTreeScreen extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: Space.x4, vertical: Space.x2),
               children: [
-                _chip('Cheapest first', prefs.sort == RecipeSort.cheapest, () => notifier.setSort(RecipeSort.cheapest)),
-                _chip('Lowest level first', prefs.sort == RecipeSort.lowestLevel, () => notifier.setSort(RecipeSort.lowestLevel)),
-                _chip('Hide element recipes', prefs.hideElement, () => notifier.setHideElement(!prefs.hideElement)),
                 _chip(
-                  prefs.maxLevel == null ? 'Max ingredient level' : 'Ingredients ≤ Lv ${prefs.maxLevel}',
+                  'Cheapest first',
+                  prefs.sort == RecipeSort.cheapest,
+                  () => notifier.setSort(RecipeSort.cheapest),
+                ),
+                _chip(
+                  'Lowest level first',
+                  prefs.sort == RecipeSort.lowestLevel,
+                  () => notifier.setSort(RecipeSort.lowestLevel),
+                ),
+                _chip(
+                  'Hide element recipes',
+                  prefs.hideElement,
+                  () => notifier.setHideElement(!prefs.hideElement),
+                ),
+                _chip(
+                  prefs.maxLevel == null
+                      ? 'Max ingredient level'
+                      : 'Ingredients ≤ Lv ${prefs.maxLevel}',
                   prefs.maxLevel != null,
                   () => _pickMaxLevel(context, prefs.maxLevel, notifier.setMaxLevel),
                 ),
@@ -80,9 +103,14 @@ class RecipeTreeScreen extends ConsumerWidget {
   }
 
   Widget _chip(String label, bool selected, VoidCallback onTap) => Padding(
-        padding: const EdgeInsets.only(right: Space.x2),
-        child: FilterChip(label: Text(label), selected: selected, showCheckmark: false, onSelected: (_) => onTap()),
-      );
+    padding: const EdgeInsets.only(right: Space.x2),
+    child: FilterChip(
+      label: Text(label),
+      selected: selected,
+      showCheckmark: false,
+      onSelected: (_) => onTap(),
+    ),
+  );
 
   Future<void> _pickMaxLevel(BuildContext context, int? current, ValueChanged<int?> onChanged) {
     return showModalBottomSheet(
@@ -133,18 +161,33 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
           children: [
             SizedBox(
               width: 18,
-              child: Text(canExpand ? (_open ? '▾' : '▸') : '·',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontFamily: Fonts.mono, color: _open && canExpand ? dc.accent : dc.textMuted)),
+              child: Text(
+                canExpand ? (_open ? '▾' : '▸') : '·',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: Fonts.mono,
+                  color: _open && canExpand ? dc.accent : dc.textMuted,
+                ),
+              ),
             ),
             const SizedBox(width: 6),
             Expanded(
-              child: Text.rich(TextSpan(children: [
-                TextSpan(text: d.name, style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-                TextSpan(text: '  ${d.race} ${d.level}', style: context.tt.labelMedium),
-              ])),
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: d.name,
+                      style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    TextSpan(text: '  ${d.race} ${d.level}', style: context.tt.labelMedium),
+                  ],
+                ),
+              ),
             ),
-            if (d.fusion != FusionKind.normal || d.unlockCategory != null) ...[FusionTag(d), const SizedBox(width: 8)],
+            if (d.fusion != FusionKind.normal || d.unlockCategory != null) ...[
+              FusionTag(d),
+              const SizedBox(width: 8),
+            ],
             Text(countLabel, style: context.tt.labelMedium),
             IconButton(
               tooltip: 'Open ${d.name}',
@@ -247,7 +290,9 @@ class _Indent extends StatelessWidget {
       margin: const EdgeInsets.only(left: 12),
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
-        border: Border(left: BorderSide(color: accent ? dc.accent.withValues(alpha: 0.5) : dc.outline, width: 2)),
+        border: Border(
+          left: BorderSide(color: accent ? dc.accent.withValues(alpha: 0.5) : dc.outline, width: 2),
+        ),
       ),
       child: child,
     );
@@ -274,38 +319,45 @@ class _MaxLevelSheetState extends State<_MaxLevelSheet> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x2, 0),
-            child: Row(children: [
-              Text('Max ingredient level', style: context.tt.titleLarge),
-              const Spacer(),
-              TextButton(
+            child: Row(
+              children: [
+                Text('Max ingredient level', style: context.tt.titleLarge),
+                const Spacer(),
+                TextButton(
                   onPressed: () {
                     widget.onChanged(null);
                     Navigator.pop(context);
                   },
-                  child: const Text('Clear')),
-              TextButton(onPressed: () => Navigator.pop(context), child: const Text('Done')),
-            ]),
+                  child: const Text('Clear'),
+                ),
+                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Done')),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Space.x4),
-            child: Row(children: [
-              Expanded(
-                child: Slider(
-                  value: _v,
-                  min: 1,
-                  max: 99,
-                  divisions: 98,
-                  onChanged: (v) => setState(() => _v = v),
-                  onChangeEnd: (v) => widget.onChanged(v.round()),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Slider(
+                    value: _v,
+                    min: 1,
+                    max: 99,
+                    divisions: 98,
+                    onChanged: (v) => setState(() => _v = v),
+                    onChangeEnd: (v) => widget.onChanged(v.round()),
+                  ),
                 ),
-              ),
-              SizedBox(width: 56, child: LevelBadge(_v.round(), size: 22)),
-            ]),
+                SizedBox(width: 56, child: LevelBadge(_v.round(), size: 22)),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(Space.x4),
-            child: Text('Hides recipes that need an ingredient above this level. Set it to your level.',
-                style: context.tt.bodySmall),
+            child: Text(
+              'Hides recipes that need an ingredient above this level. Set it to your level.',
+              style: context.tt.bodySmall,
+            ),
           ),
         ],
       ),

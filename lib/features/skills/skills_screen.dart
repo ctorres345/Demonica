@@ -23,13 +23,18 @@ class _SkillsScreenState extends ConsumerState<SkillsScreen> {
     final data = ref.watch(gameDataProvider).value;
     if (data == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
     final q = _q.toLowerCase();
-    final skills = data.skills.values
-        .where((s) => (q.isEmpty || s.name.toLowerCase().contains(q)) && (_element == null || s.element == _element))
-        .toList()
-      ..sort((a, b) {
-        final e = a.element.compareTo(b.element);
-        return e != 0 ? e : a.rank.compareTo(b.rank);
-      });
+    final skills =
+        data.skills.values
+            .where(
+              (s) =>
+                  (q.isEmpty || s.name.toLowerCase().contains(q)) &&
+                  (_element == null || s.element == _element),
+            )
+            .toList()
+          ..sort((a, b) {
+            final e = a.element.compareTo(b.element);
+            return e != 0 ? e : a.rank.compareTo(b.rank);
+          });
     final learnerCount = <String, int>{};
     for (final d in data.demons.values) {
       for (final s in d.skills) {
@@ -44,7 +49,10 @@ class _SkillsScreenState extends ConsumerState<SkillsScreen> {
             padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, 0),
             child: TextField(
               onChanged: (v) => setState(() => _q = v),
-              decoration: const InputDecoration(hintText: 'Search skills', prefixIcon: Icon(Icons.search, size: 18)),
+              decoration: const InputDecoration(
+                hintText: 'Search skills',
+                prefixIcon: Icon(Icons.search, size: 18),
+              ),
             ),
           ),
           SizedBox(
