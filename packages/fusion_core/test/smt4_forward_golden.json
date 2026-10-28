@@ -1,0 +1,44 @@
+{
+"Pixie": {
+"Angel": "Apsaras",
+"Dwarf": "Stonka",
+"Slime": "Knocker",
+"Erthys": "Napaea",
+"Aeros": "Spriggan",
+"Jack Frost": "Aeros",
+"Napaea": "Aeros",
+"Centaur": "Archangel",
+"Mokoi": "Archangel",
+"Fomorian": "Archangel",
+"Knocker": "Kaso",
+"Cerberus": "Rukh"
+},
+"Erthys": {
+"Angel": "Archangel",
+"Dwarf": "Knocker",
+"Slime": null,
+"Aeros": null,
+"Jack Frost": "Spriggan",
+"Pixie": "Napaea",
+"Napaea": null,
+"Centaur": null,
+"Mokoi": null,
+"Fomorian": "Mokoi",
+"Knocker": "Hua Po",
+"Cerberus": null
+},
+"Jack Frost": {
+"Angel": "Senri",
+"Dwarf": "Kaso",
+"Slime": "Hua Po",
+"Erthys": "Spriggan",
+"Aeros": "Pyro Jack",
+"Pixie": "Aeros",
+"Napaea": "Aeros",
+"Centaur": "Archangel",
+"Mokoi": "Archangel",
+"Fomorian": "Archangel",
+"Knocker": "Kaso",
+"Cerberus": "Rukh"
+}
+}
