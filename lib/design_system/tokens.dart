@@ -40,10 +40,24 @@ enum Palette {
 
   /// SMT IV: black and grey panels, orange headers, yellow stat labels,
   /// green bars, a red line under the selected item.
-  smt4('SMT IV');
+  smt4('SMT IV'),
+
+  /// Codex: parchment and ink with one deep red accent, like a printed
+  /// compendium. Light by default; its dark twin is ink on dark leather.
+  codex('Codex');
 
   const Palette(this.label);
   final String label;
+
+  /// The theme mode a palette looks best in; used when the user picks a
+  /// palette on the welcome screen without choosing dark or light.
+  ThemeMode get preferredMode => this == Palette.codex ? ThemeMode.light : ThemeMode.dark;
+
+  String get blurb => switch (this) {
+    Palette.strangeJourney => 'Navy panels, light-blue lines, white text.',
+    Palette.smt4 => 'Black and grey panels, orange highlights.',
+    Palette.codex => 'Parchment and ink, one deep red accent.',
+  };
 }
 
 @immutable
@@ -116,11 +130,44 @@ class DemonicaColors extends ThemeExtension<DemonicaColors> {
     chaos: Color(0xFFC8451F),
   );
 
+  static const codexLight = DemonicaColors(
+    bg: Color(0xFFF3EFE6),
+    surface: Color(0xFFFBF8F1),
+    surfaceHigh: Color(0xFFECE6D8),
+    outline: Color(0xFFCFC6B2),
+    text: Color(0xFF1D1A14),
+    textMuted: Color(0xFF6B6457),
+    accent: Color(0xFF8F1D2C),
+    onAccent: Color(0xFFFFFFFF),
+    danger: Color(0xFFC62F3F),
+    ok: Color(0xFF2F7D4F),
+    law: Color(0xFF2F5FD0),
+    neutral: Color(0xFF6B6457),
+    chaos: Color(0xFFC8451F),
+  );
+
+  static const codexDark = DemonicaColors(
+    bg: Color(0xFF17130E),
+    surface: Color(0xFF221C15),
+    surfaceHigh: Color(0xFF32291F),
+    outline: Color(0xFF4D4232),
+    text: Color(0xFFF3EDE0),
+    textMuted: Color(0xFFB3A891),
+    accent: Color(0xFFE05A6B),
+    onAccent: Color(0xFF2A0A10),
+    danger: Color(0xFFFF6B6B),
+    ok: Color(0xFF8FD07A),
+    law: Color(0xFF7FA0F0),
+    neutral: Color(0xFFB3A891),
+    chaos: Color(0xFFFF8A5B),
+  );
+
   static DemonicaColors of(Palette palette, Brightness brightness) {
     final dark = brightness == Brightness.dark;
     return switch (palette) {
       Palette.strangeJourney => dark ? DemonicaColors.dark : DemonicaColors.light,
       Palette.smt4 => dark ? smt4Dark : smt4Light,
+      Palette.codex => dark ? codexDark : codexLight,
     };
   }
 

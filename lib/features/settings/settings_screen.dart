@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../../design_system/components.dart';
+import '../../design_system/palette_card.dart';
 import '../../design_system/tokens.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -20,28 +22,27 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Space.x4, Space.x2, Space.x4, Space.x8),
         children: [
-          const SectionHeader('Theme'),
-          SegmentedButton<ThemeMode>(
-            segments: const [
-              ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
-              ButtonSegment(value: ThemeMode.light, label: Text('Light')),
-              ButtonSegment(value: ThemeMode.system, label: Text('System')),
-            ],
-            selected: {settings.themeMode},
-            onSelectionChanged: (s) => notifier.setThemeMode(s.first),
-          ),
           const SectionHeader('Palette'),
           Text(
-            'Which game\'s menu colors the app uses. Works with dark and light.',
+            'Which game\'s menu colors the app uses. Every palette works in dark and light.',
             style: context.tt.bodySmall,
           ),
           const SizedBox(height: Space.x2),
-          SegmentedButton<Palette>(
-            segments: [
-              for (final p in Palette.values) ButtonSegment(value: p, label: Text(p.label)),
-            ],
-            selected: {settings.palette},
-            onSelectionChanged: (s) => notifier.setPalette(s.first),
+          PalettePicker(
+            selected: settings.palette,
+            brightness: brightnessFor(context, settings.themeMode),
+            onChanged: notifier.setPalette,
+          ),
+          const SectionHeader('Dark or light'),
+          ThemeModePicker(selected: settings.themeMode, onChanged: notifier.setThemeMode),
+          const SizedBox(height: Space.x2),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => context.go('/welcome'),
+              icon: const Icon(Icons.replay, size: 18),
+              label: const Text('Open the welcome screen again'),
+            ),
           ),
           const SectionHeader('Demons that count for fusion'),
           Text(

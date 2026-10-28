@@ -41,11 +41,15 @@ class AppSettings {
     this.themeMode = ThemeMode.dark,
     this.palette = Palette.strangeJourney,
     this.disabledDemons = const {},
+    this.onboarded = false,
     this.loaded = false,
   });
 
   final ThemeMode themeMode;
   final Palette palette;
+
+  /// True once the user has been through the welcome screen.
+  final bool onboarded;
   final Set<String> disabledDemons;
   final bool loaded;
 
@@ -55,10 +59,12 @@ class AppSettings {
     ThemeMode? themeMode,
     Palette? palette,
     Set<String>? disabledDemons,
+    bool? onboarded,
     bool? loaded,
   }) => AppSettings(
     themeMode: themeMode ?? this.themeMode,
     palette: palette ?? this.palette,
+    onboarded: onboarded ?? this.onboarded,
     disabledDemons: disabledDemons ?? this.disabledDemons,
     loaded: loaded ?? this.loaded,
   );
@@ -85,6 +91,8 @@ class SettingsNotifier extends Notifier<AppSettings> {
     state = AppSettings(
       themeMode: ThemeMode.values.byName(j['themeMode'] as String? ?? 'dark'),
       palette: Palette.values.byName(j['palette'] as String? ?? Palette.strangeJourney.name),
+      onboarded:
+          j['onboarded'] as bool? ?? true, // settings saved before the welcome screen existed
       disabledDemons: ((j['disabledDemons'] as List?) ?? const []).cast<String>().toSet(),
       loaded: true,
     );
@@ -97,6 +105,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
       jsonEncode({
         'themeMode': state.themeMode.name,
         'palette': state.palette.name,
+        'onboarded': state.onboarded,
         'disabledDemons': state.disabledDemons.toList(),
       }),
     );
@@ -107,8 +116,13 @@ class SettingsNotifier extends Notifier<AppSettings> {
     _save();
   }
 
-  void setPalette(Palette palette) {
-    state = state.copyWith(palette: palette);
+  void setPalette(Palette palette, {ThemeMode? mode}) {
+    state = state.copyWith(palette: palette, themeMode: mode);
+    _save();
+  }
+
+  void setOnboarded(bool v) {
+    state = state.copyWith(onboarded: v);
     _save();
   }
 

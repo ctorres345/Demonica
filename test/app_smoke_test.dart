@@ -45,7 +45,11 @@ void main() {
 
     expect(find.text('Lilith'), findsWidgets);
     expect(find.text('Lullaby'), findsOneWidget);
-    await tester.scrollUntilVisible(find.text('OPEN RECIPE TREE'), 200, scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(
+      find.text('OPEN RECIPE TREE'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('OPEN RECIPE TREE'), findsOneWidget);
     expect(find.textContaining('Black Maria'), findsWidgets);
   });

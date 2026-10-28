@@ -6,36 +6,52 @@ import '../design_system/theme.dart';
 import '../design_system/tokens.dart';
 import '../features/compendium/compendium_screen.dart';
 import '../features/compendium/demon_detail_screen.dart';
+import '../features/onboarding/welcome_screen.dart';
 import '../features/recipes/recipe_tree_screen.dart';
 import '../features/settings/settings_screen.dart';
 import '../features/skills/skills_screen.dart';
 import 'providers.dart';
 
-final _router = GoRouter(
-  initialLocation: '/smt4/demons',
-  routes: [
-    ShellRoute(
-      builder: (context, state, child) => AppShell(location: state.uri.path, child: child),
-      routes: [
-        GoRoute(path: '/', redirect: (_, _) => '/smt4/demons'),
-        GoRoute(path: '/smt4/demons', builder: (context, state) => const _CompendiumRoute()),
-        GoRoute(
-          path: '/smt4/demon/:id',
-          builder: (context, state) => _CompendiumRoute(demonId: state.pathParameters['id']),
-          routes: [
-            GoRoute(
-              path: 'tree',
-              builder: (context, state) =>
-                  _CompendiumRoute(demonId: state.pathParameters['id'], tree: true),
-            ),
-          ],
-        ),
-        GoRoute(path: '/smt4/skills', builder: (context, state) => const SkillsScreen()),
-        GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
-      ],
-    ),
-  ],
-);
+/// The router watches settings so the first start lands on the welcome screen.
+final routerProvider = Provider<GoRouter>((ref) {
+  final settings = ValueNotifier(ref.read(settingsProvider));
+  ref.listen(settingsProvider, (_, next) => settings.value = next);
+  ref.onDispose(settings.dispose);
+  return GoRouter(
+    initialLocation: '/smt4/demons',
+    refreshListenable: settings,
+    redirect: (context, state) {
+      final s = settings.value;
+      if (!s.loaded || s.onboarded) return null;
+      return state.uri.path == '/welcome' ? null : '/welcome';
+    },
+    routes: _routes,
+  );
+});
+
+final _routes = <RouteBase>[
+  GoRoute(path: '/welcome', builder: (context, state) => const WelcomeScreen()),
+  ShellRoute(
+    builder: (context, state, child) => AppShell(location: state.uri.path, child: child),
+    routes: [
+      GoRoute(path: '/', redirect: (_, _) => '/smt4/demons'),
+      GoRoute(path: '/smt4/demons', builder: (context, state) => const _CompendiumRoute()),
+      GoRoute(
+        path: '/smt4/demon/:id',
+        builder: (context, state) => _CompendiumRoute(demonId: state.pathParameters['id']),
+        routes: [
+          GoRoute(
+            path: 'tree',
+            builder: (context, state) =>
+                _CompendiumRoute(demonId: state.pathParameters['id'], tree: true),
+          ),
+        ],
+      ),
+      GoRoute(path: '/smt4/skills', builder: (context, state) => const SkillsScreen()),
+      GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
+    ],
+  ),
+];
 
 class DemonicaApp extends ConsumerWidget {
   const DemonicaApp({super.key});
@@ -44,13 +60,14 @@ class DemonicaApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(settingsProvider.select((s) => s.themeMode));
     final palette = ref.watch(settingsProvider.select((s) => s.palette));
+    final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'Demonica',
       debugShowCheckedModeBanner: false,
       theme: demonicaTheme(Brightness.light, palette: palette),
       darkTheme: demonicaTheme(Brightness.dark, palette: palette),
       themeMode: mode,
-      routerConfig: _router,
+      routerConfig: router,
     );
   }
 }

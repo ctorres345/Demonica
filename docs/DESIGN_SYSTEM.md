@@ -4,7 +4,7 @@ Dark-first Material 3 with a light twin. The dark palette is modelled on the Str
 
 ## Color
 
-Two palettes, picked in Settings and saved on the device (`Palette` in tokens.dart): **Strange Journey** (default, table below) and **SMT IV** (bg #0D0D0D, surface #1E1E1E, outline #4A4A4A, accent orange #F7941D, danger red #D8232F, ok green #6FD621). Both have a dark and a light variant.
+Three palettes, picked on the welcome screen at first start and in Settings, saved on the device (`Palette` in tokens.dart): **Strange Journey** (default, table below), **SMT IV** (bg #0D0D0D, surface #1E1E1E, outline #4A4A4A, accent orange #F7941D, danger red #D8232F, ok green #6FD621) and **Codex** (light by default: parchment #F3EFE6, surface #FBF8F1, outline #CFC6B2, ink #1D1A14, accent deep red #8F1D2C; its dark twin is ink on dark leather). Every palette has a dark and a light variant; `PaletteCard` in palette_card.dart draws the preview used by both screens.
 
 | Token | Dark | Light | Use |
 | --- | --- | --- | --- |
