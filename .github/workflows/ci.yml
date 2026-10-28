@@ -1,9 +1,9 @@
 name: CI
 
+# Runs only on demand: the repository is on the free GitHub tier, so the
+# checks are run locally before each push (see RUNBOOK.md).
 on:
-  push:
-    branches: ["**"]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   test:

@@ -36,7 +36,9 @@ The web build must copy `index.html` to `404.html` so deep links such as `/smt4/
 
 ## Deploy to GitHub Pages
 
-`.github/workflows/deploy-web.yml` builds and publishes on every push to `main`. One-time setup in the repository: Settings → Pages → Source: "GitHub Actions".
+`.github/workflows/deploy-web.yml` builds and publishes when run by hand from the Actions tab (GitHub Actions minutes are limited on the free tier, so nothing runs automatically). One-time setup in the repository: Settings → Pages → Source: "GitHub Actions".
+
+Before every push, run locally: `flutter analyze`, `flutter test`, `dart test` in `packages/fusion_core`, and `flutter build web --release --no-web-resources-cdn`. The CI workflow does the same and can be run by hand.
 
 ## Known limits
 

@@ -1,8 +1,8 @@
 name: Deploy web to GitHub Pages
 
+# Manual only (free GitHub tier): run it from the Actions tab after a merge
+# to publish the web app to GitHub Pages.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
