@@ -10,7 +10,7 @@ Make fusing a specific demon in SMT IV easy: pick the target, filter by the skil
 | --- | --- |
 | Game scope | SMT IV only in v1, behind `GameRules` so SMT IV Apocalypse, SMT V and Persona can be added with one adapter and one import script each |
 | Platforms | Web first (GitHub Pages, installable PWA, which is also the iOS path), Android APK on GitHub Releases, iOS IPA best effort. No app stores |
-| Player state | On the device only, no accounts. Save slots come in v0.2 |
+| Player state | None tied to the game's saves: the app is a companion. Only bookmarked recipes and paths, on the device, exportable (v0.2) |
 | Visual style | Three game-inspired palettes (Strange Journey, SMT IV, Codex) chosen at first start or in Settings; dark-first Material 3, 1px outlines, Chakra Petch + Inter + JetBrains Mono. Light theme mirrors it |
 | Data | Upstream JSON at a pinned commit, decoded by `tool/import_smt4.dart`. Our own curated `locations.json` later |
 | Tracker | Jira project DEM |
@@ -37,7 +37,7 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | Phase | Contents | Gate |
 | --- | --- | --- |
 | MVP (done) | Scaffold, design system, data import, compendium + filters, demon detail, reverse recipes, expandable tree, skills lookup, settings | Recipes match the existing tool |
-| v0.2 Saves | Save slots, your level, owned/Compendium marks, DLC and unlock toggles per save, ★ and ⚑ badges in the tree | |
+| v0.2 Saved recipes | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
 | v0.3 Planner | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Cesar confirms the inheritance rule in-game |
 | v0.4 Locations | Curated `locations.json` (IGN demon locations as the main source), recruit flag in tree, route and spoiler tags | |
 | v1.0 Releases | GitHub Actions: Pages deploy, APK and unsigned IPA on releases, runbook | |
