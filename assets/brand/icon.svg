@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0E2448"/>
+      <stop offset="1" stop-color="#050B16"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F7E08A"/>
+      <stop offset="0.45" stop-color="#D9A93A"/>
+      <stop offset="1" stop-color="#8A5E12"/>
+    </linearGradient>
+    <linearGradient id="goldDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#B8862A"/>
+      <stop offset="1" stop-color="#5E3F0C"/>
+    </linearGradient>
+    <linearGradient id="eye" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF6B6B"/>
+      <stop offset="1" stop-color="#B80F1E"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+
+  <!-- side antennas -->
+  <g fill="url(#goldDark)" stroke="#3B2706" stroke-width="10">
+    <rect x="150" y="300" width="70" height="300" rx="20"/>
+    <rect x="804" y="300" width="70" height="300" rx="20"/>
+    <rect x="135" y="270" width="100" height="44" rx="14"/>
+    <rect x="789" y="270" width="100" height="44" rx="14"/>
+  </g>
+
+  <!-- top sensor -->
+  <g fill="url(#goldDark)" stroke="#3B2706" stroke-width="10">
+    <rect x="462" y="132" width="100" height="90" rx="16"/>
+    <rect x="482" y="100" width="60" height="40" rx="10"/>
+  </g>
+
+  <!-- dome -->
+  <path d="M232 560 C232 330 352 212 512 212 C672 212 792 330 792 560 L792 700 C792 790 720 860 512 860 C304 860 232 790 232 700 Z"
+        fill="url(#gold)" stroke="#3B2706" stroke-width="14" stroke-linejoin="round"/>
+
+  <!-- dome ridge -->
+  <path d="M512 226 L512 470" stroke="#7A4E0E" stroke-width="12" stroke-linecap="round"/>
+  <path d="M290 560 L734 560" stroke="#7A4E0E" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- brow plate -->
+  <path d="M262 560 L762 560 L742 640 L282 640 Z" fill="url(#goldDark)" stroke="#3B2706" stroke-width="10" stroke-linejoin="round"/>
+
+  <!-- eyes -->
+  <g filter="url(#glow)">
+    <path d="M300 585 L470 578 L470 620 L310 630 Z" fill="url(#eye)" stroke="#5A0A12" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M724 585 L554 578 L554 620 L714 630 Z" fill="url(#eye)" stroke="#5A0A12" stroke-width="8" stroke-linejoin="round"/>
+  </g>
+
+  <!-- mouth grill -->
+  <g stroke="#3B2706" stroke-width="12" stroke-linecap="round">
+    <path d="M430 720 L430 800"/>
+    <path d="M485 720 L485 800"/>
+    <path d="M540 720 L540 800"/>
+    <path d="M595 720 L595 800"/>
+  </g>
+</svg>

@@ -52,3 +52,7 @@ Below 840dp: bottom navigation (Demons, Skills, Settings) and push navigation. A
 ## Prototypes
 
 The three explored directions (Terminal, Gauntlet, Codex) are in the "Demonica Prototypes" artifact shared in the project thread. The implemented palette started from Terminal and was retuned to the Strange Journey / SMT I colors; the other two are token swaps.
+
+## Icon
+
+`assets/brand/icon.svg` is the source: a simplified Demonica helmet (gold dome, red visor eyes, side antennas, top sensor) on a navy rounded square. The PNGs under `web/`, `android/.../mipmap-*` and `ios/Runner/Assets.xcassets/AppIcon.appiconset` are rendered from it at 1024px; re-render with headless Chromium (or any SVG rasterizer) when the SVG changes. iOS and the maskable web icons use the square version (no rounded corners) because the platform applies its own mask.
