@@ -5,7 +5,8 @@
 # app to GitHub Pages. Runs on your machine; no GitHub Actions minutes needed.
 #
 # Before running: bump the version and move the CHANGELOG lines (see
-# CONTRIBUTING.md, "Releasing a version"), commit, and push main.
+# CONTRIBUTING.md, "Releasing a version") in a PR. After it is merged, run
+# `git checkout main && git pull`: the script needs main to match origin/main.
 #
 # Usage: tool/release.sh [--dry-run] [--skip-web] [--skip-android] [--skip-ios]
 #                        [--allow-debug-key]
