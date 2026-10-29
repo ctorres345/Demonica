@@ -2,6 +2,11 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
+## Unreleased
+
+- Web app works offline after the first visit, and can be added to the home screen on iPhone and Android.
+- Releases: each version on GitHub has the Android APK (and an unsigned iOS IPA) attached, built with `tool/release.sh`.
+
 ## 0.4.0 (2026-10-29)
 
 - Demon page: "Where to find" lists the areas where the demon appears, in story order, with the story phase, a route tag for Lucifer's Palace and Purgatorium, and whether it can be recruited there. Fusion-only demons say so.

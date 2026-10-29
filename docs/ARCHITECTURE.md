@@ -132,7 +132,7 @@ Storage keys end in `.v1`. If a stored shape ever changes in a way old code cann
 | `/saved` | saved | same |
 | `/settings` | settings | same |
 
-`:id` is `slugify(name)`, for example `jack-frost`. The web build copies `index.html` to `404.html` so these paths load directly on GitHub Pages.
+`:id` is `slugify(name)`, for example `jack-frost`. The web build copies `index.html` to `404.html` so these paths load directly on GitHub Pages, and `web/sw.js` treats every page load as the same app shell so they also open offline.
 
 ## The engine
 

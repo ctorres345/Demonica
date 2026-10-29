@@ -10,6 +10,9 @@ step 'packages'
 flutter pub get
 (cd packages/fusion_core && dart pub get)
 
+step 'scripts'
+for script in tool/*.sh; do bash -n "$script"; done
+
 step 'format'
 dart format --output=none --set-exit-if-changed lib test tool packages/fusion_core
 

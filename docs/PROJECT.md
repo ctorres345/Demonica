@@ -42,7 +42,7 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | v0.2 Saved recipes (done) | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
 | v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule confirmed in-game by Cesar (DEM-7, 2026-10-29): at most 8 skills, so free slots = 8 minus innate |
 | v0.4 Locations (done) | Curated `locations.json` (GamerGuides walkthrough as the source), "Where to find" on the demon page, recruit flag in lists and the tree, route and spoiler tags | |
-| v1.0 Releases | GitHub Actions: Pages deploy, APK and unsigned IPA on releases, runbook | |
+| v1.0 Releases | Local `tool/release.sh` (no Actions): Pages deploy via `gh-pages` branch, APK and unsigned IPA on releases, offline web app, runbook | |
 
 ## Risks
 

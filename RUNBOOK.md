@@ -35,18 +35,61 @@ To move to a newer upstream commit, change `upstreamCommit` in `tool/import_smt4
 ```sh
 flutter build web --release --no-web-resources-cdn --base-href /Demonica/   # GitHub Pages
 flutter build apk --release                                                 # Android
-flutter build ipa --release                                                 # iOS (needs signing)
+flutter build ios --release --no-codesign                                   # iOS, unsigned (Mac only)
 ```
 
-The web build must copy `index.html` to `404.html` so deep links such as `/smt4/demon/lilith` load on GitHub Pages. The deploy workflow does this.
+The web build must copy `index.html` to `404.html` so deep links such as `/smt4/demon/lilith` load on GitHub Pages. `tool/deploy_web.sh` does this.
+
+The web app works offline after the first visit: `web/sw.js` is a small service worker (network first, last good copy when offline), registered from `web/flutter_bootstrap.js`. Flutter's own service worker no longer caches anything.
+
+## Release
+
+Everything runs on your Mac with one script. GitHub Actions is not used (no free minutes left).
+
+1. Bump the version and move the CHANGELOG lines (CONTRIBUTING.md, "Releasing a version"). Commit and push `main`.
+2. Try it first: `tool/release.sh --dry-run`. It runs `tool/check.sh`, builds the APK and the unsigned IPA into `build/release/`, writes the release notes, and publishes nothing.
+3. Release: `tool/release.sh`. It tags `vX.Y.Z`, creates the GitHub Release with the CHANGELOG section as notes and the APK and IPA attached, then deploys the web app.
+
+Options: `--skip-web`, `--skip-android`, `--skip-ios`. The script stops before publishing if you are not on an up-to-date, clean `main`, the tag exists, the CHANGELOG has no heading for the version, or `gh` is not signed in.
+
+Needs: Flutter, the Android SDK (Android Studio), Xcode for the IPA, and the GitHub CLI signed in once (`brew install gh`, then `gh auth login`).
 
 ## Deploy to GitHub Pages
 
-`.github/workflows/deploy-web.yml` builds and publishes when run by hand from the Actions tab (GitHub Actions minutes are limited on the free tier, so nothing runs automatically). One-time setup in the repository: Settings → Pages → Source: "GitHub Actions".
+`tool/deploy_web.sh` builds the web app with `--base-href /Demonica/` and force-pushes it to the `gh-pages` branch, which only ever holds the latest build. `tool/release.sh` runs it; run it alone to redeploy without a new version. Add `--dry-run` to build without pushing.
 
-Before every push, run `tool/check.sh` (format, `flutter analyze`, `dart analyze` and `dart test` in `packages/fusion_core`, `flutter test`, `flutter build web --release --no-web-resources-cdn`). The CI workflow does the same and can be run by hand.
+One-time setup in the repository (Pages on the free plan needs a **public** repository):
+
+1. Settings → General → Danger zone → Change visibility → Public.
+2. Run `tool/deploy_web.sh` once so the `gh-pages` branch exists.
+3. Settings → Pages → Build and deployment → Source: "Deploy from a branch", Branch: `gh-pages`, folder `/ (root)`, Save.
+
+The app is then at https://ctorres345.github.io/Demonica/ a minute or two after each deploy.
+
+## Android signing
+
+Release APKs are signed with the key described in `android/key.properties`. Without that file they are signed with the debug key, which works for a first install but cannot update an APK signed with a different key. Create the key once and **back up the `.jks` file and passwords**: losing them means users have to uninstall to update.
+
+```sh
+keytool -genkey -v -keystore ~/keys/demonica-upload.jks -keyalg RSA -keysize 2048 -validity 10000 -alias demonica
+```
+
+Then create `android/key.properties` (git ignores it, along with `*.jks`):
+
+```properties
+storePassword=<the keystore password>
+keyPassword=<the key password>
+keyAlias=demonica
+storeFile=/Users/<you>/keys/demonica-upload.jks
+```
+
+## iOS
+
+Without a paid Apple developer account there is no way to install a native build directly, so iPhone users get the web app: open the Pages URL in Safari, tap Share → "Add to Home Screen". It opens full screen with the Demonica icon and works offline after the first visit. The release also attaches an unsigned IPA for people who re-sign apps themselves (AltStore, Sideloadly).
+
+Before every push, run `tool/check.sh` (format, `flutter analyze`, `dart analyze` and `dart test` in `packages/fusion_core`, `flutter test`, `flutter build web --release --no-web-resources-cdn`). The CI workflow does the same and can be run by hand, but it spends Actions minutes.
 
 ## Known limits
 
-- iOS without a paid Apple developer account: install the web app from Safari ("Add to Home Screen"); it works offline after the first load.
+- iOS without a paid Apple developer account: install the web app from Safari ("Add to Home Screen"); see "iOS" above.
 - The existing tool's website is blocked from the cloud build environment, so recipe cross-checks are against an independent port of its code plus in-browser spot checks.

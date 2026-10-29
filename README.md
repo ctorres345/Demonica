@@ -17,6 +17,7 @@
 </p>
 
 <p align="center">
+  <a href="#install">Install</a> ·
   <a href="#what-it-does">What it does</a> ·
   <a href="#screenshots">Screenshots</a> ·
   <a href="#getting-started">Getting started</a> ·
@@ -35,6 +36,15 @@
 ## Why
 
 The fusion data for SMT IV is great, but most tools show it as long tables. When you want "Scathach with Bufudyne", you end up jumping between pages and keeping the chain in your head. Demonica starts from the demon you want, shows every recipe that makes it, and lets you open any ingredient into its own recipes in the same screen, so the whole fusion path is in front of you.
+
+## Install
+
+| Device | How |
+|---|---|
+| **Any browser** | Open [ctorres345.github.io/Demonica](https://ctorres345.github.io/Demonica/). |
+| **iPhone / iPad** | Open the link above in Safari, tap **Share**, then **Add to Home Screen**. It opens full screen and works offline after the first visit. |
+| **Android** | Download `demonica-x.y.z.apk` from the [latest release](https://github.com/ctorres345/Demonica/releases/latest) and open it. Allow installs from your browser when asked. Or add the web app to the home screen from Chrome. |
+| **Desktop** | Use the web app. In Chrome or Edge, the install icon in the address bar adds it as an app. |
 
 ## What it does
 
@@ -94,7 +104,7 @@ tool/check.sh
 
 It runs `flutter pub get`, `dart format`, `flutter analyze`, the fusion engine tests in `packages/fusion_core`, the widget tests and a release web build, and stops at the first failure.
 
-Building for each platform, refreshing the game data and deploying to GitHub Pages are in [RUNBOOK.md](RUNBOOK.md).
+Building for each platform, refreshing the game data, releasing (`tool/release.sh`) and deploying to GitHub Pages are in [RUNBOOK.md](RUNBOOK.md).
 
 ## Project layout
 
@@ -106,6 +116,7 @@ lib/design_system/      colour tokens, palettes, Material 3 theme, shared widget
 lib/features/           compendium, demon page, recipe tree, skills, planner, saved, settings, welcome
 lib/app/                routes (go_router), state (Riverpod), adaptive phone/desktop shell
 tool/check.sh           every pre-push check in one command
+tool/release.sh         tag, GitHub Release with APK/IPA, web deploy (run on a Mac)
 docs/                   plan, architecture, coding guidelines, design system, screenshots
 ```
 
@@ -119,7 +130,7 @@ More detail:
 | [docs/CODING_GUIDELINES.md](docs/CODING_GUIDELINES.md) | Where code goes, state, UI, style, tests, dependencies |
 | [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) | Colours, palettes, type and components |
 | [docs/PROJECT.md](docs/PROJECT.md) | What the app is for, decisions, roadmap, fusion rules |
-| [RUNBOOK.md](RUNBOOK.md) | Building, refreshing game data, deploying |
+| [RUNBOOK.md](RUNBOOK.md) | Building, refreshing game data, releasing, deploying |
 
 ## Roadmap
 
