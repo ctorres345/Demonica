@@ -30,6 +30,23 @@ final gameDataProvider = FutureProvider<GameData>((ref) async {
   );
 });
 
+/// Where demons can be found (curated `locations.json`, see docs/PROJECT.md).
+final locationsProvider = FutureProvider<LocationData>((ref) async {
+  return LocationData.fromJsonString(
+    await rootBundle.loadString('assets/data/smt4/locations.json'),
+  );
+});
+
+/// Names of demons that can be recruited in an area the user can see. Late-game
+/// areas count only when spoilers are on. Used for the recruit flag in the tree.
+final recruitableProvider = Provider<Set<String>>((ref) {
+  final loc = ref.watch(locationsProvider).value;
+  if (loc == null) return const {};
+  return loc.recruitable(
+    includeSpoilers: ref.watch(settingsProvider.select((s) => s.showSpoilers)),
+  );
+});
+
 final rulesProvider = Provider<Smt4Rules?>((ref) {
   final data = ref.watch(gameDataProvider).value;
   return data == null ? null : Smt4Rules(data);
@@ -42,6 +59,7 @@ class AppSettings {
     this.palette = Palette.strangeJourney,
     this.disabledDemons = const {},
     this.onboarded = false,
+    this.showSpoilers = false,
     this.loaded = false,
   });
 
@@ -51,6 +69,9 @@ class AppSettings {
   /// True once the user has been through the welcome screen.
   final bool onboarded;
   final Set<String> disabledDemons;
+
+  /// Show late-game areas (Blasted Tokyo onwards) in "Where to find".
+  final bool showSpoilers;
   final bool loaded;
 
   FusionSettings get fusion => FusionSettings(disabledDemons: disabledDemons);
@@ -60,12 +81,14 @@ class AppSettings {
     Palette? palette,
     Set<String>? disabledDemons,
     bool? onboarded,
+    bool? showSpoilers,
     bool? loaded,
   }) => AppSettings(
     themeMode: themeMode ?? this.themeMode,
     palette: palette ?? this.palette,
     onboarded: onboarded ?? this.onboarded,
     disabledDemons: disabledDemons ?? this.disabledDemons,
+    showSpoilers: showSpoilers ?? this.showSpoilers,
     loaded: loaded ?? this.loaded,
   );
 }
@@ -94,6 +117,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
       onboarded:
           j['onboarded'] as bool? ?? true, // settings saved before the welcome screen existed
       disabledDemons: ((j['disabledDemons'] as List?) ?? const []).cast<String>().toSet(),
+      showSpoilers: j['showSpoilers'] as bool? ?? false,
       loaded: true,
     );
   }
@@ -107,6 +131,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
         'palette': state.palette.name,
         'onboarded': state.onboarded,
         'disabledDemons': state.disabledDemons.toList(),
+        'showSpoilers': state.showSpoilers,
       }),
     );
   }
@@ -123,6 +148,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   void setOnboarded(bool v) {
     state = state.copyWith(onboarded: v);
+    _save();
+  }
+
+  void setShowSpoilers(bool v) {
+    state = state.copyWith(showSpoilers: v);
     _save();
   }
 

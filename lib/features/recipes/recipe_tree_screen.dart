@@ -184,6 +184,7 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
     final dc = context.dc;
     final d = widget.demon;
     final recipes = ref.watch(recipesProvider(d.name));
+    final recruitable = ref.watch(recruitableProvider.select((s) => s.contains(d.name)));
     // Watch only this node's slice of the tree state, so opening one branch
     // does not rebuild every other node.
     final (open, chosen) = ref.watch(
@@ -236,6 +237,13 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
                       style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                     ),
                     TextSpan(text: '  ${d.race} ${d.level}', style: context.tt.labelMedium),
+                    if (recruitable) ...[
+                      const TextSpan(text: '  '),
+                      const WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: RecruitMark(),
+                      ),
+                    ],
                   ],
                 ),
               ),

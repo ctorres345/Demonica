@@ -19,7 +19,7 @@ flowchart TB
     rules["Smt4Rules<br/>fuse, reverse and forward recipes"]
     data["GameData + models<br/>Demon, Skill, Recipe"]
   end
-  assets[("assets/data/smt4/*.json<br/>written by tool/import_smt4.dart")]
+  assets[("assets/data/smt4/*.json<br/>written by tool/import_smt4.dart<br/>+ curated locations.json")]
   prefs[("shared_preferences<br/>settings + saved recipes")]
 
   screens --> providers
@@ -55,7 +55,8 @@ lib/
     settings/                palette, theme, unlock toggles, about
     onboarding/              welcome screen (first start)
 packages/fusion_core/
-  lib/src/model/             models.dart (Demon, Skill, Recipe, FusionSettings), game_data.dart
+  lib/src/model/             models.dart (Demon, Skill, Recipe, FusionSettings), game_data.dart,
+                             locations.dart (Area, Encounter, LocationData)
   lib/src/engine/            game_rules.dart (the GameRules interface), planner.dart (skill planner)
   lib/src/games/smt4/        smt4_rules.dart
   test/                      rule tests + smt4_golden.json (independent port)
@@ -63,7 +64,8 @@ packages/fusion_core/
 tool/
   import_smt4.dart           upstream JSON -> assets/data/smt4
   check.sh                   every pre-push check in one command
-assets/data/smt4/            decoded game data (committed, do not edit by hand)
+assets/data/smt4/            decoded game data (committed, do not edit by hand),
+                             except locations.json, which is curated by hand
 docs/                        this file, DESIGN_SYSTEM.md, CODING_GUIDELINES.md, PROJECT.md
   screenshots/               images used by the README
 ```
@@ -98,7 +100,9 @@ sequenceDiagram
 | --- | --- | --- | --- |
 | `gameDataProvider` | FutureProvider | `GameData` for SMT IV | bundled asset |
 | `rulesProvider` | Provider | `Smt4Rules?` (null while loading) | |
-| `settingsProvider` | Notifier | palette, theme mode, onboarded, disabled demons | `demonica.settings.v1` |
+| `locationsProvider` | FutureProvider | `LocationData` from `locations.json` | bundled asset |
+| `recruitableProvider` | Provider | names recruitable in areas the user can see (spoiler switch) | |
+| `settingsProvider` | Notifier | palette, theme mode, onboarded, show spoilers, disabled demons | `demonica.settings.v1` |
 | `fusionSettingsProvider` | Provider | `FusionSettings` (disabled demons only) | |
 | `compendiumFilterProvider` | Notifier | search text, races, max level, skill, show disabled | no |
 | `filteredDemonsProvider` | Provider | the compendium list | |

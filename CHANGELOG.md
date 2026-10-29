@@ -2,6 +2,13 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
+## 0.4.0 (2026-10-29)
+
+- Demon page: "Where to find" lists the areas where the demon appears, in story order, with the story phase, a route tag for Lucifer's Palace and Purgatorium, and whether it can be recruited there. Fusion-only demons say so.
+- Recruit flag: a green speech bubble next to recruitable demons in the compendium, recipe rows and the recipe tree, so you know when talking beats fusing.
+- Settings: "Show late-game areas" switch (off by default) hides Blasted Tokyo, Infernal Tokyo and the final dungeons, and a counter shows how many demons have locations.
+- Data: 190 recruitable demons in 21 areas, from the GamerGuides walkthrough bestiaries.
+
 ## 0.3.0 (2026-10-29)
 
 - Plan tab: pick a target demon and the skills it should end with. Demonica finds up to three fusion chains (up to 3 fusions deep), cheapest first, and says which skills to keep at each step and which ingredients to level up first. Ticking a step saves the plan to the Saved tab.

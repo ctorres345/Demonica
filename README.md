@@ -41,7 +41,8 @@ The fusion data for SMT IV is great, but most tools show it as long tables. When
 | | |
 |---|---|
 | **Find a demon** | Search all 454 demons. Filter by skill ("who learns Mediarahan?"), race and level. |
-| **See the demon** | Stats, resistances, ailments, skills with learn level and MP cost, free skill slots, how to get it, evolutions and re-summon price. |
+| **See the demon** | Stats, resistances, ailments, skills with learn level and MP cost, free skill slots, where to find it, how to get it, evolutions and re-summon price. |
+| **Where to find** | Areas where the demon can be recruited, in story order, with route tags. A green speech bubble in lists and the tree marks demons you can just talk to instead of fusing. Late-game areas stay hidden until you turn spoilers on. |
 | **Recipe tree** | Every normal, element and special recipe. Sort by macca or by lowest ingredient level. Tap an ingredient to open its recipes underneath. |
 | **Used in** | The other direction: every fusion this demon is an ingredient for. |
 | **Skills** | Pick a skill and see which demons learn it, and at what level. |
@@ -122,7 +123,6 @@ More detail:
 
 ## Roadmap
 
-- **Recruit locations:** where to find each demon in the field.
 - **Releases:** Android and iOS builds on GitHub.
 
 Found a wrong recipe or a bug? Use **Report a problem** in Settings, or [open an issue](https://github.com/ctorres345/Demonica/issues/new).
@@ -140,4 +140,5 @@ Reporting a wrong recipe or telling a friend who is playing SMT IV helps just as
 ## Data and credits
 
 - **Fusion data:** [aqiu384/megaten-fusion-tool](https://github.com/aqiu384/megaten-fusion-tool), released into the public domain (Unlicense). Thank you. The import script pins the upstream commit it reads from and decodes it once; the app never touches the raw files.
+- **Demon locations:** collected by hand from the "Local Demon Bestiary" tables of the [GamerGuides SMT IV walkthrough](https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough). Facts only, no text copied.
 - **Fonts:** Chakra Petch, Inter and JetBrains Mono, all under the SIL Open Font License.

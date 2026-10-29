@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fusion_core/fusion_core.dart';
 
+import '../../app/providers.dart';
 import '../../design_system/components.dart';
 import '../../design_system/tokens.dart';
 
 /// "A (Race 4) × B (Race 2)   ≈ 1 020 ¥" with an optional caret and tap.
-class RecipeRow extends StatelessWidget {
+/// Ingredients that can be recruited get a [RecruitMark].
+class RecipeRow extends ConsumerWidget {
   const RecipeRow({
     super.key,
     required this.recipe,
@@ -32,8 +35,9 @@ class RecipeRow extends StatelessWidget {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dc = context.dc;
+    final recruitable = ref.watch(recruitableProvider);
     final spans = <InlineSpan>[];
     for (var i = 0; i < recipe.ingredients.length; i++) {
       final name = recipe.ingredients[i];
@@ -55,6 +59,13 @@ class RecipeRow extends StatelessWidget {
                   ),
                   if (d != null)
                     TextSpan(text: ' ${d.race} ${d.level}', style: context.tt.labelMedium),
+                  if (recruitable.contains(name)) ...[
+                    const TextSpan(text: ' '),
+                    const WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: RecruitMark(size: 13),
+                    ),
+                  ],
                 ],
               ),
             ),

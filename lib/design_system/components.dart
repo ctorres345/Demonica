@@ -123,12 +123,16 @@ class DemonTile extends StatelessWidget {
     required this.onTap,
     this.selected = false,
     this.subtitle,
+    this.recruitable = false,
   });
 
   final Demon demon;
   final VoidCallback onTap;
   final bool selected;
   final String? subtitle;
+
+  /// Draws the [RecruitMark] next to the name.
+  final bool recruitable;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +157,12 @@ class DemonTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(demon.name, style: context.tt.titleMedium),
+                  Row(
+                    children: [
+                      Flexible(child: Text(demon.name, style: context.tt.titleMedium)),
+                      if (recruitable) ...[const SizedBox(width: 6), const RecruitMark()],
+                    ],
+                  ),
                   Text(
                     subtitle ?? demon.race,
                     style: context.tt.bodySmall,
@@ -172,6 +181,19 @@ class DemonTile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Small speech-bubble icon: this demon can be recruited by talking to it, so
+/// fusing it is optional. The tooltip doubles as the screen-reader label.
+class RecruitMark extends StatelessWidget {
+  const RecruitMark({super.key, this.size = 14});
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: 'Recruitable: you can talk to it instead of fusing',
+    child: Icon(Icons.forum_outlined, size: size, color: context.dc.ok),
+  );
 }
 
 /// WK / RS / NU / RP / DR cells for the 8 elements.

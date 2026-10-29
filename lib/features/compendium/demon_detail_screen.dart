@@ -76,6 +76,7 @@ class DemonDetailScreen extends ConsumerWidget {
               },
             ),
           ),
+        _WhereToFind(demon),
         SectionHeader('How to get', trailing: _howToGetTrailing(demon, recipes.length)),
         if (demon.prereq != null)
           Padding(
@@ -185,6 +186,115 @@ class DemonDetailScreen extends ConsumerWidget {
     FusionKind.enemy => null,
     FusionKind.normal => '$count recipes',
   };
+}
+
+/// Areas where the demon appears, in story order, so the user knows when
+/// talking to it is easier than fusing. Late-game areas stay hidden until
+/// spoilers are turned on in Settings.
+class _WhereToFind extends ConsumerWidget {
+  const _WhereToFind(this.demon);
+  final Demon demon;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loc = ref.watch(locationsProvider).value;
+    if (loc == null) return const SizedBox.shrink();
+    final showSpoilers = ref.watch(settingsProvider.select((s) => s.showSpoilers));
+    final all = loc.forDemon(demon.name);
+    final shown = [
+      for (final e in all)
+        if (showSpoilers || !e.area.spoiler) e,
+    ];
+    final hidden = all.length - shown.length;
+    final recruitAreas = shown.where((e) => e.kind == EncounterKind.recruit).length;
+    if (all.isEmpty && demon.isEnemyOnly) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(
+          'Where to find',
+          trailing: recruitAreas == 0
+              ? null
+              : 'recruit in $recruitAreas ${recruitAreas == 1 ? 'area' : 'areas'}',
+        ),
+        if (all.isEmpty) const _Note('Not found in the wild as far as we know. Fuse it instead.'),
+        for (final e in shown)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.x1),
+            child: _EncounterRow(e),
+          ),
+        if (hidden > 0)
+          InkWell(
+            onTap: () => context.go('/settings'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                children: [
+                  Icon(Icons.visibility_off_outlined, size: 16, color: context.dc.textMuted),
+                  const SizedBox(width: Space.x2),
+                  Expanded(
+                    child: Text(
+                      '$hidden late-game ${hidden == 1 ? 'area' : 'areas'} hidden. '
+                      'Show spoilers in Settings.',
+                      style: context.tt.bodySmall,
+                    ),
+                  ),
+                  Icon(Icons.chevron_right, size: 18, color: context.dc.textMuted),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// "Naraku   MIKADO   RECRUIT" with a route tag for route-locked areas.
+class _EncounterRow extends StatelessWidget {
+  const _EncounterRow(this.e);
+  final Encounter e;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    final kindTag = switch (e.kind) {
+      EncounterKind.recruit => Tag('Recruit', color: dc.ok),
+      EncounterKind.horde => const Tag('Horde, no recruit'),
+      EncounterKind.enemy => const Tag('Enemy, no recruit'),
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: dc.surface,
+        border: Border.all(color: dc.outline),
+        borderRadius: Radii.borderSmall,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Wrap(
+              spacing: Space.x2,
+              runSpacing: Space.x1,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(
+                  e.area.name,
+                  style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                Text(e.area.phaseName, style: context.tt.labelMedium),
+                if (e.area.routes.isNotEmpty)
+                  Tag('${e.area.routes.map(_routeName).join(' or ')} route', color: dc.accent),
+              ],
+            ),
+          ),
+          const SizedBox(width: Space.x2),
+          kindTag,
+        ],
+      ),
+    );
+  }
+
+  static String _routeName(String r) => r[0].toUpperCase() + r.substring(1);
 }
 
 class _StatsGrid extends StatelessWidget {

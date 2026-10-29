@@ -47,7 +47,8 @@ All in `lib/design_system/`. Reuse these before writing a new widget.
 
 | Component | File | Purpose |
 | --- | --- | --- |
-| `DemonTile` | components.dart | list row: level badge, name, race, obtain tag or alignment |
+| `DemonTile` | components.dart | list row: level badge, name (+ recruit mark), race, obtain tag or alignment |
+| `RecruitMark` | components.dart | green speech-bubble icon with tooltip: the demon can be recruited, fusing is optional |
 | `LevelBadge` | components.dart | mono level with "LV" caption |
 | `Tag`, `AlignmentTag`, `FusionTag` | components.dart | small outlined mono labels |
 | `ElementDot` | components.dart | colored square before a skill name, always next to a label |

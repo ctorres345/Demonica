@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fusion_core/fusion_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +16,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(gameDataProvider).value;
+    final loc = ref.watch(locationsProvider).value;
     final settings = ref.watch(settingsProvider);
     final fusion = ref.watch(fusionSettingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
@@ -46,6 +48,18 @@ class SettingsScreen extends ConsumerWidget {
               icon: const Icon(Icons.replay, size: 18),
               label: const Text('Open the welcome screen again'),
             ),
+          ),
+          SectionHeader('Where to find', trailing: loc == null ? null : _coverage(loc, data)),
+          SwitchListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            title: Text('Show late-game areas', style: context.tt.bodyMedium),
+            subtitle: Text(
+              'Blasted Tokyo, Infernal Tokyo and the final dungeons. Off keeps story spoilers out of "Where to find".',
+              style: context.tt.bodySmall,
+            ),
+            value: settings.showSpoilers,
+            onChanged: notifier.setShowSpoilers,
           ),
           const SectionHeader('Demons that count for fusion'),
           Text(
@@ -96,6 +110,13 @@ class SettingsScreen extends ConsumerWidget {
             '${data == null ? '' : ', commit ${data.sourceCommit.substring(0, 8)}'}.',
             style: context.tt.bodySmall,
           ),
+          if (loc != null) ...[
+            const SizedBox(height: Space.x2),
+            Text(
+              'Demon locations come from the ${loc.sourceName} (facts only, collected by hand).',
+              style: context.tt.bodySmall,
+            ),
+          ],
           const SizedBox(height: Space.x2),
           Align(
             alignment: Alignment.centerLeft,
@@ -114,6 +135,14 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// "190 of 426 recruitable". The second number counts every demon that is not
+/// enemy-only, so the gap is demons you can only fuse.
+String _coverage(LocationData loc, GameData? data) {
+  final n = loc.recruitable().length;
+  final total = data?.demons.values.where((d) => !d.isEnemyOnly).length;
+  return '${total == null ? n : '$n of $total'} recruitable';
 }
 
 /// A pre-filled GitHub issue so a report carries the data version.

@@ -44,6 +44,7 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
     final data = ref.watch(gameDataProvider);
     final filter = ref.watch(compendiumFilterProvider);
     final demons = ref.watch(filteredDemonsProvider);
+    final recruitable = ref.watch(recruitableProvider);
     final dc = context.dc;
 
     return Scaffold(
@@ -172,6 +173,7 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
                           demon: d,
                           selected: d.id == widget.selectedId,
                           subtitle: _subtitle(d, filter.skill),
+                          recruitable: recruitable.contains(d.name),
                           onTap: () => context.go('/smt4/demon/${d.id}'),
                         );
                       },
