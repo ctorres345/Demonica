@@ -17,14 +17,14 @@ Demonica is a one-person project. This page is the checklist for keeping it heal
 
 ```mermaid
 flowchart LR
-  a["Jira story<br/>DEM-n"] --> b["Code + tests<br/>on main"] --> c["tool/check.sh<br/>all green"] --> d["Commit<br/>DEM-n: summary"] --> e["git push origin main"]
+  a["Jira story<br/>DEM-n"] --> b["Code + tests<br/>on a branch"] --> c["tool/check.sh<br/>all green"] --> d["Commit<br/>DEM-n: summary"] --> e["Pull request"] --> f["Cesar merges"]
 ```
 
 1. Pick the story in Jira (project **DEM**).
-2. Work on `main`. No pull requests: it is a solo project and GitHub Actions minutes are not available on the free tier.
+2. Work on a branch. `main` only takes changes through a pull request, and Cesar reviews and merges each one. There is no CI, so `tool/check.sh` is the gate.
 3. Run `tool/check.sh`. It runs format, analyze (app and engine), engine tests, app tests and the release web build. **Do not push if it fails.**
 4. Commit with the story key first: `DEM-12: Export saved recipes to a file`. The body lists what changed in plain words.
-5. Push: `git push origin main`.
+5. Push the branch and open a pull request to `main`. Wait for Cesar to merge it before deploying the web app or closing the Jira story.
 6. If the change is visible to users, add a line under **Unreleased** in `CHANGELOG.md`.
 
 ## Docs to touch with a change
