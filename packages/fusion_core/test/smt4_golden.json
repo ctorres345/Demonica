@@ -256,32 +256,148 @@
 "Cerberus": {
 "recipes": [
 [
-"Airavata",
-"Samael"
-],
-[
-"Ananta",
-"Baal"
-],
-[
 "Ananta",
 "Da Peng"
 ],
 [
-"Ananta",
-"Kinmamon"
+"Huang Long",
+"Rukh"
+],
+[
+"Da Peng",
+"Koga Saburo"
+],
+[
+"Da Peng",
+"Huang Long"
+],
+[
+"Ongyo-Ki",
+"Rukh"
+],
+[
+"Da Peng",
+"Ongyo-Ki"
+],
+[
+"Da Peng",
+"Kali"
+],
+[
+"Fenrir",
+"Master Therion"
+],
+[
+"Cabracan",
+"Ganesha"
+],
+[
+"Ganesha",
+"Taowu"
+],
+[
+"Fenrir",
+"Ganesha"
 ],
 [
 "Ananta",
-"Mahamayuri"
+"Ometeotl"
+],
+[
+"Odin",
+"Pendragon"
 ],
 [
 "Ananta",
 "Odin"
 ],
 [
+"Mahamayuri",
+"Orochi"
+],
+[
+"Mahamayuri",
+"Pendragon"
+],
+[
 "Ananta",
-"Ometeotl"
+"Mahamayuri"
+],
+[
+"Baal",
+"Orochi"
+],
+[
+"Baal",
+"Pendragon"
+],
+[
+"Ananta",
+"Baal"
+],
+[
+"Apsu",
+"Orochi"
+],
+[
+"Apsu",
+"Pendragon"
+],
+[
+"Ananta",
+"Apsu"
+],
+[
+"Hachiman",
+"Ouroboros"
+],
+[
+"Hachiman",
+"Orochi"
+],
+[
+"Hachiman",
+"Pendragon"
+],
+[
+"Ananta",
+"Hachiman"
+],
+[
+"Gui Xian",
+"Vishnu"
+],
+[
+"Ouroboros",
+"Vishnu"
+],
+[
+"Orochi",
+"Vishnu"
+],
+[
+"Pendragon",
+"Vishnu"
+],
+[
+"Ananta",
+"Vishnu"
+],
+[
+"Anubis",
+"Sphinx"
+],
+[
+"Barong",
+"Sleipnir"
+],
+[
+"Barong",
+"Sphinx"
+],
+[
+"Maya",
+"Ukano Mitama"
 ],
 [
 "Anubis",
@@ -292,36 +408,36 @@
 "Maya"
 ],
 [
-"Anubis",
-"Sphinx"
+"Barong",
+"Lilith"
 ],
 [
-"Apsu",
-"Orochi"
-],
-[
-"Apsu",
-"Pendragon"
-],
-[
-"Arahabaki",
-"Huang Long"
-],
-[
-"Arahabaki",
-"Koga Saburo"
-],
-[
-"Arahabaki",
+"Barong",
 "Maya"
 ],
 [
-"Baal",
-"Orochi"
+"Sleipnir",
+"Titania"
 ],
 [
-"Baal",
-"Pendragon"
+"Demonee-Ho",
+"Sleipnir"
+],
+[
+"Oberon",
+"Sphinx"
+],
+[
+"Sphinx",
+"Titania"
+],
+[
+"Demonee-Ho",
+"Sphinx"
+],
+[
+"Airavata",
+"Samael"
 ],
 [
 "Baihu",
@@ -332,28 +448,132 @@
 "Samael"
 ],
 [
-"Barbatos",
-"Garrote"
+"Shax",
+"Sleipnir"
 ],
 [
 "Barbatos",
 "Sleipnir"
 ],
 [
-"Barong",
-"Lilith"
-],
-[
-"Barong",
+"Botis",
 "Sleipnir"
 ],
 [
-"Barong",
+"Samael",
+"Sleipnir"
+],
+[
+"Murmur",
 "Sphinx"
+],
+[
+"Shax",
+"Sphinx"
+],
+[
+"Barbatos",
+"Sphinx"
+],
+[
+"Botis",
+"Sphinx"
+],
+[
+"Samael",
+"Sphinx"
+],
+[
+"Demonee-Ho",
+"Gogmagog"
+],
+[
+"Kangiten",
+"Ouroboros"
+],
+[
+"Kama",
+"Orochi"
+],
+[
+"Kangiten",
+"Orochi"
+],
+[
+"Kama",
+"Pendragon"
+],
+[
+"Kangiten",
+"Pendragon"
+],
+[
+"Ananta",
+"Kinmamon"
+],
+[
+"Ananta",
+"Kama"
+],
+[
+"Ananta",
+"Kangiten"
+],
+[
+"Catoblepas",
+"Ongyo-Ki"
+],
+[
+"Cabracan",
+"Yaksha"
+],
+[
+"Cabracan",
+"Ongyo-Ki"
+],
+[
+"Taowu",
+"Yaksha"
+],
+[
+"Ongyo-Ki",
+"Taowu"
 ],
 [
 "Berserker",
 "Fenrir"
+],
+[
+"Fenrir",
+"Yaksha"
+],
+[
+"Fenrir",
+"Ongyo-Ki"
+],
+[
+"Oumitsunu",
+"Quetzalcoatl"
+],
+[
+"Arahabaki",
+"Koga Saburo"
+],
+[
+"Koga Saburo",
+"Oumitsunu"
+],
+[
+"Arahabaki",
+"Huang Long"
+],
+[
+"Huang Long",
+"Oumitsunu"
+],
+[
+"Jikokuten",
+"Maya"
 ],
 [
 "Bishamonten",
@@ -364,7 +584,35 @@
 "Maya"
 ],
 [
-"Botis",
+"Marici",
+"Queen Mab"
+],
+[
+"Lilith",
+"Marici"
+],
+[
+"Marici",
+"Maya"
+],
+[
+"Thor",
+"Wild Hunt"
+],
+[
+"Queen Mab",
+"Thor"
+],
+[
+"Lilith",
+"Thor"
+],
+[
+"Maya",
+"Thor"
+],
+[
+"Barbatos",
 "Garrote"
 ],
 [
@@ -372,188 +620,32 @@
 "Legion"
 ],
 [
-"Cabracan",
-"Ganesha"
-],
-[
-"Cabracan",
-"Ongyo-Ki"
-],
-[
-"Cabracan",
-"Yaksha"
-],
-[
-"Catoblepas",
-"Ongyo-Ki"
-],
-[
-"Da Peng",
-"Huang Long"
-],
-[
-"Da Peng",
-"Kali"
-],
-[
-"Da Peng",
-"Koga Saburo"
-],
-[
-"Da Peng",
-"Ongyo-Ki"
-],
-[
-"Demonee-Ho",
-"Gogmagog"
-],
-[
-"Demonee-Ho",
-"Sleipnir"
-],
-[
-"Fenrir",
-"Ganesha"
-],
-[
-"Fenrir",
-"Master Therion"
-],
-[
-"Fenrir",
-"Yaksha"
-],
-[
-"Ganesha",
-"Taowu"
-],
-[
-"Gui Xian",
-"Vishnu"
-],
-[
-"Hachiman",
-"Orochi"
-],
-[
-"Hachiman",
-"Ouroboros"
-],
-[
-"Huang Long",
-"Rukh"
-],
-[
-"Jikokuten",
-"Maya"
-],
-[
-"Kama",
-"Orochi"
-],
-[
-"Kama",
-"Pendragon"
-],
-[
-"Kangiten",
-"Orochi"
-],
-[
-"Kangiten",
-"Ouroboros"
-],
-[
-"Koga Saburo",
-"Oumitsunu"
+"Botis",
+"Garrote"
 ],
 [
 "Legion",
 "Samael"
 ],
 [
-"Lilith",
-"Marici"
+"Garrote",
+"Samael"
 ],
 [
 "Lilith",
 "Oumitsunu"
 ],
 [
-"Mahamayuri",
-"Orochi"
-],
-[
-"Mahamayuri",
-"Pendragon"
-],
-[
-"Marici",
-"Queen Mab"
+"Arahabaki",
+"Maya"
 ],
 [
 "Maya",
 "Oumitsunu"
-],
-[
-"Maya",
-"Ukano Mitama"
-],
-[
-"Murmur",
-"Sphinx"
-],
-[
-"Oberon",
-"Sphinx"
-],
-[
-"Odin",
-"Pendragon"
-],
-[
-"Ongyo-Ki",
-"Rukh"
-],
-[
-"Oumitsunu",
-"Quetzalcoatl"
-],
-[
-"Ouroboros",
-"Vishnu"
-],
-[
-"Queen Mab",
-"Thor"
-],
-[
-"Shax",
-"Sleipnir"
-],
-[
-"Shax",
-"Sphinx"
-],
-[
-"Sleipnir",
-"Titania"
-],
-[
-"Sphinx",
-"Titania"
-],
-[
-"Taowu",
-"Yaksha"
-],
-[
-"Thor",
-"Wild Hunt"
 ]
 ],
 "special": null,
-"count": 74
+"count": 97
 },
 "Pallas Athena": {
 "recipes": [
@@ -1437,188 +1529,80 @@
 "Kali": {
 "recipes": [
 [
-"Alilat",
-"Bishamonten"
-],
-[
-"Alilat",
-"Gemori"
-],
-[
-"Alilat",
-"Illuyanka"
-],
-[
-"Alilat",
-"Jikokuten"
-],
-[
-"Alilat",
-"Mitra"
-],
-[
-"Alilat",
-"Murmur"
-],
-[
-"Alilat",
-"Orochi"
-],
-[
-"Alilat",
-"Queen Mab"
-],
-[
-"Alilat",
-"Wild Hunt"
-],
-[
-"Alilat",
-"Zhu Yin"
-],
-[
-"Ananta",
-"Black Maria"
-],
-[
-"Ananta",
-"Skadi"
-],
-[
-"Asherah",
-"Samael"
-],
-[
-"Barbatos",
-"Black Maria"
-],
-[
-"Berserker",
-"Demonee-Ho"
-],
-[
-"Bishamonten",
-"Huang Long"
-],
-[
-"Bishamonten",
-"Koga Saburo"
-],
-[
-"Bishamonten",
-"Skadi"
-],
-[
-"Bishamonten",
-"Xi Wangmu"
-],
-[
-"Black Maria",
-"Botis"
-],
-[
-"Black Maria",
-"Lilith"
-],
-[
-"Black Maria",
-"Maya"
-],
-[
-"Black Maria",
-"Thor"
-],
-[
-"Botis",
-"Isis"
-],
-[
-"Demonee-Ho",
-"Yaksha"
-],
-[
-"Erlkonig",
-"Tezcatlipoca"
-],
-[
-"Gemori",
-"Xi Wangmu"
+"Sarasvati",
+"Vishnu"
 ],
 [
 "Hachiman",
 "Peri"
 ],
 [
-"Huang Long",
-"Jikokuten"
+"Peri",
+"Vishnu"
 ],
 [
-"Huang Long",
-"Marici"
+"Sarasvati",
+"Susano-o"
 ],
 [
-"Isis",
-"Maya"
-],
-[
-"Isis",
-"Samael"
-],
-[
-"Jikokuten",
-"Xi Wangmu"
-],
-[
-"Kangiten",
-"Peri"
+"Sarasvati",
+"Shiva"
 ],
 [
 "Kartikeya",
 "Peri"
 ],
 [
-"Koga Saburo",
-"Marici"
+"Peri",
+"Susano-o"
 ],
 [
-"Lilith",
-"Skadi"
+"Peri",
+"Shiva"
 ],
 [
-"Marici",
-"Quetzalcoatl"
-],
-[
-"Marici",
-"Skadi"
+"Ongyo-Ki",
+"Peri"
 ],
 [
 "Maya",
 "Peri"
 ],
 [
-"Murmur",
-"Skadi"
+"Kangiten",
+"Peri"
 ],
 [
-"Murmur",
-"Xi Wangmu"
+"Erlkonig",
+"Tezcatlipoca"
+],
+[
+"Ongyo-Ki",
+"Vivian"
 ],
 [
 "Oberon",
 "Ongyo-Ki"
 ],
 [
-"Ongyo-Ki",
-"Peri"
+"Titania",
+"Yaksha"
 ],
 [
 "Ongyo-Ki",
 "Titania"
 ],
 [
-"Ongyo-Ki",
-"Vivian"
+"Berserker",
+"Demonee-Ho"
+],
+[
+"Demonee-Ho",
+"Yaksha"
+],
+[
+"Demonee-Ho",
+"Ongyo-Ki"
 ],
 [
 "Orochi",
@@ -1633,39 +1617,159 @@
 "Xi Wangmu"
 ],
 [
-"Peri",
-"Susano-o"
+"Ananta",
+"Black Maria"
 ],
 [
-"Peri",
-"Vishnu"
+"Ananta",
+"Skadi"
 ],
 [
-"Queen Mab",
+"Ananta",
 "Xi Wangmu"
 ],
 [
-"Quetzalcoatl",
+"Alilat",
+"Orochi"
+],
+[
+"Alilat",
+"Pendragon"
+],
+[
+"Alilat",
+"Ananta"
+],
+[
+"Black Maria",
 "Thor"
 ],
 [
-"Sarasvati",
-"Shiva"
+"Bishamonten",
+"Skadi"
 ],
 [
-"Sarasvati",
-"Susano-o"
+"Marici",
+"Skadi"
 ],
 [
-"Sarasvati",
-"Vishnu"
+"Skadi",
+"Thor"
+],
+[
+"Jikokuten",
+"Xi Wangmu"
+],
+[
+"Bishamonten",
+"Xi Wangmu"
+],
+[
+"Marici",
+"Xi Wangmu"
+],
+[
+"Thor",
+"Xi Wangmu"
+],
+[
+"Asherah",
+"Samael"
+],
+[
+"Botis",
+"Isis"
+],
+[
+"Isis",
+"Samael"
+],
+[
+"Barbatos",
+"Black Maria"
+],
+[
+"Black Maria",
+"Botis"
+],
+[
+"Black Maria",
+"Samael"
+],
+[
+"Murmur",
+"Skadi"
 ],
 [
 "Shax",
 "Skadi"
 ],
 [
+"Barbatos",
+"Skadi"
+],
+[
+"Botis",
+"Skadi"
+],
+[
+"Samael",
+"Skadi"
+],
+[
+"Gemori",
+"Xi Wangmu"
+],
+[
+"Murmur",
+"Xi Wangmu"
+],
+[
 "Shax",
+"Xi Wangmu"
+],
+[
+"Barbatos",
+"Xi Wangmu"
+],
+[
+"Botis",
+"Xi Wangmu"
+],
+[
+"Samael",
+"Xi Wangmu"
+],
+[
+"Isis",
+"Maya"
+],
+[
+"Black Maria",
+"Lilith"
+],
+[
+"Black Maria",
+"Maya"
+],
+[
+"Lilith",
+"Skadi"
+],
+[
+"Maya",
+"Skadi"
+],
+[
+"Queen Mab",
+"Xi Wangmu"
+],
+[
+"Lilith",
+"Xi Wangmu"
+],
+[
+"Maya",
 "Xi Wangmu"
 ],
 [
@@ -1673,12 +1777,124 @@
 "Zhu Yin"
 ],
 [
-"Titania",
-"Yaksha"
+"Marici",
+"Quetzalcoatl"
+],
+[
+"Quetzalcoatl",
+"Thor"
+],
+[
+"Bishamonten",
+"Koga Saburo"
+],
+[
+"Koga Saburo",
+"Marici"
+],
+[
+"Koga Saburo",
+"Thor"
+],
+[
+"Huang Long",
+"Jikokuten"
+],
+[
+"Bishamonten",
+"Huang Long"
+],
+[
+"Huang Long",
+"Marici"
+],
+[
+"Huang Long",
+"Thor"
+],
+[
+"Alilat",
+"Illuyanka"
+],
+[
+"Alilat",
+"Zhu Yin"
+],
+[
+"Alilat",
+"Quetzalcoatl"
+],
+[
+"Alilat",
+"Koga Saburo"
+],
+[
+"Alilat",
+"Huang Long"
+],
+[
+"Alilat",
+"Jikokuten"
+],
+[
+"Alilat",
+"Bishamonten"
+],
+[
+"Alilat",
+"Marici"
+],
+[
+"Alilat",
+"Thor"
+],
+[
+"Alilat",
+"Mitra"
+],
+[
+"Alilat",
+"Gemori"
+],
+[
+"Alilat",
+"Murmur"
+],
+[
+"Alilat",
+"Shax"
+],
+[
+"Alilat",
+"Barbatos"
+],
+[
+"Alilat",
+"Botis"
+],
+[
+"Alilat",
+"Samael"
+],
+[
+"Alilat",
+"Wild Hunt"
+],
+[
+"Alilat",
+"Queen Mab"
+],
+[
+"Alilat",
+"Lilith"
+],
+[
+"Alilat",
+"Maya"
 ]
 ],
 "special": null,
-"count": 60
+"count": 91
 },
 "Dwarf": {
 "recipes": [

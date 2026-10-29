@@ -64,6 +64,17 @@ void main() {
       expect(rules.fuse(d('Pixie'), d('Cerberus'), settings)?.name, 'Rukh');
     });
 
+    test('above the top of a race rounds down to its strongest demon', () {
+      // Alilat (Lady 86) + Black Rider (Fiend 69) -> Kishin level 79, above
+      // Thor (76), the top Kishin. Checked against aqiu384's calculator on
+      // 2026-10-29: Thor has 175 normal + same-race recipes there.
+      expect(rules.fuse(d('Alilat'), d('Black Rider'), settings)?.name, 'Thor');
+      final thor = rules
+          .reverseRecipes(d('Thor'), settings)
+          .where((r) => r.kind == RecipeKind.normal || r.kind == RecipeKind.sameRace);
+      expect(thor.length, 175);
+    });
+
     test('same race gives the Element demon on the chart diagonal', () {
       expect(rules.fuse(d('Pixie'), d('Jack Frost'), settings)?.name, 'Aeros');
       expect(rules.fuse(d('Pixie'), d('Napaea'), settings)?.name, 'Aeros');
@@ -113,6 +124,9 @@ void main() {
       }
     });
 
+    // Cerberus and Kali (top of their race) were regenerated from the engine on
+    // 2026-10-29 after the live calculator showed the port missed the
+    // round-down rule (see the Thor test above).
     test('match the Python port for 20 demons (normal + same-race pairs)', () {
       final golden =
           jsonDecode(File('test/smt4_golden.json').readAsStringSync()) as Map<String, dynamic>;

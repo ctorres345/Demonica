@@ -19,6 +19,7 @@ First public release.
 - Skills: "4 demons" instead of a bare number; skills nobody learns are dimmed.
 - Plan: "SHOW IN TREE", and "2 to inherit · 6 slots free".
 - Welcome screen says what the app is before asking for a palette.
+- Fixed: fusions that land above the strongest demon of a race now give that demon, like the game does (Thor, Cerberus and Kali gained up to 96 recipes each). Checked against aqiu384's calculator.
 - Macca prices are hidden by default (in-game discounts change the real numbers). Settings → "Show macca prices" turns them on; "Cheapest first" sorting works either way.
 
 ## 0.4.0 (2026-10-29)

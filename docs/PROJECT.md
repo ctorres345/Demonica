@@ -26,7 +26,7 @@ Make fusing a specific demon in SMT IV easy: pick the target, filter by the skil
 
 ## Fusion rules (as implemented in `Smt4Rules`)
 
-1. Two different races: result race from the chart, result level = ceil((a + b) / 2) + 1, lowest demon of that race at or above it. If the fusion lands above the race's top fusable demon it fails.
+1. Two different races: result race from the chart, result level = ceil((a + b) / 2) + 1, lowest demon of that race at or above it. Above the race's top result it rounds down to that top demon (Alilat + Black Rider → Thor; confirmed against the live calculator 2026-10-29), unless the race's strongest ingredient is a special fusion, then it fails.
 2. Same race: the Element demon on the chart diagonal.
 3. Element + demon: one rank up or down in the demon's race, per the element chart.
 4. Special demons: fixed ingredient list only.

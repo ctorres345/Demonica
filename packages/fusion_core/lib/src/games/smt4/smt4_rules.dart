@@ -127,7 +127,12 @@ class Smt4Rules implements GameRules {
         return result;
       }
     }
-    return null;
+    // Above every result of the race: the game rounds down to the race's
+    // strongest demon (Alilat + Black Rider -> Thor), unless the race ends in
+    // the overflow sentinel, which the loop already handled.
+    final top = _resultByRaceLevel[resultRace]![levels.last]!;
+    if (top.name == a.name || top.name == b.name) return null;
+    return top;
   }
 
   Demon? _fuseWithElement(Demon elem, Demon other, FusionSettings settings) {
