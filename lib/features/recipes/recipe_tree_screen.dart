@@ -48,11 +48,6 @@ class RecipeTreeScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            tooltip: 'Save this path',
-            icon: const Icon(Icons.bookmark_add_outlined),
-            onPressed: () => _savePath(context, ref, demon),
-          ),
-          IconButton(
             tooltip: 'Open demon page',
             icon: const Icon(Icons.info_outline),
             onPressed: () => context.go('/smt4/demon/${demon.id}'),
@@ -90,19 +85,11 @@ class RecipeTreeScreen extends ConsumerWidget {
               ],
             ),
           ),
+          _PathStrip(demon: demon, onSave: () => _savePath(context, ref, demon)),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(Space.x4, Space.x1, Space.x4, Space.x8),
-              children: [
-                _DemonNode(demon: demon, root: demon.name, nodeKey: demon.name, depth: 0),
-                const SizedBox(height: Space.x4),
-                Text(
-                  'Tap a recipe to expand its ingredients. Tap an ingredient to expand its own recipes. '
-                  'Only one recipe per demon stays open, so what you see is one fusion path: '
-                  'save it with the bookmark button at the top.',
-                  style: context.tt.bodySmall,
-                ),
-              ],
+              padding: const EdgeInsets.fromLTRB(Space.x4, Space.x2, Space.x4, Space.x8),
+              children: [_DemonNode(demon: demon, root: demon.name, nodeKey: demon.name, depth: 0)],
             ),
           ),
         ],
@@ -152,6 +139,58 @@ class RecipeTreeScreen extends ConsumerWidget {
         current: current,
         onChanged: onChanged,
       );
+}
+
+/// A one-line strip above the tree that says what the open recipes add up to
+/// and saves them as a path.
+class _PathStrip extends ConsumerWidget {
+  const _PathStrip({required this.demon, required this.onSave});
+  final Demon demon;
+  final VoidCallback onSave;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dc = context.dc;
+    final data = ref.watch(gameDataProvider).value!;
+    final steps = ref.watch(treeExpansionProvider(demon.name)).plan(demon.name, data);
+    final showPrices = ref.watch(showPricesProvider);
+    final total = steps.fold<int>(0, (sum, s) => sum + s.macca);
+    final label = steps.isEmpty
+        ? 'No recipe open yet. Open one per demon to build a path.'
+        : [
+            'Path: ${steps.length} ${steps.length == 1 ? 'step' : 'steps'}',
+            if (showPrices) macca(total),
+          ].join(' · ');
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: Space.x4),
+      padding: const EdgeInsets.only(left: Space.x3),
+      constraints: const BoxConstraints(minHeight: 44),
+      decoration: BoxDecoration(
+        color: steps.isEmpty ? dc.surface : dc.accent.withValues(alpha: 0.10),
+        border: Border.all(color: steps.isEmpty ? dc.outline : dc.accent),
+        borderRadius: Radii.borderSmall,
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.route, size: 18, color: steps.isEmpty ? dc.textMuted : dc.accent),
+          const SizedBox(width: Space.x2),
+          Expanded(
+            child: Text(
+              label,
+              key: const Key('path-strip-label'),
+              style: steps.isEmpty ? context.tt.bodySmall : context.tt.bodyMedium,
+            ),
+          ),
+          if (steps.isNotEmpty)
+            TextButton.icon(
+              onPressed: onSave,
+              icon: const Icon(Icons.bookmark_add_outlined, size: 18),
+              label: const Text('SAVE PATH'),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 /// A demon in the tree. Expanding it lists its recipes.
