@@ -163,7 +163,7 @@ class _EmptyState extends StatelessWidget {
               const SizedBox(height: Space.x2),
               Text(
                 'Tap the bookmark next to any recipe, or on a demon\'s page, to keep it here. '
-                'In the recipe tree, the bookmark at the top saves the whole open path as a '
+                'In the recipe tree, SAVE PATH in the bar at the top saves the whole open path as a '
                 'step-by-step plan.',
                 textAlign: TextAlign.center,
                 style: context.tt.bodySmall,
@@ -272,22 +272,10 @@ class _SavedCard extends ConsumerWidget {
                   if (entry.type == SavedType.recipe &&
                       entry.steps.single.kind != RecipeKind.normal)
                     Tag(entry.steps.single.kind == RecipeKind.special ? 'Special' : 'Element'),
-                  PopupMenuButton<String>(
-                    tooltip: 'More',
-                    icon: Icon(Icons.more_vert, size: 18, color: dc.textMuted),
-                    onSelected: (v) => switch (v) {
-                      'note' => _editNote(context, ref),
-                      'tree' => _openTree(context, ref),
-                      _ => _remove(context, ref),
-                    },
-                    itemBuilder: (_) => [
-                      PopupMenuItem(
-                        value: 'note',
-                        child: Text(entry.note.isEmpty ? 'Add note' : 'Edit note'),
-                      ),
-                      const PopupMenuItem(value: 'tree', child: Text('Open in tree')),
-                      const PopupMenuItem(value: 'remove', child: Text('Remove')),
-                    ],
+                  IconButton(
+                    tooltip: 'Remove',
+                    icon: Icon(Icons.delete_outline, size: 18, color: dc.textMuted),
+                    onPressed: () => _remove(context, ref),
                   ),
                 ],
               ),
@@ -312,6 +300,26 @@ class _SavedCard extends ConsumerWidget {
                 ),
               ),
             ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: Space.x1),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: dc.outline.withValues(alpha: 0.5))),
+            ),
+            child: Row(
+              children: [
+                TextButton.icon(
+                  onPressed: () => _editNote(context, ref),
+                  icon: const Icon(Icons.edit_note, size: 18),
+                  label: Text(entry.note.isEmpty ? 'Add note' : 'Edit note'),
+                ),
+                TextButton.icon(
+                  onPressed: () => _openTree(context, ref),
+                  icon: const Icon(Icons.account_tree_outlined, size: 16),
+                  label: const Text('Open in tree'),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -413,46 +421,52 @@ class _StepLine extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dc = context.dc;
-    return InkWell(
-      onTap: () => onChanged(!step.done),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(Space.x4, 0, Space.x2, 0),
-        decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: dc.outline.withValues(alpha: 0.5))),
-        ),
-        child: Row(
-          children: [
-            SizedBox(width: 22, child: Text('${index + 1}.', style: context.tt.labelMedium)),
-            Checkbox(
-              value: step.done,
-              visualDensity: VisualDensity.compact,
-              onChanged: (v) => onChanged(v ?? false),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final e in step.levelUps.entries)
-                      Text(
-                        'First level ${e.key} to Lv ${e.value}',
-                        style: context.tt.labelSmall?.copyWith(color: dc.accent),
-                      ),
-                    _stepText(context),
-                    if (step.skills.isNotEmpty)
-                      Text('Keep: ${step.skills.join(', ')}', style: context.tt.labelSmall),
-                  ],
+    // Only the tick box and the step text toggle the step, so a tap on the
+    // number, the price or the gaps while scrolling does not tick it.
+    return Container(
+      padding: const EdgeInsets.fromLTRB(Space.x4, 0, Space.x2, 0),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: dc.outline.withValues(alpha: 0.5))),
+      ),
+      child: Row(
+        children: [
+          SizedBox(width: 22, child: Text('${index + 1}.', style: context.tt.labelMedium)),
+          Checkbox(
+            value: step.done,
+            visualDensity: VisualDensity.compact,
+            onChanged: (v) => onChanged(v ?? false),
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: () => onChanged(!step.done),
+                borderRadius: Radii.borderSmall,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: Space.x1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final e in step.levelUps.entries)
+                        Text(
+                          'First level ${e.key} to Lv ${e.value}',
+                          style: context.tt.labelSmall?.copyWith(color: dc.accent),
+                        ),
+                      _stepText(context),
+                      if (step.skills.isNotEmpty)
+                        Text('Keep: ${step.skills.join(', ')}', style: context.tt.labelSmall),
+                    ],
+                  ),
                 ),
               ),
             ),
-            if (step.macca > 0 && ref.watch(showPricesProvider))
-              Padding(
-                padding: const EdgeInsets.only(left: Space.x2),
-                child: Text(macca(step.macca), style: context.tt.labelSmall),
-              ),
-          ],
-        ),
+          ),
+          if (step.macca > 0 && ref.watch(showPricesProvider))
+            Padding(
+              padding: const EdgeInsets.only(left: Space.x2),
+              child: Text(macca(step.macca), style: context.tt.labelSmall),
+            ),
+        ],
       ),
     );
   }
