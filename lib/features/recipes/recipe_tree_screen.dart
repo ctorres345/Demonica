@@ -147,12 +147,14 @@ class RecipeTreeScreen extends ConsumerWidget {
     ),
   );
 
-  Future<void> _pickMaxLevel(BuildContext context, int? current, ValueChanged<int?> onChanged) {
-    return showModalBottomSheet(
-      context: context,
-      builder: (ctx) => _MaxLevelSheet(initial: current ?? 99, onChanged: onChanged),
-    );
-  }
+  Future<void> _pickMaxLevel(BuildContext context, int? current, ValueChanged<int?> onChanged) =>
+      showLevelSheet(
+        context,
+        title: 'Max ingredient level',
+        help: 'Hides recipes that need an ingredient above this level. Set it to your level.',
+        current: current,
+        onChanged: onChanged,
+      );
 }
 
 /// A demon in the tree. Expanding it lists its recipes.
@@ -182,8 +184,12 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
     final dc = context.dc;
     final d = widget.demon;
     final recipes = ref.watch(recipesProvider(d.name));
-    final tree = ref.watch(treeExpansionProvider(widget.root));
-    final open = tree.isOpen(widget.nodeKey);
+    // Watch only this node's slice of the tree state, so opening one branch
+    // does not rebuild every other node.
+    final (open, chosen) = ref.watch(
+      treeExpansionProvider(widget.root)
+          .select((t) => (t.isOpen(widget.nodeKey), t.openRecipe(widget.nodeKey)?.value)),
+    );
     final canExpand = recipes.isNotEmpty;
     final countLabel = switch (d.fusion) {
       FusionKind.special => 'special',
@@ -193,7 +199,6 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
     };
     // A recipe opened from the Saved screen stays visible even when it sits
     // past the first rows or the current filters hide it.
-    final chosen = tree.openRecipe(widget.nodeKey)?.value;
     final visible = recipes.take(_shown).toList();
     if (chosen != null && !visible.contains(chosen)) visible.insert(0, chosen);
     final header = InkWell(
@@ -363,72 +368,6 @@ class _Indent extends StatelessWidget {
         ),
       ),
       child: child,
-    );
-  }
-}
-
-class _MaxLevelSheet extends StatefulWidget {
-  const _MaxLevelSheet({required this.initial, required this.onChanged});
-  final int initial;
-  final ValueChanged<int?> onChanged;
-
-  @override
-  State<_MaxLevelSheet> createState() => _MaxLevelSheetState();
-}
-
-class _MaxLevelSheetState extends State<_MaxLevelSheet> {
-  late double _v = widget.initial.toDouble();
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x2, 0),
-            child: Row(
-              children: [
-                Text('Max ingredient level', style: context.tt.titleLarge),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    widget.onChanged(null);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Clear'),
-                ),
-                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Done')),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Space.x4),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Slider(
-                    value: _v,
-                    min: 1,
-                    max: 99,
-                    divisions: 98,
-                    onChanged: (v) => setState(() => _v = v),
-                    onChangeEnd: (v) => widget.onChanged(v.round()),
-                  ),
-                ),
-                SizedBox(width: 56, child: LevelBadge(_v.round(), size: 22)),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(Space.x4),
-            child: Text(
-              'Hides recipes that need an ingredient above this level. Set it to your level.',
-              style: context.tt.bodySmall,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

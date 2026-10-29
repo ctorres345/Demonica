@@ -1,6 +1,7 @@
 import 'package:demonica/app/providers.dart';
 import 'package:demonica/design_system/components.dart';
 import 'package:demonica/design_system/theme.dart';
+import 'package:demonica/design_system/tokens.dart';
 import 'package:demonica/features/compendium/demon_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,6 +72,23 @@ void main() {
     final list = container.read(filteredDemonsProvider);
     expect(list, isNotEmpty);
     expect(list.every((d) => d.skills.any((s) => s.name == 'Mediarahan')), isTrue);
+  });
+
+  testWidgets('changing the palette does not recompute recipes', (tester) async {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    await loadData(tester, container);
+
+    final before = container.read(recipesProvider('Lilith'));
+    final usedBefore = container.read(usedInProvider('Lilith'));
+    expect(before, isNotEmpty);
+    container.read(settingsProvider.notifier).setPalette(Palette.smt4, mode: ThemeMode.light);
+    expect(identical(container.read(recipesProvider('Lilith')), before), isTrue);
+    expect(identical(container.read(usedInProvider('Lilith')), usedBefore), isTrue);
+
+    // Turning a demon off does recompute.
+    container.read(settingsProvider.notifier).setDemonsEnabled(['Pixie'], false);
+    expect(identical(container.read(recipesProvider('Lilith')), before), isFalse);
   });
 
   test('macca formatting groups thousands', () {

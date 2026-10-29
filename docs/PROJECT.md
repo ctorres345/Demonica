@@ -1,5 +1,7 @@
 # Demonica: project plan (v2, 2026-10-28)
 
+Related docs: [ARCHITECTURE.md](ARCHITECTURE.md) (how the code is built), [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) (look and components), [CODING_GUIDELINES.md](CODING_GUIDELINES.md) (rules for code), [../CONTRIBUTING.md](../CONTRIBUTING.md) (how changes land and releases).
+
 ## Goal
 
 Make fusing a specific demon in SMT IV easy: pick the target, filter by the skills you want, read the recipe tree, and later follow a step-by-step plan. The existing tool (aqiu384's megaten-fusion-tool) has the data but a confusing UI, flat recipe lists, no chaining into an ingredient's own recipes, and no recruit locations.

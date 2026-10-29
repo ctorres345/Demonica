@@ -7,13 +7,13 @@ enum FusionKind { normal, special, accident, enemy }
 enum Resist { none, weak, resist, nullify, repel, drain }
 
 Resist resistFromString(String s) => switch (s) {
-      'weak' => Resist.weak,
-      'resist' => Resist.resist,
-      'null' => Resist.nullify,
-      'repel' => Resist.repel,
-      'drain' => Resist.drain,
-      _ => Resist.none,
-    };
+  'weak' => Resist.weak,
+  'resist' => Resist.resist,
+  'null' => Resist.nullify,
+  'repel' => Resist.repel,
+  'drain' => Resist.drain,
+  _ => Resist.none,
+};
 
 class Stats {
   const Stats({
@@ -29,14 +29,14 @@ class Stats {
   final int hp, mp, st, dx, ma, ag, lu;
 
   factory Stats.fromJson(Map<String, dynamic> j) => Stats(
-        hp: j['hp'] as int,
-        mp: j['mp'] as int,
-        st: j['st'] as int,
-        dx: j['dx'] as int,
-        ma: j['ma'] as int,
-        ag: j['ag'] as int,
-        lu: j['lu'] as int,
-      );
+    hp: j['hp'] as int,
+    mp: j['mp'] as int,
+    st: j['st'] as int,
+    dx: j['dx'] as int,
+    ma: j['ma'] as int,
+    ag: j['ag'] as int,
+    lu: j['lu'] as int,
+  );
 }
 
 /// A skill a demon knows, and the level it is learned at (0 = innate).
@@ -94,28 +94,29 @@ class Demon {
   int get innateSkillCount => skills.where((s) => s.innate).length;
 
   factory Demon.fromJson(Map<String, dynamic> j) => Demon(
-        name: j['name'] as String,
-        race: j['race'] as String,
-        level: j['level'] as int,
-        alignment: j['alignment'] as String,
-        stats: Stats.fromJson(j['stats'] as Map<String, dynamic>),
-        resists: (j['resists'] as Map<String, dynamic>)
-            .map((k, v) => MapEntry(k, resistFromString(v as String))),
-        ailments: (j['ailments'] as Map<String, dynamic>)
-            .map((k, v) => MapEntry(k, resistFromString(v as String))),
-        skills: [
-          for (final s in j['skills'] as List)
-            LearnedSkill(s['name'] as String, s['level'] as int)
-        ],
-        price: j['price'] as int,
-        fusion: FusionKind.values.byName(j['fusion'] as String),
-        prereq: j['prereq'] as String?,
-        unlockCategory: j['unlockCategory'] as String?,
-        specialRecipe: (j['specialRecipe'] as List?)?.cast<String>() ?? const [],
-        evolvesTo: j['evolvesTo'] as String?,
-        evolvesAtLevel: j['evolvesAtLevel'] as int?,
-        evolvesFrom: j['evolvesFrom'] as String?,
-      );
+    name: j['name'] as String,
+    race: j['race'] as String,
+    level: j['level'] as int,
+    alignment: j['alignment'] as String,
+    stats: Stats.fromJson(j['stats'] as Map<String, dynamic>),
+    resists: (j['resists'] as Map<String, dynamic>).map(
+      (k, v) => MapEntry(k, resistFromString(v as String)),
+    ),
+    ailments: (j['ailments'] as Map<String, dynamic>).map(
+      (k, v) => MapEntry(k, resistFromString(v as String)),
+    ),
+    skills: [
+      for (final s in j['skills'] as List) LearnedSkill(s['name'] as String, s['level'] as int),
+    ],
+    price: j['price'] as int,
+    fusion: FusionKind.values.byName(j['fusion'] as String),
+    prereq: j['prereq'] as String?,
+    unlockCategory: j['unlockCategory'] as String?,
+    specialRecipe: (j['specialRecipe'] as List?)?.cast<String>() ?? const [],
+    evolvesTo: j['evolvesTo'] as String?,
+    evolvesAtLevel: j['evolvesAtLevel'] as int?,
+    evolvesFrom: j['evolvesFrom'] as String?,
+  );
 }
 
 class Skill {
@@ -154,18 +155,18 @@ class Skill {
   bool get isPassive => element == 'pas';
 
   factory Skill.fromJson(Map<String, dynamic> j) => Skill(
-        name: j['name'] as String,
-        element: j['element'] as String,
-        target: j['target'] as String,
-        rank: j['rank'] as int,
-        unique: j['unique'] as bool,
-        costMp: j['costMp'] as int,
-        power: j['power'] as int,
-        accuracy: j['accuracy'] as int,
-        effect: j['effect'] as String,
-        condition: j['condition'] as String,
-        skillCard: j['skillCard'] as String?,
-      );
+    name: j['name'] as String,
+    element: j['element'] as String,
+    target: j['target'] as String,
+    rank: j['rank'] as int,
+    unique: j['unique'] as bool,
+    costMp: j['costMp'] as int,
+    power: j['power'] as int,
+    accuracy: j['accuracy'] as int,
+    effect: j['effect'] as String,
+    condition: j['condition'] as String,
+    skillCard: j['skillCard'] as String?,
+  );
 }
 
 class UnlockEntry {
@@ -196,11 +197,7 @@ class FusionSettings {
 /// One way to produce a demon. Normal and element recipes have two
 /// ingredients; special recipes may have 2 to 4.
 class Recipe {
-  const Recipe({
-    required this.result,
-    required this.ingredients,
-    required this.kind,
-  });
+  const Recipe({required this.result, required this.ingredients, required this.kind});
 
   final String result;
   final List<String> ingredients;
@@ -242,7 +239,5 @@ bool _sameList(List<String> a, List<String> b) {
   return true;
 }
 
-String slugify(String name) => name
-    .toLowerCase()
-    .replaceAll(RegExp(r"[^a-z0-9]+"), '-')
-    .replaceAll(RegExp(r'^-+|-+$'), '');
+String slugify(String name) =>
+    name.toLowerCase().replaceAll(RegExp(r"[^a-z0-9]+"), '-').replaceAll(RegExp(r'^-+|-+$'), '');

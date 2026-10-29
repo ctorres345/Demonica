@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/providers.dart';
+import '../../app/version.dart';
 import '../../design_system/components.dart';
 import '../../design_system/palette_card.dart';
 import '../../design_system/tokens.dart';
@@ -15,6 +16,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(gameDataProvider).value;
     final settings = ref.watch(settingsProvider);
+    final fusion = ref.watch(fusionSettingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     final dc = context.dc;
 
@@ -78,7 +80,7 @@ class SettingsScreen extends ConsumerWidget {
                   contentPadding: EdgeInsets.zero,
                   title: Text(e.demons.join(', '), style: context.tt.bodyMedium),
                   subtitle: Text(e.condition, style: context.tt.bodySmall),
-                  value: e.demons.every(settings.fusion.isEnabled),
+                  value: e.demons.every(fusion.isEnabled),
                   onChanged: (v) => notifier.setDemonsEnabled(e.demons, v),
                 ),
             ],
@@ -104,7 +106,10 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: Space.x4),
-          Text('demonica · v0.2', style: context.tt.labelSmall?.copyWith(color: dc.textMuted)),
+          Text(
+            'demonica · v$appVersion',
+            style: context.tt.labelSmall?.copyWith(color: dc.textMuted),
+          ),
         ],
       ),
     );

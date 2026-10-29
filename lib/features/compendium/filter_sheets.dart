@@ -17,7 +17,7 @@ Future<void> showRacePicker(BuildContext context, WidgetRef ref, List<String> ra
           final selected = ref.watch(compendiumFilterProvider).races;
           return Column(
             children: [
-              _SheetHeader(
+              SheetHeader(
                 'Race',
                 onClear: () => ref.read(compendiumFilterProvider.notifier).setRaces({}),
               ),
@@ -50,71 +50,13 @@ Future<void> showRacePicker(BuildContext context, WidgetRef ref, List<String> ra
   );
 }
 
-Future<void> showLevelPicker(BuildContext context, WidgetRef ref, int? current) {
-  return showModalBottomSheet(
-    context: context,
-    builder: (ctx) => _LevelSheet(
-      initial: current ?? 99,
-      onChanged: ref.read(compendiumFilterProvider.notifier).setMaxLevel,
-    ),
-  );
-}
-
-class _LevelSheet extends StatefulWidget {
-  const _LevelSheet({required this.initial, required this.onChanged});
-  final int initial;
-  final ValueChanged<int?> onChanged;
-
-  @override
-  State<_LevelSheet> createState() => _LevelSheetState();
-}
-
-class _LevelSheetState extends State<_LevelSheet> {
-  late double _v = widget.initial.toDouble();
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _SheetHeader(
-            'Max level',
-            onClear: () {
-              widget.onChanged(null);
-              Navigator.pop(context);
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Space.x4),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Slider(
-                    value: _v,
-                    min: 1,
-                    max: 99,
-                    divisions: 98,
-                    onChanged: (v) => setState(() => _v = v),
-                    onChangeEnd: (v) => widget.onChanged(v.round()),
-                  ),
-                ),
-                SizedBox(width: 56, child: LevelBadge(_v.round(), size: 22)),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(Space.x4),
-            child: Text(
-              'Shows demons at or below this level. Set it to your current level to see what you can fuse now.',
-              style: context.tt.bodySmall,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+Future<void> showLevelPicker(BuildContext context, WidgetRef ref, int? current) => showLevelSheet(
+  context,
+  title: 'Max level',
+  help: 'Shows demons at or below this level. Set it to your current level to see what you can fuse now.',
+  current: current,
+  onChanged: ref.read(compendiumFilterProvider.notifier).setMaxLevel,
+);
 
 Future<void> showSkillPicker(BuildContext context, WidgetRef ref) {
   return showModalBottomSheet(
@@ -149,7 +91,7 @@ class _SkillSheetState extends ConsumerState<_SkillSheet> {
           ..sort((a, b) => a.name.compareTo(b.name));
     return Column(
       children: [
-        _SheetHeader(
+        SheetHeader(
           'Who learns this skill?',
           onClear: () {
             ref.read(compendiumFilterProvider.notifier).setSkill(null);
@@ -171,9 +113,7 @@ class _SkillSheetState extends ConsumerState<_SkillSheet> {
             itemCount: skills.length,
             itemBuilder: (ctx, i) {
               final s = skills[i];
-              final learners = data.demons.values
-                  .where((d) => d.skills.any((x) => x.name == s.name))
-                  .length;
+              final learners = data.learnerCounts[s.name] ?? 0;
               return Padding(
                 padding: const EdgeInsets.only(bottom: Space.x1),
                 child: SkillRow(
@@ -193,27 +133,6 @@ class _SkillSheetState extends ConsumerState<_SkillSheet> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SheetHeader extends StatelessWidget {
-  const _SheetHeader(this.title, {required this.onClear});
-  final String title;
-  final VoidCallback onClear;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x2, Space.x2),
-      child: Row(
-        children: [
-          Text(title, style: context.tt.titleLarge),
-          const Spacer(),
-          TextButton(onPressed: onClear, child: const Text('Clear')),
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Done')),
-        ],
-      ),
     );
   }
 }

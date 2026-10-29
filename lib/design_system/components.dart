@@ -331,6 +331,104 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
+/// Title row of a bottom sheet: "Title          CLEAR  DONE".
+class SheetHeader extends StatelessWidget {
+  const SheetHeader(this.title, {super.key, required this.onClear});
+  final String title;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x2, Space.x2),
+      child: Row(
+        children: [
+          Text(title, style: context.tt.titleLarge),
+          const Spacer(),
+          TextButton(onPressed: onClear, child: const Text('Clear')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Done')),
+        ],
+      ),
+    );
+  }
+}
+
+/// Opens a bottom sheet with a 1 to 99 level slider. [onChanged] gets the
+/// level when the slider is released, and null when the user taps Clear.
+Future<void> showLevelSheet(
+  BuildContext context, {
+  required String title,
+  required String help,
+  required int? current,
+  required ValueChanged<int?> onChanged,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    builder: (ctx) =>
+        _LevelSheet(title: title, help: help, initial: current ?? 99, onChanged: onChanged),
+  );
+}
+
+class _LevelSheet extends StatefulWidget {
+  const _LevelSheet({
+    required this.title,
+    required this.help,
+    required this.initial,
+    required this.onChanged,
+  });
+  final String title;
+  final String help;
+  final int initial;
+  final ValueChanged<int?> onChanged;
+
+  @override
+  State<_LevelSheet> createState() => _LevelSheetState();
+}
+
+class _LevelSheetState extends State<_LevelSheet> {
+  late double _v = widget.initial.toDouble();
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SheetHeader(
+            widget.title,
+            onClear: () {
+              widget.onChanged(null);
+              Navigator.pop(context);
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Space.x4),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Slider(
+                    value: _v,
+                    min: 1,
+                    max: 99,
+                    divisions: 98,
+                    onChanged: (v) => setState(() => _v = v),
+                    onChangeEnd: (v) => widget.onChanged(v.round()),
+                  ),
+                ),
+                SizedBox(width: 56, child: LevelBadge(_v.round(), size: 22)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(Space.x4),
+            child: Text(widget.help, style: context.tt.bodySmall),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Macca formatted with thin spaces: 36710 -> "36 710 ¥".
 String macca(int v) {
   final s = v.toString();

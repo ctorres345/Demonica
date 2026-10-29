@@ -18,10 +18,10 @@ class GameData {
     required this.fusionTable,
     required this.elementModifiers,
     required this.unlocks,
-  })  : demons = {for (final d in demons) d.name: d},
-        skills = {for (final s in skills) s.name: s},
-        demonsById = {for (final d in demons) d.id: d},
-        skillsById = {for (final s in skills) s.id: s};
+  }) : demons = {for (final d in demons) d.name: d},
+       skills = {for (final s in skills) s.name: s},
+       demonsById = {for (final d in demons) d.id: d},
+       skillsById = {for (final s in skills) s.id: s};
 
   final String gameId;
   final String title;
@@ -43,24 +43,22 @@ class GameData {
   final Map<String, Map<String, int>> elementModifiers;
   final List<UnlockCategory> unlocks;
 
-  Demon demon(String name) =>
-      demons[name] ?? (throw ArgumentError('unknown demon "$name"'));
-  Skill skill(String name) =>
-      skills[name] ?? (throw ArgumentError('unknown skill "$name"'));
+  Demon demon(String name) => demons[name] ?? (throw ArgumentError('unknown demon "$name"'));
+  Skill skill(String name) => skills[name] ?? (throw ArgumentError('unknown skill "$name"'));
 
   /// Demon names that are toggled by an unlock category, with their default.
   Map<String, bool> get unlockDefaults => {
-        for (final cat in unlocks)
-          for (final e in cat.entries)
-            for (final d in e.demons) d: cat.enabledByDefault,
-      };
+    for (final cat in unlocks)
+      for (final e in cat.entries)
+        for (final d in e.demons) d: cat.enabledByDefault,
+  };
 
   FusionSettings get defaultSettings => FusionSettings(
-        disabledDemons: {
-          for (final e in unlockDefaults.entries)
-            if (!e.value) e.key,
-        },
-      );
+    disabledDemons: {
+      for (final e in unlockDefaults.entries)
+        if (!e.value) e.key,
+    },
+  );
 
   /// Demons sorted by level, then race order, then name.
   late final List<Demon> demonsByLevel = demons.values.toList()
@@ -72,9 +70,18 @@ class GameData {
       return a.name.compareTo(b.name);
     });
 
-  late final Map<String, int> _raceOrder = {
-    for (var i = 0; i < races.length; i++) races[i]: i
-  };
+  /// How many demons learn each skill natively, keyed by skill name.
+  late final Map<String, int> learnerCounts = () {
+    final out = <String, int>{};
+    for (final d in demons.values) {
+      for (final s in d.skills) {
+        out[s.name] = (out[s.name] ?? 0) + 1;
+      }
+    }
+    return out;
+  }();
+
+  late final Map<String, int> _raceOrder = {for (var i = 0; i < races.length; i++) races[i]: i};
   int raceOrder(String race) => _raceOrder[race] ?? 999;
 
   /// Builds GameData from the JSON strings of the asset files.
@@ -98,27 +105,23 @@ class GameData {
       elementDemons: (m['elementDemons'] as List).cast<String>(),
       maxSkillSlots: m['maxSkillSlots'] as int,
       demons: [
-        for (final d in jsonDecode(demons) as List)
-          Demon.fromJson(d as Map<String, dynamic>)
+        for (final d in jsonDecode(demons) as List) Demon.fromJson(d as Map<String, dynamic>),
       ],
       skills: [
-        for (final s in jsonDecode(skills) as List)
-          Skill.fromJson(s as Map<String, dynamic>)
+        for (final s in jsonDecode(skills) as List) Skill.fromJson(s as Map<String, dynamic>),
       ],
       fusionTable: (fc['table'] as Map<String, dynamic>).map(
-          (k, v) => MapEntry(k, (v as Map<String, dynamic>).cast<String, String>())),
+        (k, v) => MapEntry(k, (v as Map<String, dynamic>).cast<String, String>()),
+      ),
       elementModifiers: (ec['modifiers'] as Map<String, dynamic>).map(
-          (k, v) => MapEntry(k, (v as Map<String, dynamic>).cast<String, int>())),
+        (k, v) => MapEntry(k, (v as Map<String, dynamic>).cast<String, int>()),
+      ),
       unlocks: [
         for (final c in jsonDecode(unlocks) as List)
-          UnlockCategory(
-            c['category'] as String,
-            c['enabledByDefault'] as bool,
-            [
-              for (final e in c['entries'] as List)
-                UnlockEntry((e['demons'] as List).cast<String>(), e['condition'] as String)
-            ],
-          )
+          UnlockCategory(c['category'] as String, c['enabledByDefault'] as bool, [
+            for (final e in c['entries'] as List)
+              UnlockEntry((e['demons'] as List).cast<String>(), e['condition'] as String),
+          ]),
       ],
     );
   }

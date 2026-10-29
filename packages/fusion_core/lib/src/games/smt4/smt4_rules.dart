@@ -31,11 +31,18 @@ class Smt4Rules implements GameRules {
   late Map<String, List<int>> _resultLevelsByRace;
   late Map<String, Map<int, Demon>> _resultByRaceLevel;
 
+  // Recipe lists per demon name for the current settings. The tree and the
+  // detail screen ask for the same demons many times.
+  final _reverseCache = <String, List<Recipe>>{};
+  final _forwardCache = <String, List<Recipe>>{};
+
   void _prepare(FusionSettings settings) {
     if (_cacheKey != null && _setEquals(_cacheKey!, settings.disabledDemons)) {
       return;
     }
     _cacheKey = Set.of(settings.disabledDemons);
+    _reverseCache.clear();
+    _forwardCache.clear();
     final ingredients = <String, List<Demon>>{};
     final results = <String, List<Demon>>{};
     for (final d in data.demons.values) {
@@ -79,7 +86,7 @@ class Smt4Rules implements GameRules {
     _prepare(settings);
     return [
       for (final l in _resultLevelsByRace[race] ?? const <int>[])
-        if (l != _overflow) _resultByRaceLevel[race]![l]!
+        if (l != _overflow) _resultByRaceLevel[race]![l]!,
     ];
   }
 
@@ -142,14 +149,20 @@ class Smt4Rules implements GameRules {
     return _resultByRaceLevel[other.race]![lvl];
   }
 
+  /// The result is cached per settings and cannot be modified; copy it
+  /// before sorting or filtering in place.
   @override
   List<Recipe> reverseRecipes(Demon target, FusionSettings settings) {
     _prepare(settings);
+    return _reverseCache[target.name] ??= List.unmodifiable(_reverse(target, settings));
+  }
+
+  List<Recipe> _reverse(Demon target, FusionSettings settings) {
     if (!settings.isEnabled(target.name)) return const [];
     switch (target.fusion) {
       case FusionKind.special:
         return [
-          Recipe(result: target.name, ingredients: target.specialRecipe, kind: RecipeKind.special)
+          Recipe(result: target.name, ingredients: target.specialRecipe, kind: RecipeKind.special),
         ];
       case FusionKind.accident:
       case FusionKind.enemy:
@@ -164,11 +177,13 @@ class Smt4Rules implements GameRules {
         final list = _ingredientsByRace[race] ?? const [];
         for (var i = 0; i < list.length; i++) {
           for (var j = i + 1; j < list.length; j++) {
-            out.add(Recipe(
-              result: target.name,
-              ingredients: [list[i].name, list[j].name],
-              kind: RecipeKind.sameRace,
-            ));
+            out.add(
+              Recipe(
+                result: target.name,
+                ingredients: [list[i].name, list[j].name],
+                kind: RecipeKind.sameRace,
+              ),
+            );
           }
         }
       }
@@ -187,11 +202,9 @@ class Smt4Rules implements GameRules {
         for (final a in _ingredientsByRace[raceA] ?? const <Demon>[]) {
           for (final b in _ingredientsByRace[raceB] ?? const <Demon>[]) {
             if (fuse(a, b, settings)?.name == target.name) {
-              out.add(Recipe(
-                result: target.name,
-                ingredients: _ordered(a, b),
-                kind: RecipeKind.normal,
-              ));
+              out.add(
+                Recipe(result: target.name, ingredients: _ordered(a, b), kind: RecipeKind.normal),
+              );
             }
           }
         }
@@ -204,20 +217,24 @@ class Smt4Rules implements GameRules {
       if (data.elementModifiers[target.race]?[elemName] == null) continue;
       for (final d in _ingredientsByRace[target.race] ?? const <Demon>[]) {
         if (fuse(elem, d, settings)?.name == target.name) {
-          out.add(Recipe(
-            result: target.name,
-            ingredients: [d.name, elemName],
-            kind: RecipeKind.element,
-          ));
+          out.add(
+            Recipe(result: target.name, ingredients: [d.name, elemName], kind: RecipeKind.element),
+          );
         }
       }
     }
     return out;
   }
 
+  /// Cached and unmodifiable, like [reverseRecipes].
   @override
   List<Recipe> forwardRecipes(Demon ingredient, FusionSettings settings) {
     _prepare(settings);
+    return _forwardCache[ingredient.name] ??= List.unmodifiable(_forward(ingredient, settings));
+  }
+
+  List<Recipe> _forward(Demon ingredient, FusionSettings settings) {
+    if (ingredient.isEnemyOnly) return const [];
     final out = <Recipe>[];
     final candidates = [
       for (final l in _ingredientsByRace.values) ...l,
@@ -231,8 +248,8 @@ class Smt4Rules implements GameRules {
       final kind = ingredient.race == _elementRace || other.race == _elementRace
           ? RecipeKind.element
           : ingredient.race == other.race
-              ? RecipeKind.sameRace
-              : RecipeKind.normal;
+          ? RecipeKind.sameRace
+          : RecipeKind.normal;
       out.add(Recipe(result: r.name, ingredients: _ordered(ingredient, other), kind: kind));
     }
     return out;
@@ -257,6 +274,5 @@ class Smt4Rules implements GameRules {
     return a.level <= b.level ? [a.name, b.name] : [b.name, a.name];
   }
 
-  static bool _setEquals(Set<String> a, Set<String> b) =>
-      a.length == b.length && a.containsAll(b);
+  static bool _setEquals(Set<String> a, Set<String> b) => a.length == b.length && a.containsAll(b);
 }

@@ -1,39 +1,27 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# fusion_core
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/tools/pub/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+The pure-Dart fusion engine behind Demonica. No Flutter, no I/O: it takes the decoded game JSON as strings and answers fusion questions.
 
 ```dart
-const like = 'sample';
+final data = GameData.fromJsonStrings(meta: ..., demons: ..., skills: ...,
+    fusionChart: ..., elementChart: ..., unlocks: ...);
+final rules = Smt4Rules(data);
+final settings = data.defaultSettings;            // DLC off, story demons on
+
+rules.fuse(data.demon('Pixie'), data.demon('Angel'), settings);   // -> Demon?
+rules.reverseRecipes(data.demon('Lilith'), settings);             // every way to make Lilith
+rules.forwardRecipes(data.demon('Pixie'), settings);              // everything Pixie fuses into
+rules.freeSkillSlots(data.demon('Lilith'));                       // inherit slots
 ```
 
-## Additional information
+`reverseRecipes` and `forwardRecipes` are cached per settings and return read-only lists.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+| Folder | Contents |
+| --- | --- |
+| `lib/src/model` | `Demon`, `Skill`, `Recipe`, `FusionSettings`, `GameData` |
+| `lib/src/engine` | `GameRules`, the interface each game implements |
+| `lib/src/games/smt4` | `Smt4Rules`, with the rules in plain words at the top |
+| `test` | rule tests and `smt4_golden.json` (recipes from an independent port of the upstream code) |
+| `benchmark` | `dart run benchmark/recipes_benchmark.dart` |
+
+Run `dart test` here after any change. See ../../docs/ARCHITECTURE.md for how the app uses it.

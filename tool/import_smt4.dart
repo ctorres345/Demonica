@@ -41,7 +41,8 @@ Future<void> main(List<String> args) async {
     final text = localDir != null
         ? await File('$localDir/$upstreamDir/$f').readAsString()
         : await _download(
-            'https://raw.githubusercontent.com/$upstreamRepo/$upstreamCommit/$upstreamDir/$f');
+            'https://raw.githubusercontent.com/$upstreamRepo/$upstreamCommit/$upstreamDir/$f',
+          );
     raw[f] = jsonDecode(text);
   }
 
@@ -64,8 +65,10 @@ Future<void> main(List<String> args) async {
     final a = (row['a'] as List).cast<String>();
     final b = (row['b'] as List).cast<num>();
     final c = (row['c'] as List).cast<String>();
-    _require(a.length == 3 && b.length == 8 && c.length == 3,
-        'unexpected skill row shape for ${a.first}');
+    _require(
+      a.length == 3 && b.length == 8 && c.length == 3,
+      'unexpected skill row shape for ${a.first}',
+    );
     final name = a[0];
     final rawRank = b[0].toInt();
     final unique = rawRank > 900;
@@ -97,10 +100,11 @@ Future<void> main(List<String> args) async {
   // ---- demons -------------------------------------------------------------
   final alignments = (raw['alignments.json'] as Map).cast<String, String>();
   final prereqs = (raw['fusion-prereqs.json'] as Map).cast<String, String>();
-  final specials = (raw['special-recipes.json'] as Map)
-      .map((k, v) => MapEntry(k as String, (v as List).cast<String>()));
+  final specials = (raw['special-recipes.json'] as Map).map(
+    (k, v) => MapEntry(k as String, (v as List).cast<String>()),
+  );
   final evolutions = (raw['evolutions.json'] as Map).cast<String, dynamic>();
-  final unlockSets = (raw['demon-unlocks.json'] as List).cast<Map>();
+  final unlockSets = (raw['demon-unlocks.json'] as List).cast<Map<String, dynamic>>();
 
   final unlockCategory = <String, String>{};
   final unlockCondition = <String, String>{};
@@ -175,8 +179,7 @@ Future<void> main(List<String> args) async {
         .map((r) => (resistCodes[r]! / 1000).floor())
         .fold<num>(0, (acc, i) => acc + resistRankPrices[i]);
     final resistPrice = lvl * resistRankSum * resistRankSum;
-    final price =
-        ((hpPrice + mpPrice + statPrice + innatePrice + resistPrice) / 2).floor() * 2;
+    final price = ((hpPrice + mpPrice + statPrice + innatePrice + resistPrice) / 2).floor() * 2;
 
     final race = d['race'] as String;
     final align = alignments[name] ?? alignments[race] ?? 'Neutral-Neutral';
@@ -225,18 +228,25 @@ Future<void> main(List<String> args) async {
       'level': (d['lvl'] as num).floor(),
       'alignment': alignments[d['race']] ?? 'Neutral-Neutral',
       'stats': {
-        'hp': s[0].toInt(), 'mp': s[1].toInt(), 'st': s[2].toInt(), 'dx': s[3].toInt(),
-        'ma': s[4].toInt(), 'ag': s[5].toInt(), 'lu': s[6].toInt(),
+        'hp': s[0].toInt(),
+        'mp': s[1].toInt(),
+        'st': s[2].toInt(),
+        'dx': s[3].toInt(),
+        'ma': s[4].toInt(),
+        'ag': s[5].toInt(),
+        'lu': s[6].toInt(),
       },
       'resists': {
         for (var i = 0; i < resistElems.length; i++)
-          resistElems[i]: _resistLabel((d['resists'] as String)[i])
+          resistElems[i]: _resistLabel((d['resists'] as String)[i]),
       },
       'ailments': {
         for (var i = 0; i < ailmentNames.length; i++)
-          ailmentNames[i].toLowerCase(): _resistLabel((d['ailments'] as String)[i])
+          ailmentNames[i].toLowerCase(): _resistLabel((d['ailments'] as String)[i]),
       },
-      'skills': [for (final n in (d['eskills'] as List)) {'name': n, 'level': 0}],
+      'skills': [
+        for (final n in (d['eskills'] as List)) {'name': n, 'level': 0},
+      ],
       'price': 0,
       'fusion': 'enemy',
       'prereq': 'Enemy only',
@@ -248,7 +258,7 @@ Future<void> main(List<String> args) async {
   // races[0..r]. We expand it to a full symmetric map.
   final chart = raw['fusion-chart.json'] as Map<String, dynamic>;
   final chartRaces = (chart['races'] as List).cast<String>();
-  final table = (chart['table'] as List).cast<List>();
+  final table = (chart['table'] as List).cast<List<dynamic>>();
   final fusionTable = <String, Map<String, String>>{};
   for (var r = 0; r < table.length; r++) {
     for (var c = 0; c < table[r].length; c++) {
@@ -261,7 +271,7 @@ Future<void> main(List<String> args) async {
   final elem = raw['element-chart.json'] as Map<String, dynamic>;
   final elemNames = (elem['elems'] as List).cast<String>();
   final elemRaces = (elem['races'] as List).cast<String>();
-  final elemTable = (elem['table'] as List).cast<List>();
+  final elemTable = (elem['table'] as List).cast<List<dynamic>>();
   final elementModifiers = <String, Map<String, int>>{};
   for (var r = 0; r < elemRaces.length; r++) {
     for (var c = 0; c < elemNames.length; c++) {
@@ -289,14 +299,19 @@ Future<void> main(List<String> args) async {
     'maxSkillSlots': 8,
   });
   write('demons.json', demons.values.toList()..sort(_byRaceThenLevel(races)));
-  write('skills.json', skills.values.toList()..sort((a, b) => (a['name'] as String).compareTo(b['name'] as String)));
+  write(
+    'skills.json',
+    skills.values.toList()..sort((a, b) => (a['name'] as String).compareTo(b['name'] as String)),
+  );
   write('fusion_chart.json', {'races': chartRaces, 'table': fusionTable});
   write('element_chart.json', {'elements': elemNames, 'modifiers': elementModifiers});
   write('unlocks.json', unlocks);
-  write('affinity_bonuses.json', raw['affinity-bonuses.json']);
+  write('affinity_bonuses.json', raw['affinity-bonuses.json'] as Object);
 
-  stdout.writeln('Wrote ${demons.length} demons, ${skills.length} skills, '
-      '${specials.length} special recipes to $outDir (upstream $upstreamCommit).');
+  stdout.writeln(
+    'Wrote ${demons.length} demons, ${skills.length} skills, '
+    '${specials.length} special recipes to $outDir (upstream $upstreamCommit).',
+  );
 }
 
 int Function(Map<String, dynamic>, Map<String, dynamic>) _byRaceThenLevel(List<String> races) {
@@ -310,15 +325,24 @@ int Function(Map<String, dynamic>, Map<String, dynamic>) _byRaceThenLevel(List<S
 
 String _resistLabel(String code) {
   switch (code) {
-    case '-': return 'none';
-    case 'w': return 'weak';
-    case 'W': return 'weak';
-    case 'X': return 'weak'; // extra-weak ailment code
-    case 's': return 'resist';
-    case 'n': return 'null';
-    case 'r': return 'repel';
-    case 'd': return 'drain';
-    default: throw StateError('unknown resist code "$code"');
+    case '-':
+      return 'none';
+    case 'w':
+      return 'weak';
+    case 'W':
+      return 'weak';
+    case 'X':
+      return 'weak'; // extra-weak ailment code
+    case 's':
+      return 'resist';
+    case 'n':
+      return 'null';
+    case 'r':
+      return 'repel';
+    case 'd':
+      return 'drain';
+    default:
+      throw StateError('unknown resist code "$code"');
   }
 }
 

@@ -126,17 +126,6 @@ class SettingsNotifier extends Notifier<AppSettings> {
     _save();
   }
 
-  void setDemonEnabled(String name, bool enabled) {
-    final set = {...state.disabledDemons};
-    if (enabled) {
-      set.remove(name);
-    } else {
-      set.add(name);
-    }
-    state = state.copyWith(disabledDemons: set);
-    _save();
-  }
-
   void setDemonsEnabled(Iterable<String> names, bool enabled) {
     final set = {...state.disabledDemons};
     for (final n in names) {
@@ -148,6 +137,14 @@ class SettingsNotifier extends Notifier<AppSettings> {
 }
 
 final settingsProvider = NotifierProvider<SettingsNotifier, AppSettings>(SettingsNotifier.new);
+
+/// Just the fusion part of the settings. Anything that computes recipes
+/// watches this instead of [settingsProvider], so changing the palette or
+/// the theme does not recompute recipes.
+final fusionSettingsProvider = Provider<FusionSettings>(
+  (ref) =>
+      FusionSettings(disabledDemons: ref.watch(settingsProvider.select((s) => s.disabledDemons))),
+);
 
 /// Compendium filters.
 class CompendiumFilter {
@@ -211,11 +208,11 @@ final filteredDemonsProvider = Provider<List<Demon>>((ref) {
   final data = ref.watch(gameDataProvider).value;
   if (data == null) return const [];
   final f = ref.watch(compendiumFilterProvider);
-  final settings = ref.watch(settingsProvider);
+  final fusion = ref.watch(fusionSettingsProvider);
   final q = f.query.trim().toLowerCase();
   return [
     for (final d in data.demonsByLevel)
-      if ((f.showDisabled || settings.fusion.isEnabled(d.name)) &&
+      if ((f.showDisabled || fusion.isEnabled(d.name)) &&
           (q.isEmpty || d.name.toLowerCase().contains(q) || d.race.toLowerCase().contains(q)) &&
           (f.races.isEmpty || f.races.contains(d.race)) &&
           (f.maxLevel == null || d.level <= f.maxLevel!) &&
@@ -250,36 +247,41 @@ class TreePrefsNotifier extends Notifier<TreePrefs> {
 
 final treePrefsProvider = NotifierProvider<TreePrefsNotifier, TreePrefs>(TreePrefsNotifier.new);
 
-/// Recipes for a demon, filtered and sorted by the tree prefs. Cached per demon
-/// name while settings and prefs stay the same.
+/// Recipes for a demon, filtered and sorted by the tree prefs. The engine
+/// caches the raw list; this provider caches the filtered, sorted copy per
+/// demon name while the fusion settings and prefs stay the same.
 final recipesProvider = Provider.family<List<Recipe>, String>((ref, demonName) {
   final rules = ref.watch(rulesProvider);
   if (rules == null) return const [];
-  final settings = ref.watch(settingsProvider).fusion;
+  final settings = ref.watch(fusionSettingsProvider);
   final prefs = ref.watch(treePrefsProvider);
   final data = rules.data;
   final demon = data.demons[demonName];
   if (demon == null) return const [];
-  var list = rules.reverseRecipes(demon, settings);
-  if (prefs.hideElement) {
-    list = list.where((r) => r.kind != RecipeKind.element).toList();
-  }
-  if (prefs.maxLevel != null) {
-    list = list
-        .where((r) => r.ingredients.every((n) => (data.demons[n]?.level ?? 0) <= prefs.maxLevel!))
-        .toList();
-  }
-  int maxLevel(Recipe r) =>
-      r.ingredients.fold(0, (m, n) => (data.demons[n]?.level ?? 0) > m ? data.demons[n]!.level : m);
-  list.sort((a, b) {
-    switch (prefs.sort) {
-      case RecipeSort.cheapest:
-        final c = rules.recipeCost(a).compareTo(rules.recipeCost(b));
-        return c != 0 ? c : maxLevel(a).compareTo(maxLevel(b));
-      case RecipeSort.lowestLevel:
-        final c = maxLevel(a).compareTo(maxLevel(b));
-        return c != 0 ? c : rules.recipeCost(a).compareTo(rules.recipeCost(b));
-    }
+  final maxPref = prefs.maxLevel;
+  int topLevel(Recipe r) =>
+      r.ingredients.map((n) => data.demons[n]?.level ?? 0).fold(0, (a, b) => a > b ? a : b);
+  // Work out each recipe's sort keys once instead of inside the comparator.
+  final keyed = [
+    for (final r in rules.reverseRecipes(demon, settings))
+      if (!(prefs.hideElement && r.kind == RecipeKind.element))
+        (recipe: r, cost: rules.recipeCost(r), level: topLevel(r)),
+  ];
+  if (maxPref != null) keyed.removeWhere((k) => k.level > maxPref);
+  keyed.sort((a, b) {
+    final (first, second) = switch (prefs.sort) {
+      RecipeSort.cheapest => (a.cost.compareTo(b.cost), a.level.compareTo(b.level)),
+      RecipeSort.lowestLevel => (a.level.compareTo(b.level), a.cost.compareTo(b.cost)),
+    };
+    return first != 0 ? first : second;
   });
-  return list;
+  return [for (final k in keyed) k.recipe];
+});
+
+/// Every fusion that uses a demon as an ingredient ("Used in" tab).
+final usedInProvider = Provider.family<List<Recipe>, String>((ref, demonName) {
+  final rules = ref.watch(rulesProvider);
+  final demon = rules?.data.demons[demonName];
+  if (rules == null || demon == null) return const [];
+  return rules.forwardRecipes(demon, ref.watch(fusionSettingsProvider));
 });

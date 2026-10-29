@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 /// The dark palette follows the Strange Journey / SMT I menus: deep navy
 /// panels, light-blue outlines, white text, red for the selected command,
 /// orange HP and green MP.
-/// Screens never use these directly; they read [DemonicaColors] and
-/// [ElementColors] from the theme so a direction swap is one file.
+/// Screens never use the color constants directly; they read
+/// [DemonicaColors] and [ElementColors] from the theme (`context.dc`,
+/// `context.ec`) so a palette swap is one file. See docs/DESIGN_SYSTEM.md.
 abstract final class Fonts {
   static const display = 'ChakraPetch';
   static const body = 'Inter';
@@ -82,7 +83,8 @@ class DemonicaColors extends ThemeExtension<DemonicaColors> {
   final Color accent, onAccent, danger, ok;
   final Color law, neutral, chaos;
 
-  static const dark = DemonicaColors(
+  /// Strange Journey (the default palette).
+  static const strangeJourneyDark = DemonicaColors(
     bg: Color(0xFF050B16),
     surface: Color(0xFF0C1C36),
     surfaceHigh: Color(0xFF173159),
@@ -96,6 +98,22 @@ class DemonicaColors extends ThemeExtension<DemonicaColors> {
     law: Color(0xFF6FA3FF),
     neutral: Color(0xFFA9C0DE),
     chaos: Color(0xFFFF7A4A),
+  );
+
+  static const strangeJourneyLight = DemonicaColors(
+    bg: Color(0xFFEEF3FA),
+    surface: Color(0xFFFFFFFF),
+    surfaceHigh: Color(0xFFDCE7F5),
+    outline: Color(0xFF9DB7D8),
+    text: Color(0xFF0A1A33),
+    textMuted: Color(0xFF4A6A94),
+    accent: Color(0xFF1F6FD0),
+    onAccent: Color(0xFFFFFFFF),
+    danger: Color(0xFFC8252C),
+    ok: Color(0xFF1F8A3A),
+    law: Color(0xFF2F5FD0),
+    neutral: Color(0xFF5E7596),
+    chaos: Color(0xFFC84A1F),
   );
 
   static const smt4Dark = DemonicaColors(
@@ -121,7 +139,9 @@ class DemonicaColors extends ThemeExtension<DemonicaColors> {
     outline: Color(0xFFBDBDBD),
     text: Color(0xFF141414),
     textMuted: Color(0xFF5F5F5F),
-    accent: Color(0xFFD97706),
+    // Darker than the game's orange so white button text and orange captions
+    // stay readable on light grey (4.5:1).
+    accent: Color(0xFFB45309),
     onAccent: Color(0xFFFFFFFF),
     danger: Color(0xFFB91C1C),
     ok: Color(0xFF2E8B1E),
@@ -165,27 +185,11 @@ class DemonicaColors extends ThemeExtension<DemonicaColors> {
   static DemonicaColors of(Palette palette, Brightness brightness) {
     final dark = brightness == Brightness.dark;
     return switch (palette) {
-      Palette.strangeJourney => dark ? DemonicaColors.dark : DemonicaColors.light,
+      Palette.strangeJourney => dark ? strangeJourneyDark : strangeJourneyLight,
       Palette.smt4 => dark ? smt4Dark : smt4Light,
       Palette.codex => dark ? codexDark : codexLight,
     };
   }
-
-  static const light = DemonicaColors(
-    bg: Color(0xFFEEF3FA),
-    surface: Color(0xFFFFFFFF),
-    surfaceHigh: Color(0xFFDCE7F5),
-    outline: Color(0xFF9DB7D8),
-    text: Color(0xFF0A1A33),
-    textMuted: Color(0xFF4A6A94),
-    accent: Color(0xFF1F6FD0),
-    onAccent: Color(0xFFFFFFFF),
-    danger: Color(0xFFC8252C),
-    ok: Color(0xFF1F8A3A),
-    law: Color(0xFF2F5FD0),
-    neutral: Color(0xFF5E7596),
-    chaos: Color(0xFFC84A1F),
-  );
 
   Color alignmentColor(String alignment) {
     final lawChaos = alignment.split('-').last;

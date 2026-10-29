@@ -77,8 +77,9 @@ void main() {
     });
 
     test('matches the Python port for sampled pairs', () {
-      final golden = jsonDecode(File('test/smt4_forward_golden.json').readAsStringSync())
-          as Map<String, dynamic>;
+      final golden = jsonDecode(
+        File('test/smt4_forward_golden.json').readAsStringSync(),
+      ) as Map<String, dynamic>;
       for (final a in golden.entries) {
         for (final b in (a.value as Map<String, dynamic>).entries) {
           final got = rules.fuse(d(a.key), d(b.key), settings)?.name;
@@ -113,18 +114,18 @@ void main() {
     });
 
     test('match the Python port for 20 demons (normal + same-race pairs)', () {
-      final golden = jsonDecode(File('test/smt4_golden.json').readAsStringSync())
-          as Map<String, dynamic>;
+      final golden =
+          jsonDecode(File('test/smt4_golden.json').readAsStringSync()) as Map<String, dynamic>;
       for (final e in golden.entries) {
         final target = data.demon(e.key);
         final expected = {
           for (final p in (e.value['recipes'] as List))
-            ([...(p as List).cast<String>()]..sort()).join('|')
+            ([...(p as List).cast<String>()]..sort()).join('|'),
         };
         final got = {
           for (final r in rules.reverseRecipes(target, settings))
             if (r.kind == RecipeKind.normal || r.kind == RecipeKind.sameRace)
-              ([...r.ingredients]..sort()).join('|')
+              ([...r.ingredients]..sort()).join('|'),
         };
         expect(got, expected, reason: e.key);
       }
@@ -143,8 +144,28 @@ void main() {
       final r1 = rules.reverseRecipes(data.demon('Pixie'), settings);
       expect(r1.any((r) => r.ingredients.contains('Dwarf')), isTrue);
       final r2 = rules.reverseRecipes(
-          data.demon('Pixie'), settings.copyWith(disabledDemons: {...settings.disabledDemons, 'Dwarf'}));
+        data.demon('Pixie'),
+        settings.copyWith(disabledDemons: {...settings.disabledDemons, 'Dwarf'}),
+      );
       expect(r2.any((r) => r.ingredients.contains('Dwarf')), isFalse);
+    });
+
+    test('recipe lists are cached per settings and read-only', () {
+      final pixie = data.demon('Pixie');
+      final a = rules.reverseRecipes(pixie, settings);
+      expect(identical(a, rules.reverseRecipes(pixie, settings)), isTrue);
+      expect(() => a.sort((x, y) => 0), throwsUnsupportedError);
+      final other = settings.copyWith(disabledDemons: {...settings.disabledDemons, 'Dwarf'});
+      expect(identical(a, rules.reverseRecipes(pixie, other)), isFalse);
+      expect(
+        identical(rules.forwardRecipes(pixie, other), rules.forwardRecipes(pixie, other)),
+        isTrue,
+      );
+    });
+
+    test('learner counts match a direct scan', () {
+      final n = data.demons.values.where((d) => d.skills.any((s) => s.name == 'Mediarahan')).length;
+      expect(data.learnerCounts['Mediarahan'], n);
     });
 
     test('is fast enough for the UI', () {

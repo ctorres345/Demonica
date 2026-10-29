@@ -1,0 +1,27 @@
+# Changelog
+
+User-visible changes, newest first. Dates are when the change reached `main`.
+
+## Unreleased
+
+- Faster screens: recipe lists are cached, and changing the palette or theme no longer recomputes recipes. Opening one branch of the recipe tree no longer rebuilds the whole tree.
+- SMT IV light palette: darker orange accent so button text is readable (contrast 3.2:1 to 5.0:1).
+- Settings shows the app version from one place (`lib/app/version.dart`).
+- Docs: architecture, coding guidelines, contributing guide, design system rules.
+
+## 0.2.0 (2026-10-29)
+
+- Saved tab: bookmark a demon, a recipe, or the open path of the recipe tree as a step-by-step plan. Notes, done ticks, export and import as a file.
+- Demon page: "Used in" tab with every fusion the demon is part of, sortable by result level.
+- Game-style status line on the demon page, 12x12 pixel helmet in the app bar and rail.
+- "Report a wrong recipe" link in Settings.
+
+## 0.1.0 (2026-10-28)
+
+- Compendium of all 454 SMT IV demons with search and race, level and skill filters.
+- Demon page: stats, resistances, skills, free inherit slots, how to get it.
+- Expandable recipe tree: tap any ingredient to see its own recipes.
+- Skills lookup: who learns a skill.
+- Three palettes (Strange Journey, SMT IV, Codex) in dark and light, picked on a welcome screen or in Settings.
+- Settings to turn DLC, quest, NG+ and Fiend demons on or off.
+- App icon for web, Android and iOS.

@@ -29,13 +29,10 @@ class DemonDetailScreen extends ConsumerWidget {
       );
     }
     final dc = context.dc;
-    final settings = ref.watch(settingsProvider);
+    final enabled = ref.watch(fusionSettingsProvider).isEnabled(demon.name);
     final recipes = ref.watch(recipesProvider(demon.name));
-    final enabled = settings.fusion.isEnabled(demon.name);
+    final usedIn = ref.watch(usedInProvider(demon.name));
     final freeSlots = rules.freeSkillSlots(demon);
-    final usedIn = demon.isEnemyOnly
-        ? const <Recipe>[]
-        : rules.forwardRecipes(demon, settings.fusion);
 
     final overview = ListView(
       padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, Space.x8),
@@ -93,14 +90,14 @@ class DemonDetailScreen extends ConsumerWidget {
         else if (recipes.isEmpty)
           const _Note('No recipe with the current settings. Enable more demons in Settings.')
         else ...[
-          for (final r in recipes.take(5))
+          for (final (r, cost) in recipes.take(5).map((r) => (r, rules.recipeCost(r))))
             Padding(
               padding: const EdgeInsets.only(bottom: Space.x1),
               child: RecipeRow(
                 recipe: r,
                 data: data,
-                cost: rules.recipeCost(r),
-                trailing: SaveRecipeButton(recipe: r, cost: rules.recipeCost(r)),
+                cost: cost,
+                trailing: SaveRecipeButton(recipe: r, cost: cost),
               ),
             ),
           if (recipes.length > 5)

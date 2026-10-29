@@ -35,12 +35,7 @@ class _SkillsScreenState extends ConsumerState<SkillsScreen> {
             final e = a.element.compareTo(b.element);
             return e != 0 ? e : a.rank.compareTo(b.rank);
           });
-    final learnerCount = <String, int>{};
-    for (final d in data.demons.values) {
-      for (final s in d.skills) {
-        learnerCount[s.name] = (learnerCount[s.name] ?? 0) + 1;
-      }
-    }
+    final learnerCount = data.learnerCounts;
     return Scaffold(
       appBar: AppBar(title: const Text('SKILLS')),
       body: Column(

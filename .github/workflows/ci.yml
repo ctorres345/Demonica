@@ -14,9 +14,4 @@ jobs:
         with:
           channel: stable
           cache: true
-      - run: flutter pub get
-      - run: flutter analyze
-      - run: dart test
-        working-directory: packages/fusion_core
-      - run: flutter test
-      - run: flutter build web --release --no-web-resources-cdn
+      - run: bash tool/check.sh
