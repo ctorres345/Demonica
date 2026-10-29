@@ -9,6 +9,8 @@ import '../features/compendium/compendium_screen.dart';
 import '../features/compendium/demon_detail_screen.dart';
 import '../features/onboarding/welcome_screen.dart';
 import '../features/recipes/recipe_tree_screen.dart';
+import '../features/saved/saved_screen.dart';
+import '../features/saved/saved_store.dart';
 import '../features/settings/settings_screen.dart';
 import '../features/skills/skills_screen.dart';
 import 'providers.dart';
@@ -49,6 +51,7 @@ final _routes = <RouteBase>[
         ],
       ),
       GoRoute(path: '/smt4/skills', builder: (context, state) => const SkillsScreen()),
+      GoRoute(path: '/saved', builder: (context, state) => const SavedScreen()),
       GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
     ],
   ),
@@ -74,7 +77,7 @@ class DemonicaApp extends ConsumerWidget {
 }
 
 /// Bottom navigation on phones, a rail on wide screens.
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.location, required this.child});
   final String location;
   final Widget child;
@@ -82,19 +85,31 @@ class AppShell extends StatelessWidget {
   static const _tabs = [
     (path: '/smt4/demons', icon: Icons.auto_awesome_mosaic_outlined, label: 'DEMONS'),
     (path: '/smt4/skills', icon: Icons.bolt_outlined, label: 'SKILLS'),
+    (path: '/saved', icon: Icons.bookmarks_outlined, label: 'SAVED'),
     (path: '/settings', icon: Icons.tune, label: 'SETTINGS'),
   ];
 
   int get _index {
     if (location.startsWith('/smt4/skills')) return 1;
-    if (location.startsWith('/settings')) return 2;
+    if (location.startsWith('/saved')) return 2;
+    if (location.startsWith('/settings')) return 3;
     return 0;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final wide = MediaQuery.sizeOf(context).width >= wideBreakpoint;
     final dc = context.dc;
+    // Saved entries not ticked off yet, shown as a badge on the tab.
+    final open = ref.watch(savedProvider.select((l) => l.where((e) => !e.done).length));
+    Widget icon(({IconData icon, String label, String path}) t) => t.path == '/saved' && open > 0
+        ? Badge.count(
+            count: open,
+            backgroundColor: dc.accent,
+            textColor: dc.onAccent,
+            child: Icon(t.icon),
+          )
+        : Icon(t.icon);
     if (wide) {
       return Scaffold(
         body: Row(
@@ -109,7 +124,7 @@ class AppShell extends StatelessWidget {
               onDestinationSelected: (i) => context.go(_tabs[i].path),
               destinations: [
                 for (final t in _tabs)
-                  NavigationRailDestination(icon: Icon(t.icon), label: Text(t.label)),
+                  NavigationRailDestination(icon: icon(t), label: Text(t.label)),
               ],
             ),
             VerticalDivider(width: 1, color: dc.outline),
@@ -124,9 +139,7 @@ class AppShell extends StatelessWidget {
         selectedIndex: _index,
         height: 64,
         onDestinationSelected: (i) => context.go(_tabs[i].path),
-        destinations: [
-          for (final t in _tabs) NavigationDestination(icon: Icon(t.icon), label: t.label),
-        ],
+        destinations: [for (final t in _tabs) NavigationDestination(icon: icon(t), label: t.label)],
       ),
     );
   }

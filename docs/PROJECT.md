@@ -37,7 +37,7 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | Phase | Contents | Gate |
 | --- | --- | --- |
 | MVP (done) | Scaffold, design system, data import, compendium + filters, demon detail, reverse recipes, expandable tree, skills lookup, settings | Recipes match the existing tool |
-| v0.2 Saved recipes | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
+| v0.2 Saved recipes (done) | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
 | v0.3 Planner | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Cesar confirms the inheritance rule in-game |
 | v0.4 Locations | Curated `locations.json` (IGN demon locations as the main source), recruit flag in tree, route and spoiler tags | |
 | v1.0 Releases | GitHub Actions: Pages deploy, APK and unsigned IPA on releases, runbook | |
@@ -55,3 +55,9 @@ Reverse recipes run the same rules backwards and are checked against an independ
 ## Open questions
 
 See the thread in the Demonica project. Defaults in use: skill slots = 8 minus innate, DLC off, recipes sorted by cheapest macca with a switch, one Jira epic per phase.
+
+## Saved recipes (v0.2, as built)
+
+- Bookmark a demon (no recipe yet), a single recipe, or the open path of the tree as a plan. Ids are built from the content, so saving or importing the same thing twice merges.
+- The tree keeps one open recipe per demon, so the open part is always one path. A plan's steps are leaves first; each step's macca counts only ingredients that are bought, not ones fused earlier in the plan.
+- Stored in `shared_preferences` under `demonica.saved.v1` in the same JSON as the export file (`format: demonica.saved`, `version: 1`). Import rejects other files and newer versions, skips unknown demons, and replaces entries with the same id.

@@ -7,6 +7,7 @@ import '../../app/providers.dart';
 import '../../design_system/components.dart';
 import '../../design_system/tokens.dart';
 import '../recipes/recipe_row.dart';
+import '../saved/save_button.dart';
 
 class DemonDetailScreen extends ConsumerWidget {
   const DemonDetailScreen({super.key, required this.demonId, this.embedded = false});
@@ -95,7 +96,12 @@ class DemonDetailScreen extends ConsumerWidget {
           for (final r in recipes.take(5))
             Padding(
               padding: const EdgeInsets.only(bottom: Space.x1),
-              child: RecipeRow(recipe: r, data: data, cost: rules.recipeCost(r)),
+              child: RecipeRow(
+                recipe: r,
+                data: data,
+                cost: rules.recipeCost(r),
+                trailing: SaveRecipeButton(recipe: r, cost: rules.recipeCost(r)),
+              ),
             ),
           if (recipes.length > 5)
             Padding(
@@ -148,6 +154,7 @@ class DemonDetailScreen extends ConsumerWidget {
               ],
             ),
           ),
+          actions: [if (!demon.isEnemyOnly) SaveDemonButton(name: demon.name)],
           bottom: TabBar(
             tabs: [
               const Tab(text: 'OVERVIEW'),

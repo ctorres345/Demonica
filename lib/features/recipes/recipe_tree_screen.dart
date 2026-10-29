@@ -6,7 +6,11 @@ import 'package:go_router/go_router.dart';
 import '../../app/providers.dart';
 import '../../design_system/components.dart';
 import '../../design_system/tokens.dart';
+import '../saved/save_button.dart';
+import '../saved/saved_model.dart';
+import '../saved/saved_store.dart';
 import 'recipe_row.dart';
+import 'tree_state.dart';
 
 /// The expandable recipe tree: target at the top, its recipes below, and any
 /// ingredient can be expanded into its own recipes in place.
@@ -43,6 +47,11 @@ class RecipeTreeScreen extends ConsumerWidget {
           ),
         ),
         actions: [
+          IconButton(
+            tooltip: 'Save this path',
+            icon: const Icon(Icons.bookmark_add_outlined),
+            onPressed: () => _savePath(context, ref, demon),
+          ),
           IconButton(
             tooltip: 'Open demon page',
             icon: const Icon(Icons.info_outline),
@@ -87,10 +96,12 @@ class RecipeTreeScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(Space.x4, Space.x1, Space.x4, Space.x8),
               children: [
-                _DemonNode(demon: demon, depth: 0, initiallyExpanded: true),
+                _DemonNode(demon: demon, root: demon.name, nodeKey: demon.name, depth: 0),
                 const SizedBox(height: Space.x4),
                 Text(
                   'Tap a recipe to expand its ingredients. Tap an ingredient to expand its own recipes. '
+                  'Only one recipe per demon stays open, so what you see is one fusion path: '
+                  'save it with the bookmark button at the top. '
                   'Costs are the macca to re-summon both ingredients from the Compendium.',
                   style: context.tt.bodySmall,
                 ),
@@ -98,6 +109,30 @@ class RecipeTreeScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _savePath(BuildContext context, WidgetRef ref, Demon demon) {
+    final data = ref.read(gameDataProvider).value!;
+    final steps = ref.read(treeExpansionProvider(demon.name)).plan(demon.name, data);
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    if (steps.isEmpty) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Open a recipe first. The open recipes are what gets saved.')),
+      );
+      return;
+    }
+    final entry = SavedEntry.path(steps);
+    ref.read(savedProvider.notifier).add(entry);
+    final what = steps.length == 1
+        ? 'Saved this recipe for ${demon.name}'
+        : 'Saved a ${steps.length}-step plan for ${demon.name} · ${macca(entry.macca)}';
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(what),
+        action: SnackBarAction(label: 'VIEW', onPressed: () => context.go('/saved')),
       ),
     );
   }
@@ -122,17 +157,24 @@ class RecipeTreeScreen extends ConsumerWidget {
 
 /// A demon in the tree. Expanding it lists its recipes.
 class _DemonNode extends ConsumerStatefulWidget {
-  const _DemonNode({required this.demon, required this.depth, this.initiallyExpanded = false});
+  const _DemonNode({
+    required this.demon,
+    required this.root,
+    required this.nodeKey,
+    required this.depth,
+  });
   final Demon demon;
+
+  /// The tree's root demon, which names the expansion state.
+  final String root;
+  final String nodeKey;
   final int depth;
-  final bool initiallyExpanded;
 
   @override
   ConsumerState<_DemonNode> createState() => _DemonNodeState();
 }
 
 class _DemonNodeState extends ConsumerState<_DemonNode> {
-  late bool _open = widget.initiallyExpanded;
   int _shown = 8;
 
   @override
@@ -140,6 +182,8 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
     final dc = context.dc;
     final d = widget.demon;
     final recipes = ref.watch(recipesProvider(d.name));
+    final tree = ref.watch(treeExpansionProvider(widget.root));
+    final open = tree.isOpen(widget.nodeKey);
     final canExpand = recipes.isNotEmpty;
     final countLabel = switch (d.fusion) {
       FusionKind.special => 'special',
@@ -147,8 +191,15 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
       FusionKind.enemy => 'enemy only',
       FusionKind.normal => '${recipes.length} recipes',
     };
+    // A recipe opened from the Saved screen stays visible even when it sits
+    // past the first rows or the current filters hide it.
+    final chosen = tree.openRecipe(widget.nodeKey)?.value;
+    final visible = recipes.take(_shown).toList();
+    if (chosen != null && !visible.contains(chosen)) visible.insert(0, chosen);
     final header = InkWell(
-      onTap: canExpand ? () => setState(() => _open = !_open) : null,
+      onTap: canExpand
+          ? () => ref.read(treeExpansionProvider(widget.root).notifier).toggleDemon(widget.nodeKey)
+          : null,
       borderRadius: Radii.borderSmall,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -162,11 +213,11 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
             SizedBox(
               width: 18,
               child: Text(
-                canExpand ? (_open ? '▾' : '▸') : '·',
+                canExpand ? (open ? '▾' : '▸') : '·',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: Fonts.mono,
-                  color: _open && canExpand ? dc.accent : dc.textMuted,
+                  color: open && canExpand ? dc.accent : dc.textMuted,
                 ),
               ),
             ),
@@ -204,16 +255,21 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         header,
-        if (_open && canExpand)
+        if (open && canExpand)
           _Indent(
             accent: widget.depth.isOdd,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (final r in recipes.take(_shown))
+                for (final r in visible)
                   Padding(
                     padding: const EdgeInsets.only(top: Space.x1),
-                    child: _RecipeNode(recipe: r, depth: widget.depth + 1),
+                    child: _RecipeNode(
+                      recipe: r,
+                      root: widget.root,
+                      demonKey: widget.nodeKey,
+                      depth: widget.depth + 1,
+                    ),
                   ),
                 if (recipes.length > _shown)
                   TextButton(
@@ -230,45 +286,57 @@ class _DemonNodeState extends ConsumerState<_DemonNode> {
 }
 
 /// A recipe row. Expanding it shows each ingredient as a demon node.
-class _RecipeNode extends ConsumerStatefulWidget {
-  const _RecipeNode({required this.recipe, required this.depth});
+class _RecipeNode extends ConsumerWidget {
+  const _RecipeNode({
+    required this.recipe,
+    required this.root,
+    required this.demonKey,
+    required this.depth,
+  });
   final Recipe recipe;
+  final String root;
+  final String demonKey;
   final int depth;
 
   @override
-  ConsumerState<_RecipeNode> createState() => _RecipeNodeState();
-}
-
-class _RecipeNodeState extends ConsumerState<_RecipeNode> {
-  bool _open = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final rules = ref.watch(rulesProvider)!;
     final data = rules.data;
+    final key = TreeExpansion.recipeKey(demonKey, recipe);
+    final open = ref.watch(treeExpansionProvider(root).select((t) => t.isOpen(key)));
     // Stop the tree at a sensible depth so it cannot recurse forever.
-    final canExpand = widget.depth < 8;
+    final canExpand = depth < 8;
+    final cost = rules.recipeCost(recipe);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         RecipeRow(
-          recipe: widget.recipe,
+          recipe: recipe,
           data: data,
-          cost: rules.recipeCost(widget.recipe),
-          expanded: canExpand ? _open : null,
-          onTap: canExpand ? () => setState(() => _open = !_open) : null,
+          cost: cost,
+          highlight: open,
+          expanded: canExpand ? open : null,
+          onTap: canExpand
+              ? () => ref.read(treeExpansionProvider(root).notifier).toggleRecipe(demonKey, recipe)
+              : null,
+          trailing: SaveRecipeButton(recipe: recipe, cost: cost),
         ),
-        if (_open)
+        if (open && canExpand)
           _Indent(
-            accent: widget.depth.isOdd,
+            accent: depth.isOdd,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (final name in widget.recipe.ingredients)
+                for (final name in recipe.ingredients)
                   if (data.demons[name] != null)
                     Padding(
                       padding: const EdgeInsets.only(top: Space.x1),
-                      child: _DemonNode(demon: data.demon(name), depth: widget.depth + 1),
+                      child: _DemonNode(
+                        demon: data.demon(name),
+                        root: root,
+                        nodeKey: TreeExpansion.childKey(key, name),
+                        depth: depth + 1,
+                      ),
                     ),
               ],
             ),

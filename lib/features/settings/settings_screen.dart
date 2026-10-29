@@ -104,7 +104,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: Space.x4),
-          Text('demonica · MVP', style: context.tt.labelSmall?.copyWith(color: dc.textMuted)),
+          Text('demonica · v0.2', style: context.tt.labelSmall?.copyWith(color: dc.textMuted)),
         ],
       ),
     );

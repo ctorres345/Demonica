@@ -15,6 +15,7 @@ class RecipeRow extends StatelessWidget {
     this.onTap,
     this.onIngredientTap,
     this.highlight = false,
+    this.trailing,
   });
 
   final Recipe recipe;
@@ -26,6 +27,9 @@ class RecipeRow extends StatelessWidget {
   final VoidCallback? onTap;
   final void Function(String demonName)? onIngredientTap;
   final bool highlight;
+
+  /// Shown after the price, e.g. the bookmark button.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +99,7 @@ class RecipeRow extends StatelessWidget {
             const SizedBox(width: 8),
             if (kindTag != null) ...[kindTag, const SizedBox(width: 8)],
             Text(macca(cost), style: context.tt.labelMedium),
+            ?trailing,
           ],
         ),
       ),
