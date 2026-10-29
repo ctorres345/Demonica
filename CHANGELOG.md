@@ -2,8 +2,14 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
-## Unreleased
+## 1.0.0 (2026-10-29)
 
+First public release.
+
+- Web app at https://ctorres345.github.io/Demonica/. It works offline after the first visit, and can be added to the home screen on iPhone and Android.
+- Android APK (and an unsigned iOS IPA) attached to each GitHub Release, built with `tool/release.sh`.
+- Settings: privacy note and an "Open source licences" page listing Flutter, the packages and the fonts.
+- MIT licence for the code. README: install table, offline use, how-to steps, roadmap with other games, credits.
 - Tutorial: five short pages after the welcome screen. Settings → "Show the tutorial again" reopens it.
 - Unlocks: the story, quest, New Game+, Fiend and DLC switches moved from Settings to their own page, as a checklist of what you have done. A locked demon's page shows its unlock condition with the same tick.
 - Settings: Help section with the tutorial, "Report a wrong recipe" and a contact address (demonica@cjtech.dev).
@@ -13,15 +19,6 @@ User-visible changes, newest first. Dates are when the change reached `main`.
 - Skills: "4 demons" instead of a bare number; skills nobody learns are dimmed.
 - Plan: "SHOW IN TREE", and "2 to inherit · 6 slots free".
 - Welcome screen says what the app is before asking for a palette.
-
-## 1.0.0 (2026-10-29)
-
-First public release.
-
-- Web app at https://ctorres345.github.io/Demonica/. It works offline after the first visit, and can be added to the home screen on iPhone and Android.
-- Android APK (and an unsigned iOS IPA) attached to each GitHub Release, built with `tool/release.sh`.
-- Settings: privacy note and an "Open source licences" page listing Flutter, the packages and the fonts.
-- MIT licence for the code. README: install table, offline use, how-to steps, roadmap with other games, credits.
 
 ## 0.4.0 (2026-10-29)
 
