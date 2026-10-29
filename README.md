@@ -129,6 +129,8 @@ tool/check.sh
 
 It runs `flutter pub get`, `dart format`, `flutter analyze`, the fusion engine tests in `packages/fusion_core`, the widget tests and a release web build, and stops at the first failure.
 
+Any editor works. VS Code with the **Dart** and **Flutter** extensions is a good fit: F5 runs the app and format on save follows the repo's 100-column width.
+
 Building for each platform, refreshing the game data, releasing (`tool/release.sh`) and deploying to GitHub Pages are in [RUNBOOK.md](RUNBOOK.md).
 
 ## Project layout
