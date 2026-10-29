@@ -312,10 +312,12 @@ class SkillRow extends StatelessWidget {
             if (learnedAt != null) ...[
               const SizedBox(width: 10),
               SizedBox(
-                width: 44,
+                width: 52,
                 child: Text(
                   learnedAt == 0 ? 'innate' : 'Lv $learnedAt',
                   textAlign: TextAlign.right,
+                  maxLines: 1,
+                  softWrap: false,
                   style: context.tt.labelSmall?.copyWith(
                     color: learnedAt == 0 ? dc.accent : dc.textMuted,
                   ),
