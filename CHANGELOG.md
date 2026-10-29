@@ -2,6 +2,14 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
+## Unreleased
+
+- Recipe tree: a bar above the tree says how many recipes are open ("Path: 2 steps") and has a SAVE PATH button. It replaces the bookmark icon at the top and the help text under the tree.
+- Saved: only the tick box and the step text tick a step, so taps while scrolling no longer tick things by accident. "Add note" and "Open in tree" are buttons on each card; the bin icon removes it (with Undo).
+- Compendium: "Sort: Level / Name / Race" next to the demon count. Race order lists each race from weakest to strongest.
+- Level filters: -/+ buttons and a number field next to the slider.
+- Tutorial: each page shows a picture of the real screen. The last page asks "Are you early in the story?". Yes hides the demons that story bosses unlock until you tick them in Settings > Unlocks.
+
 ## 1.0.0 (2026-10-29)
 
 First public release.
