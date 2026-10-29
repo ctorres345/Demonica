@@ -1,0 +1,383 @@
+[
+ {
+  "category": "Story Progression",
+  "enabledByDefault": true,
+  "entries": [
+   {
+    "demons": [
+     "Minotaur"
+    ],
+    "condition": "Defeat in Naraku"
+   },
+   {
+    "demons": [
+     "Medusa"
+    ],
+    "condition": "Defeat in Sky Tree"
+   },
+   {
+    "demons": [
+     "Dullahan"
+    ],
+    "condition": "Clear \"Corpse Disposal\""
+   },
+   {
+    "demons": [
+     "Xi Wangmu"
+    ],
+    "condition": "Defeat in Ikebukuro"
+   },
+   {
+    "demons": [
+     "Koga Saburo"
+    ],
+    "condition": "Defeat in Roppongi Passageway, Bring Ryoja's Scales to remains"
+   },
+   {
+    "demons": [
+     "Lilim"
+    ],
+    "condition": "Encounter in \"Capture the Black Samurai\""
+   },
+   {
+    "demons": [
+     "Asmodeus"
+    ],
+    "condition": "Defeat in Shinjuku National Park"
+   },
+   {
+    "demons": [
+     "Tenkai"
+    ],
+    "condition": "Defeat in Midtown, Bring Myoko's Disk to remains"
+   },
+   {
+    "demons": [
+     "Yaso Magatsuhi"
+    ],
+    "condition": "Defeat in Reverse Hills, Bring Hades Soil to remains"
+   },
+   {
+    "demons": [
+     "Lilith"
+    ],
+    "condition": "Encounter in \"The Face of True Evil\""
+   },
+   {
+    "demons": [
+     "Omoikane"
+    ],
+    "condition": "Defeat in Ichigaya, Bring Yagokoro's Brain to remains"
+   },
+   {
+    "demons": [
+     "Michizane"
+    ],
+    "condition": "Defeat in Ichigaya, Bring Tobiume's Shoot to remains"
+   },
+   {
+    "demons": [
+     "Yamato-Takeru"
+    ],
+    "condition": "Defeat in Ichigaya, Bring Yaizu's Flint to remains"
+   },
+   {
+    "demons": [
+     "Ixtab"
+    ],
+    "condition": "Clear \"Defeating the Demon\""
+   },
+   {
+    "demons": [
+     "Mahamayuri"
+    ],
+    "condition": "Defeat in Infernal Tokyo"
+   },
+   {
+    "demons": [
+     "Lucifuge"
+    ],
+    "condition": "Defeat in Lucifer Palace"
+   },
+   {
+    "demons": [
+     "Belial"
+    ],
+    "condition": "Defeat in Lucifer Palace"
+   },
+   {
+    "demons": [
+     "Masakado"
+    ],
+    "condition": "Encounter in \"The Great Spirit of Hope\""
+   }
+  ]
+ },
+ {
+  "category": "Challenge Quests",
+  "enabledByDefault": true,
+  "entries": [
+   {
+    "demons": [
+     "Ares"
+    ],
+    "condition": "Clear \"The Cursed Gauntlet\""
+   },
+   {
+    "demons": [
+     "David"
+    ],
+    "condition": "Clear \"Dance of the Dead\""
+   },
+   {
+    "demons": [
+     "Wu Kong"
+    ],
+    "condition": "Clear \"Capture the Berserker\""
+   },
+   {
+    "demons": [
+     "Cu Chulainn"
+    ],
+    "condition": "Clear \"Cu Chulainn's Training\""
+   },
+   {
+    "demons": [
+     "Hariti",
+     "Kanseiteikun"
+    ],
+    "condition": "Clear \"Sunset for a Demonnapper\", Fusion Accident"
+   },
+   {
+    "demons": [
+     "Okuninushi"
+    ],
+    "condition": "Clear \"Demon Guarding the Shrine\""
+   },
+   {
+    "demons": [
+     "Marici"
+    ],
+    "condition": "Clear \"Samurai School in Nakano\""
+   },
+   {
+    "demons": [
+     "Odin",
+     "Thor"
+    ],
+    "condition": "Clear \"Save the Old Man\""
+   },
+   {
+    "demons": [
+     "Isis",
+     "Osiris"
+    ],
+    "condition": "Clear \"Osiris' Resurrection\""
+   },
+   {
+    "demons": [
+     "Baal",
+     "Beelzebub"
+    ],
+    "condition": "Clear \"Rebirth of the Great Overlord\""
+   },
+   {
+    "demons": [
+     "Black Maria"
+    ],
+    "condition": "Clear \"Rebirth of the Lady\""
+   },
+   {
+    "demons": [
+     "Cernunnos"
+    ],
+    "condition": "Clear \"Multi-Demon Fusion\""
+   },
+   {
+    "demons": [
+     "Amaterasu"
+    ],
+    "condition": "Clear \"Ressurection of the Kousoushin\""
+   },
+   {
+    "demons": [
+     "Azazel"
+    ],
+    "condition": "Clear \"Taste of the Forbidden Fruit\""
+   },
+   {
+    "demons": [
+     "Mastema"
+    ],
+    "condition": "Clear \"Great Raven of the Underground\""
+   },
+   {
+    "demons": [
+     "Demiurge"
+    ],
+    "condition": "Clear \"The Voice of Arrogant Evil\""
+   }
+  ]
+ },
+ {
+  "category": "New Game+",
+  "enabledByDefault": true,
+  "entries": [
+   {
+    "demons": [
+     "Ogun"
+    ],
+    "condition": "Clear \"Pluck the Buds of Rebellion\""
+   },
+   {
+    "demons": [
+     "Astaroth"
+    ],
+    "condition": "Clear \"Prevent a Deal with an Overlord\""
+   },
+   {
+    "demons": [
+     "Take-Mikazuchi"
+    ],
+    "condition": "Clear \"A Century of Defense\""
+   },
+   {
+    "demons": [
+     "Seraph",
+     "Tokisada"
+    ],
+    "condition": "Clear \"Four Wings, Four Heads\", Fusion Accident"
+   },
+   {
+    "demons": [
+     "Kartikeya"
+    ],
+    "condition": "Clear \"Escape from Philanthropy\""
+   },
+   {
+    "demons": [
+     "Izanami"
+    ],
+    "condition": "Clear \"Yomotsu Okami's Rampage\""
+   },
+   {
+    "demons": [
+     "Ishtar",
+     "Asherah",
+     "Mother Harlot"
+    ],
+    "condition": "Clear \"Ishtar, the Goddess of Harvest\""
+   }
+  ]
+ },
+ {
+  "category": "Fiend Encounters",
+  "enabledByDefault": true,
+  "entries": [
+   {
+    "demons": [
+     "Chemtrail"
+    ],
+    "condition": "Find and defeat in Shinjuku West Entrance Park"
+   },
+   {
+    "demons": [
+     "Matador"
+    ],
+    "condition": "Find and defeat in Toyosu Shelter"
+   },
+   {
+    "demons": [
+     "White Rider"
+    ],
+    "condition": "Find and defeat in Ginza"
+   },
+   {
+    "demons": [
+     "Red Rider"
+    ],
+    "condition": "Find and defeat in Kasumigaseki"
+   },
+   {
+    "demons": [
+     "Black Rider"
+    ],
+    "condition": "Find and defeat in Tennozu Shelter"
+   },
+   {
+    "demons": [
+     "Pale Rider"
+    ],
+    "condition": "Find and defeat in Minami Sunamachi"
+   },
+   {
+    "demons": [
+     "Trumpeter"
+    ],
+    "condition": "Find and defeat in Kiccigiorgi Forest"
+   }
+  ]
+ },
+ {
+  "category": "Downloadable Content",
+  "enabledByDefault": false,
+  "entries": [
+   {
+    "demons": [
+     "Oread"
+    ],
+    "condition": "Experience of the Afterlife"
+   },
+   {
+    "demons": [
+     "Asterius"
+    ],
+    "condition": "Underworld Money-Maker"
+   },
+   {
+    "demons": [
+     "Plasma"
+    ],
+    "condition": "Death Has Its Applications"
+   },
+   {
+    "demons": [
+     "Uriel",
+     "Raphael"
+    ],
+    "condition": "Clipped Wings 1"
+   },
+   {
+    "demons": [
+     "Gabriel",
+     "Michael"
+    ],
+    "condition": "Clipped Wings 2"
+   },
+   {
+    "demons": [
+     "Aeshma"
+    ],
+    "condition": "Clipped Wings 1 and 2"
+   },
+   {
+    "demons": [
+     "Ancient of Days"
+    ],
+    "condition": "Ancient One of the Sun"
+   },
+   {
+    "demons": [
+     "Sanat"
+    ],
+    "condition": "The Eternal Youth"
+   },
+   {
+    "demons": [
+     "Masakado's Shadow"
+    ],
+    "condition": "For the Past... For the Future"
+   }
+  ]
+ }
+]

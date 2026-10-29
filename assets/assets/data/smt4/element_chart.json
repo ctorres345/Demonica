@@ -1,0 +1,204 @@
+{
+ "elements": [
+  "Erthys",
+  "Aeros",
+  "Aquans",
+  "Flaemis",
+  "Gnome",
+  "Sylph",
+  "Undine",
+  "Salamander"
+ ],
+ "modifiers": {
+  "Herald": {
+   "Undine": -1,
+   "Salamander": 1
+  },
+  "Megami": {
+   "Undine": 1,
+   "Salamander": -1
+  },
+  "Avian": {
+   "Gnome": -1,
+   "Sylph": 1
+  },
+  "Tree": {
+   "Gnome": 1,
+   "Sylph": -1
+  },
+  "Divine": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Flight": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Yoma": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Nymph": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Vile": {
+   "Undine": 1,
+   "Salamander": -1
+  },
+  "Raptor": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Wood": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Deity": {
+   "Undine": -1,
+   "Salamander": 1
+  },
+  "Avatar": {
+   "Undine": 1,
+   "Salamander": -1
+  },
+  "Holy": {
+   "Gnome": -1,
+   "Sylph": 1
+  },
+  "Genma": {
+   "Undine": 1,
+   "Salamander": -1
+  },
+  "Fairy": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Beast": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Jirae": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Snake": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Reaper": {
+   "Gnome": 1,
+   "Sylph": -1
+  },
+  "Wilder": {
+   "Erthys": -1,
+   "Aeros": -1,
+   "Aquans": 1,
+   "Flaemis": 1
+  },
+  "Jaki": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Vermin": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Fury": {
+   "Gnome": -1,
+   "Sylph": 1
+  },
+  "Lady": {
+   "Gnome": 1,
+   "Sylph": -1
+  },
+  "Dragon": {
+   "Gnome": -1,
+   "Sylph": 1
+  },
+  "Kishin": {
+   "Gnome": 1,
+   "Sylph": -1
+  },
+  "Fallen": {
+   "Erthys": -1,
+   "Aeros": -1,
+   "Aquans": 1,
+   "Flaemis": 1
+  },
+  "Brute": {
+   "Erthys": 1,
+   "Aeros": 1,
+   "Aquans": -1,
+   "Flaemis": -1
+  },
+  "Femme": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Night": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Tyrant": {
+   "Undine": -1,
+   "Salamander": 1
+  },
+  "Drake": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Spirit": {
+   "Erthys": -1,
+   "Aeros": 1,
+   "Aquans": 1,
+   "Flaemis": -1
+  },
+  "Ghost": {
+   "Erthys": 1,
+   "Aeros": 1,
+   "Aquans": -1,
+   "Flaemis": -1
+  },
+  "Food": {
+   "Erthys": 1,
+   "Aeros": -1,
+   "Aquans": -1,
+   "Flaemis": 1
+  },
+  "Kunitsu": {
+   "Undine": -1,
+   "Salamander": 1
+  }
+ }
+}

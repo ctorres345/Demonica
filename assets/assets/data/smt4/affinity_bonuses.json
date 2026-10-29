@@ -1,0 +1,132 @@
+{
+ "elements": {
+  "phys": "phys",
+  "gun": "phys",
+  "fire": "magic",
+  "ice": "magic",
+  "elec": "magic",
+  "force": "magic",
+  "light": "ailment",
+  "dark": "ailment",
+  "almighty": "magic",
+  "recovery": "support",
+  "ailment": "ailment",
+  "support": "support"
+ },
+ "costs": {
+  "recovery": [
+   0,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "support": [
+   1,
+   2,
+   3
+  ],
+  "deathdoor": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "drain": [
+   0,
+   1,
+   1,
+   1,
+   1
+  ],
+  "ailment": [
+   0,
+   1,
+   1,
+   1,
+   2
+  ],
+  "magic": [
+   0,
+   1,
+   1,
+   1,
+   2,
+   2,
+   2,
+   2
+  ],
+  "phys": [
+   0,
+   1,
+   1,
+   1,
+   2,
+   2,
+   2,
+   2
+  ]
+ },
+ "upgrades": {
+  "recovery": [
+   5,
+   5,
+   10,
+   15,
+   20,
+   25,
+   30,
+   35
+  ],
+  "support": [
+   0,
+   0,
+   0
+  ],
+  "deathdoor": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "drain": [
+   1,
+   1,
+   4,
+   9,
+   14
+  ],
+  "ailment": [
+   5,
+   5,
+   10,
+   15,
+   15
+  ],
+  "magic": [
+   1,
+   1,
+   4,
+   9,
+   9,
+   14,
+   19,
+   24
+  ],
+  "phys": [
+   7,
+   7,
+   14,
+   21,
+   21,
+   28,
+   35,
+   42
+  ]
+ }
+}
