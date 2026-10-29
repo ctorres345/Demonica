@@ -43,6 +43,7 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule confirmed in-game (DEM-7, 2026-10-29): at most 8 skills, so free slots = 8 minus innate |
 | v0.4 Locations (done) | Curated `locations.json` (GamerGuides walkthrough as the source), "Where to find" on the demon page, recruit flag in lists and the tree, route and spoiler tags | |
 | v1.0 Releases (done) | Local `tool/release.sh` (no Actions): Pages deploy via `gh-pages` branch, APK and unsigned IPA on releases, offline web app, runbook | |
+| v1.1 Polish (next) | Path bar with SAVE PATH (DEM-23), safer ticks and card buttons in Saved (DEM-24), compendium sort and typed level (DEM-25), tutorial screenshots and the early-story question (DEM-26). Merged, waiting for the release | |
 
 ## Risks
 

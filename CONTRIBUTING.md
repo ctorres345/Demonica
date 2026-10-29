@@ -26,7 +26,8 @@ flowchart LR
 4. Commit with the story key first: `DEM-12: Export saved recipes to a file`. The body lists what changed in plain words.
 5. Push the branch and open a pull request to `main` with the template (`.github/pull_request_template.md`). UI changes need before/after screenshots, light and dark. Put them on a throwaway `cesar/DEM-<n>-screenshots` branch and link them as `blob/<branch>/<path>?raw=true`.
 6. If the change is visible to users, add a line under **Unreleased** in `CHANGELOG.md`.
-7. After Cesar merges: deploy the web app if needed, move the Jira story to Done, and delete `cesar/DEM-<n>`. Keep the `-screenshots` branch, or the PR's images stop loading.
+7. Doc-only changes (Markdown files and nothing else) skip the branch and the PR: commit them straight to `main` and push.
+8. After Cesar merges: deploy the web app if needed, move the Jira story to Done, and delete `cesar/DEM-<n>`. Keep the `-screenshots` branch, or the PR's images stop loading.
 
 ## Docs to touch with a change
 

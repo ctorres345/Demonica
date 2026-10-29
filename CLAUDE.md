@@ -2,7 +2,8 @@
 
 Demonica is a Flutter companion app for Shin Megami Tensei IV fusions. Start with CONTRIBUTING.md; it links every other doc.
 
-- `main` takes changes only through a pull request. Work on a branch named `cesar/DEM-n`.
+- Code reaches `main` only through a pull request. Work on a branch named `cesar/DEM-n`.
+- Doc-only changes (Markdown files and nothing else) go straight to `main`, with no branch or PR.
 - Open the PR with `.github/pull_request_template.md`. UI changes need before/after screenshots, light and dark.
 - Cesar merges every PR. Never merge one yourself.
 - There is no CI. Run `tool/check.sh` and make sure it passes before every push.

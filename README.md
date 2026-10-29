@@ -163,8 +163,8 @@ More detail:
 
 | When | What |
 |---|---|
-| Done | SMT IV compendium, recipe tree, skills, saved recipes, skill planner, demon locations, offline web app, Android APK |
-| Next | v1.0 release on GitHub, fixes from player reports |
+| Done | v1.0 on GitHub: SMT IV compendium, recipe tree, skills, saved recipes, skill planner, demon locations, offline web app, Android APK |
+| Next | v1.1: path bar with SAVE PATH, compendium sort, safer ticks in Saved, picture tutorial. Then fixes from player reports |
 | Later: more games | The fusion engine keeps each game's rules behind one interface, so a new game needs a rules adapter and an import script. Candidates, roughly in order: **SMT IV Apocalypse**, **SMT V: Vengeance**, **Strange Journey Redux**, **Persona 5 Royal**. Tell us which one you want in an issue. |
 | Ideas | Share a fusion path as a link, compare two recipes side by side, Spanish translation |
 
