@@ -20,7 +20,7 @@ Make fusing a specific demon in SMT IV easy: pick the target, filter by the skil
 ## Facts from the data (corrects plan v1)
 
 - 454 demons (426 fusable or recruitable + 28 enemy-only) in 48 races, 261 skills, 67 special recipes, 12 fusion accidents.
-- SMT IV has no inheritance affinities. Any skill can be inherited except 18 unique skills (rank 900+ in the data). Free slots = 8 minus the demon's innate skills.
+- SMT IV has no inheritance affinities. Any skill can be inherited except 18 unique skills (rank 900+ in the data). Free slots = 8 minus the demon's innate skills (confirmed in-game, DEM-7). The 8 is SMT IV's number: it lives in each game's `meta.json` (`maxSkillSlots`) and `GameRules.freeSkillSlots`, so another game can use a different count.
 - The macca price is computed from stats, innate skills and resistances; the import ports the formula and matches the existing tool.
 - Unlock categories: Story Progression, Challenge Quests, New Game+, Fiend Encounters (all on by default) and Downloadable Content (off by default).
 
@@ -40,7 +40,7 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | --- | --- | --- |
 | MVP (done) | Scaffold, design system, data import, compendium + filters, demon detail, reverse recipes, expandable tree, skills lookup, settings | Recipes match the existing tool |
 | v0.2 Saved recipes (done) | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
-| v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule (8 minus innate) still to be confirmed in-game (DEM-7); it is one function, `freeSkillSlots` |
+| v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule confirmed in-game by Cesar (DEM-7, 2026-10-29): at most 8 skills, so free slots = 8 minus innate |
 | v0.4 Locations | Curated `locations.json` (IGN demon locations as the main source), recruit flag in tree, route and spoiler tags | |
 | v1.0 Releases | GitHub Actions: Pages deploy, APK and unsigned IPA on releases, runbook | |
 
