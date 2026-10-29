@@ -66,6 +66,8 @@ tool/
   check.sh                   every pre-push check in one command
 assets/data/smt4/            decoded game data (committed, do not edit by hand),
                              except locations.json, which is curated by hand
+assets/tutorial/             cropped screenshots on the tutorial pages (under 60 KB each;
+                             re-shoot from a phone-size web build when a screen changes)
 docs/                        this file, DESIGN_SYSTEM.md, CODING_GUIDELINES.md, PROJECT.md
   screenshots/               images used by the README
 ```
