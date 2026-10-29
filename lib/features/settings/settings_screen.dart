@@ -62,6 +62,20 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.showSpoilers,
             onChanged: notifier.setShowSpoilers,
           ),
+          const SectionHeader('Prices'),
+          SwitchListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            title: Text('Show macca prices', style: context.tt.bodyMedium),
+            subtitle: Text(
+              'The cost to re-summon the ingredients from the Compendium, before any in-game '
+              'discount. Off by default because discounts change the real numbers. '
+              '"Cheapest first" sorting works either way.',
+              style: context.tt.bodySmall,
+            ),
+            value: settings.showPrices,
+            onChanged: notifier.setShowPrices,
+          ),
           const SectionHeader('Unlocks'),
           ListTile(
             key: const Key('settings-unlocks'),

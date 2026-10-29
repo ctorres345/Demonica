@@ -61,6 +61,7 @@ class AppSettings {
     this.onboarded = false,
     this.tutorialSeen = false,
     this.showSpoilers = false,
+    this.showPrices = false,
     this.loaded = false,
   });
 
@@ -76,6 +77,10 @@ class AppSettings {
 
   /// Show late-game areas (Blasted Tokyo onwards) in "Where to find".
   final bool showSpoilers;
+
+  /// Show macca prices (re-summon cost of the ingredients). Off by default:
+  /// in-game discounts change the real numbers.
+  final bool showPrices;
   final bool loaded;
 
   FusionSettings get fusion => FusionSettings(disabledDemons: disabledDemons);
@@ -87,6 +92,7 @@ class AppSettings {
     bool? onboarded,
     bool? tutorialSeen,
     bool? showSpoilers,
+    bool? showPrices,
     bool? loaded,
   }) => AppSettings(
     themeMode: themeMode ?? this.themeMode,
@@ -95,6 +101,7 @@ class AppSettings {
     tutorialSeen: tutorialSeen ?? this.tutorialSeen,
     disabledDemons: disabledDemons ?? this.disabledDemons,
     showSpoilers: showSpoilers ?? this.showSpoilers,
+    showPrices: showPrices ?? this.showPrices,
     loaded: loaded ?? this.loaded,
   );
 }
@@ -125,6 +132,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
       tutorialSeen: j['tutorialSeen'] as bool? ?? false,
       disabledDemons: ((j['disabledDemons'] as List?) ?? const []).cast<String>().toSet(),
       showSpoilers: j['showSpoilers'] as bool? ?? false,
+      showPrices: j['showPrices'] as bool? ?? false,
       loaded: true,
     );
   }
@@ -140,6 +148,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
         'tutorialSeen': state.tutorialSeen,
         'disabledDemons': state.disabledDemons.toList(),
         'showSpoilers': state.showSpoilers,
+        'showPrices': state.showPrices,
       }),
     );
   }
@@ -164,6 +173,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
     _save();
   }
 
+  void setShowPrices(bool v) {
+    state = state.copyWith(showPrices: v);
+    _save();
+  }
+
   void setShowSpoilers(bool v) {
     state = state.copyWith(showSpoilers: v);
     _save();
@@ -180,6 +194,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
 }
 
 final settingsProvider = NotifierProvider<SettingsNotifier, AppSettings>(SettingsNotifier.new);
+
+/// Whether macca prices are shown anywhere in the app.
+final showPricesProvider = Provider<bool>(
+  (ref) => ref.watch(settingsProvider.select((s) => s.showPrices)),
+);
 
 /// Just the fusion part of the settings. Anything that computes recipes
 /// watches this instead of [settingsProvider], so changing the palette or

@@ -110,7 +110,7 @@ class RecipeRow extends ConsumerWidget {
             Expanded(child: Text.rich(TextSpan(children: spans))),
             const SizedBox(width: 8),
             if (kindTag != null) ...[kindTag, const SizedBox(width: 8)],
-            Text(macca(cost), style: context.tt.labelMedium),
+            if (ref.watch(showPricesProvider)) Text(macca(cost), style: context.tt.labelMedium),
             ?trailing,
           ],
         ),

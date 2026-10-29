@@ -73,10 +73,10 @@ A short tutorial shows these steps on the first start. **Settings → Show the t
 | **Find a demon** | Search all 454 demons. Filter by skill ("who learns Mediarahan?"), race and level. |
 | **See the demon** | Stats, resistances, ailments, skills with learn level and MP cost, free skill slots, where to find it, how to get it, evolutions and re-summon price. |
 | **Where to find** | Areas where the demon can be recruited, in story order, with route tags. A green speech bubble in lists and the tree marks demons you can just talk to instead of fusing. Late-game areas stay hidden until you turn spoilers on. |
-| **Recipe tree** | Every normal, element and special recipe. Sort by macca or by lowest ingredient level. Tap an ingredient to open its recipes underneath. |
+| **Recipe tree** | Every normal, element and special recipe. Sort by cheapest or by lowest ingredient level. Tap an ingredient to open its recipes underneath. |
 | **Used in** | The other direction: every fusion this demon is an ingredient for. |
 | **Skills** | Pick a skill and see which demons learn it, and at what level. |
-| **Plan** | Pick a target and the skills it should end with. Get numbered fusion steps: which skills to keep at each step, which ingredients to level up first, and the macca total. |
+| **Plan** | Pick a target and the skills it should end with. Get numbered fusion steps: which skills to keep at each step, and which ingredients to level up first. |
 | **Saved** | Bookmark a demon, one recipe or a whole fusion path. Add a note, tick steps off as you fuse, and export or import it as a file. |
 | **Unlocks** | A checklist of the bosses, quests, New Game+ and DLC that unlock demons. Tick what you have done, and locked demons stay out of recipes. |
 | **Palettes** | Strange Journey (default), SMT IV and Codex looks, plus light and dark. |

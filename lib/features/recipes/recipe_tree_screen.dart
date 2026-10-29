@@ -99,8 +99,7 @@ class RecipeTreeScreen extends ConsumerWidget {
                 Text(
                   'Tap a recipe to expand its ingredients. Tap an ingredient to expand its own recipes. '
                   'Only one recipe per demon stays open, so what you see is one fusion path: '
-                  'save it with the bookmark button at the top. '
-                  'Costs are the macca to re-summon both ingredients from the Compendium.',
+                  'save it with the bookmark button at the top.',
                   style: context.tt.bodySmall,
                 ),
               ],
@@ -126,7 +125,7 @@ class RecipeTreeScreen extends ConsumerWidget {
     ref.read(savedProvider.notifier).add(entry);
     final what = steps.length == 1
         ? 'Saved this recipe for ${demon.name}'
-        : 'Saved a ${steps.length}-step plan for ${demon.name} · ${macca(entry.macca)}';
+        : 'Saved a ${steps.length}-step plan for ${demon.name}';
     messenger.showSnackBar(
       SnackBar(
         content: Text(what),

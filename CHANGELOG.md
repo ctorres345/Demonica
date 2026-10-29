@@ -19,6 +19,7 @@ First public release.
 - Skills: "4 demons" instead of a bare number; skills nobody learns are dimmed.
 - Plan: "SHOW IN TREE", and "2 to inherit · 6 slots free".
 - Welcome screen says what the app is before asking for a palette.
+- Macca prices are hidden by default (in-game discounts change the real numbers). Settings → "Show macca prices" turns them on; "Cheapest first" sorting works either way.
 
 ## 0.4.0 (2026-10-29)
 

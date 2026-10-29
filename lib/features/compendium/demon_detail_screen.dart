@@ -47,6 +47,7 @@ class DemonDetailScreen extends ConsumerWidget {
     final usedIn = ref.watch(usedInProvider(demon.name));
     final freeSlots = rules.freeSkillSlots(demon);
     final unlock = data.unlockFor(demon.name);
+    final showPrices = ref.watch(showPricesProvider);
 
     final overview = ListView(
       padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, Space.x8),
@@ -92,11 +93,11 @@ class DemonDetailScreen extends ConsumerWidget {
           ),
         _WhereToFind(demon),
         SectionHeader('How to get', trailing: _howToGetTrailing(demon, recipes.length)),
-        if (recipes.isNotEmpty)
+        if (recipes.isNotEmpty && showPrices)
           Padding(
             padding: const EdgeInsets.only(bottom: Space.x2),
             child: Text(
-              '¥ is the macca to re-summon both ingredients from the Compendium.',
+              '¥ is the macca to re-summon both ingredients from the Compendium, before discounts.',
               style: context.tt.bodySmall,
             ),
           ),
@@ -177,7 +178,8 @@ class DemonDetailScreen extends ConsumerWidget {
             ),
         ],
         const SizedBox(height: Space.x4),
-        Text('Re-summon price: ${macca(demon.price)}', style: context.tt.labelMedium),
+        if (showPrices)
+          Text('Re-summon price: ${macca(demon.price)}', style: context.tt.labelMedium),
       ],
     );
 
@@ -548,6 +550,7 @@ class _UsedInTabState extends ConsumerState<_UsedInTab> {
               partner: data.demon(r.ingredients.firstWhere((n) => n != widget.demon.name)),
               result: data.demon(r.result),
               cost: rules.recipeCost(r),
+              showPrices: ref.watch(showPricesProvider),
             ),
           ),
       ],
@@ -557,10 +560,16 @@ class _UsedInTabState extends ConsumerState<_UsedInTab> {
 
 /// "+ Partner (Race 12)  →  Result (Race 20)   1 020 ¥".
 class _ForwardRow extends StatelessWidget {
-  const _ForwardRow({required this.partner, required this.result, required this.cost});
+  const _ForwardRow({
+    required this.partner,
+    required this.result,
+    required this.cost,
+    required this.showPrices,
+  });
   final Demon partner;
   final Demon result;
   final int cost;
+  final bool showPrices;
 
   @override
   Widget build(BuildContext context) {
@@ -603,7 +612,7 @@ class _ForwardRow extends StatelessWidget {
                 child: Icon(Icons.arrow_forward, size: 14, color: dc.accent),
               ),
               Expanded(child: name(result)),
-              Text(macca(cost), style: context.tt.labelMedium),
+              if (showPrices) Text(macca(cost), style: context.tt.labelMedium),
             ],
           ),
         ],

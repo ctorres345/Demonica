@@ -259,7 +259,7 @@ class _SavedCard extends ConsumerWidget {
                             color: entry.done ? dc.textMuted : null,
                           ),
                         ),
-                        if (entry.type != SavedType.demon)
+                        if (entry.type != SavedType.demon && ref.watch(showPricesProvider))
                           Text(
                             entry.type == SavedType.path
                                 ? 'Total ${macca(entry.macca)} to buy'
@@ -375,7 +375,7 @@ class _SavedCard extends ConsumerWidget {
 }
 
 /// "2. Nyx × Succubus → Lilith" with its own tick box.
-class _StepLine extends StatelessWidget {
+class _StepLine extends ConsumerWidget {
   const _StepLine({
     required this.index,
     required this.step,
@@ -411,7 +411,7 @@ class _StepLine extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dc = context.dc;
     return InkWell(
       onTap: () => onChanged(!step.done),
@@ -446,7 +446,7 @@ class _StepLine extends StatelessWidget {
                 ),
               ),
             ),
-            if (step.macca > 0)
+            if (step.macca > 0 && ref.watch(showPricesProvider))
               Padding(
                 padding: const EdgeInsets.only(left: Space.x2),
                 child: Text(macca(step.macca), style: context.tt.labelSmall),

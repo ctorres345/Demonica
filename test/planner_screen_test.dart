@@ -111,6 +111,10 @@ void main() {
     await runPlanner(tester, c);
     await tester.pump();
     expect(find.text('STEP 1'), findsOneWidget);
+    // Prices are hidden until the setting is on.
+    expect(find.textContaining('Total'), findsNothing);
+    c.read(settingsProvider.notifier).setShowPrices(true);
+    await tester.pump();
     expect(find.textContaining('Total'), findsOneWidget);
 
     // Ticking a step saves the plan with that step done.

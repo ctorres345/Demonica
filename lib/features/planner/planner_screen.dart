@@ -338,7 +338,11 @@ class _ResultView extends ConsumerWidget {
             children: [
               for (final (i, p) in result.plans.indexed)
                 ChoiceChip(
-                  label: Text('Option ${i + 1} · ${macca(p.totalMacca)}'),
+                  label: Text(
+                    ref.watch(showPricesProvider)
+                        ? 'Option ${i + 1} · ${macca(p.totalMacca)}'
+                        : 'Option ${i + 1}',
+                  ),
                   selected: state.option == i,
                   showCheckmark: false,
                   onSelected: (_) => ref.read(plannerProvider.notifier).showOption(i),
@@ -367,7 +371,8 @@ class _ResultView extends ConsumerWidget {
                             plan.steps.length == 1 ? '1 fusion' : '${plan.steps.length} fusions',
                             style: context.tt.titleMedium,
                           ),
-                          Text('Total ${macca(plan.totalMacca)}', style: context.tt.labelMedium),
+                          if (ref.watch(showPricesProvider))
+                            Text('Total ${macca(plan.totalMacca)}', style: context.tt.labelMedium),
                         ],
                       ),
                     ),
@@ -462,7 +467,7 @@ class _Line extends StatelessWidget {
 }
 
 /// "2. Fuse Nyx × Succubus → Lilith", what to level first, which skills to keep.
-class _PlanStep extends StatelessWidget {
+class _PlanStep extends ConsumerWidget {
   const _PlanStep({
     required this.index,
     required this.step,
@@ -477,7 +482,7 @@ class _PlanStep extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dc = context.dc;
     String name(String n) {
       final d = data.demons[n];
@@ -550,7 +555,10 @@ class _PlanStep extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 12, left: Space.x2),
-              child: Text(step.macca > 0 ? macca(step.macca) : '', style: context.tt.labelSmall),
+              child: Text(
+                step.macca > 0 && ref.watch(showPricesProvider) ? macca(step.macca) : '',
+                style: context.tt.labelSmall,
+              ),
             ),
           ],
         ),

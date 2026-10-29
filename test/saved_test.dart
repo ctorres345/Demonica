@@ -191,6 +191,10 @@ void main() {
         );
     await pump();
     expect(find.textContaining('Plan · 2 fusions · 0/2 done'), findsOneWidget);
+    // Prices are hidden until the setting is on.
+    expect(find.textContaining('Total 500'), findsNothing);
+    c.read(settingsProvider.notifier).setShowPrices(true);
+    await pump();
     expect(find.textContaining('Total 500'), findsOneWidget);
 
     // Tick both steps; the plan ticks itself.
