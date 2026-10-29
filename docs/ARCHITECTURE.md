@@ -64,6 +64,7 @@ tool/
   check.sh                   every pre-push check in one command
 assets/data/smt4/            decoded game data (committed, do not edit by hand)
 docs/                        this file, DESIGN_SYSTEM.md, CODING_GUIDELINES.md, PROJECT.md
+  screenshots/               images used by the README
 ```
 
 ## Data flow: from a tap to a recipe list
