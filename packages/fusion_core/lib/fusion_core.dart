@@ -6,4 +6,5 @@ export 'src/engine/game_rules.dart';
 export 'src/engine/planner.dart';
 export 'src/games/smt4/smt4_rules.dart';
 export 'src/model/game_data.dart';
+export 'src/model/locations.dart';
 export 'src/model/models.dart';
