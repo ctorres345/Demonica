@@ -45,6 +45,7 @@ The fusion data for SMT IV is great, but most tools show it as long tables. When
 | **Recipe tree** | Every normal, element and special recipe. Sort by macca or by lowest ingredient level. Tap an ingredient to open its recipes underneath. |
 | **Used in** | The other direction: every fusion this demon is an ingredient for. |
 | **Skills** | Pick a skill and see which demons learn it, and at what level. |
+| **Plan** | Pick a target and the skills it should end with. Get numbered fusion steps: which skills to keep at each step, which ingredients to level up first, and the macca total. |
 | **Saved** | Bookmark a demon, one recipe or a whole fusion path. Add a note, tick steps off as you fuse, and export or import it as a file. |
 | **Your unlocks** | Turn story, quest, New Game+, Fiend and DLC demons on or off, so recipes only use what you have. |
 | **Palettes** | Strange Journey (default), SMT IV and Codex looks, plus light and dark. |
@@ -97,11 +98,11 @@ Building for each platform, refreshing the game data and deploying to GitHub Pag
 ## Project layout
 
 ```
-packages/fusion_core/   pure Dart fusion engine: models, SMT IV rules, reverse recipes (no Flutter)
+packages/fusion_core/   pure Dart fusion engine: models, SMT IV rules, reverse recipes, skill planner (no Flutter)
 tool/import_smt4.dart   turns the upstream data, at a pinned commit, into assets/data/smt4/
 assets/data/smt4/       the game data the app ships
 lib/design_system/      colour tokens, palettes, Material 3 theme, shared widgets
-lib/features/           compendium, demon page, recipe tree, skills, saved, settings, welcome
+lib/features/           compendium, demon page, recipe tree, skills, planner, saved, settings, welcome
 lib/app/                routes (go_router), state (Riverpod), adaptive phone/desktop shell
 tool/check.sh           every pre-push check in one command
 docs/                   plan, architecture, coding guidelines, design system, screenshots
@@ -121,7 +122,6 @@ More detail:
 
 ## Roadmap
 
-- **Fusion planner:** give it a target and the skills you want, and it suggests a path.
 - **Recruit locations:** where to find each demon in the field.
 - **Releases:** Android and iOS builds on GitHub.
 

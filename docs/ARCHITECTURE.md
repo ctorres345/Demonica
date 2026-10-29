@@ -49,16 +49,17 @@ lib/
   features/
     compendium/              demon list, filter sheets, demon detail (Overview + Used in)
     recipes/                 recipe tree screen, RecipeRow, tree expansion state
+    planner/                 Plan tab: target + skills in, step checklist out
     saved/                   saved model + file format, store, Saved screen, bookmark buttons
     skills/                  skill lookup
     settings/                palette, theme, unlock toggles, about
     onboarding/              welcome screen (first start)
 packages/fusion_core/
   lib/src/model/             models.dart (Demon, Skill, Recipe, FusionSettings), game_data.dart
-  lib/src/engine/            game_rules.dart (the GameRules interface)
+  lib/src/engine/            game_rules.dart (the GameRules interface), planner.dart (skill planner)
   lib/src/games/smt4/        smt4_rules.dart
   test/                      rule tests + smt4_golden.json (independent port)
-  benchmark/                 recipes_benchmark.dart
+  benchmark/                 recipes_benchmark.dart, planner_benchmark.dart
 tool/
   import_smt4.dart           upstream JSON -> assets/data/smt4
   check.sh                   every pre-push check in one command
@@ -105,6 +106,7 @@ sequenceDiagram
 | `recipesProvider(name)` | Provider.family | sorted reverse recipes for one demon | |
 | `usedInProvider(name)` | Provider.family | forward recipes for one demon | |
 | `treeExpansionProvider(root)` | Notifier.family | which tree nodes are open (one recipe per demon) | no |
+| `plannerProvider` | Notifier | Plan tab: target, wanted skills, level-up switch, last result | no |
 | `savedProvider` | Notifier | saved demons, recipes and plans | `demonica.saved.v1` |
 | `savedIdsProvider` | Provider | ids of saved entries, for bookmark icons | |
 | `routerProvider` | Provider | the `GoRouter` | |
@@ -122,6 +124,7 @@ Storage keys end in `.v1`. If a stored shape ever changes in a way old code cann
 | `/smt4/demon/:id` | demon detail | list + detail |
 | `/smt4/demon/:id/tree` | recipe tree | list + tree |
 | `/smt4/skills` | skills | same |
+| `/plan` | planner | same |
 | `/saved` | saved | same |
 | `/settings` | settings | same |
 
@@ -136,6 +139,17 @@ Caching inside `Smt4Rules`:
 - Per-race lookup tables are built once per set of disabled demons.
 - `reverseRecipes` and `forwardRecipes` results are cached per demon for the same settings and returned as **unmodifiable** lists. Copy before sorting.
 - Changing the disabled set clears every cache.
+
+### The planner
+
+`Planner` (in `planner.dart`) takes a target and wanted skills and returns up to three `Plan`s, cheapest first, or a `PlanFailure` that says why not. It works on top of `GameRules` only, so it works for any game that implements it.
+
+1. Wanted skills the target learns itself are set aside (`learnedByTarget`). The rest must be inheritable and fit `freeSkillSlots(target)`.
+2. For each reverse recipe, skills a parent knows innately are covered. The rest are split between the parents in every possible way, and each parent is planned the same way one level down (memoized per demon, skill set and depth).
+3. A parent that needs nothing extra is summoned at its price. With level-ups allowed, a parent can also bring skills it learns by leveling (the step says "level X to N first"). Accidents and enemy-only demons are never ingredients.
+4. Cheapest total macca wins, then fewer fusions, then fewer level-ups. Depth is 3 fusions; deeper searches grew to several seconds for six skills.
+
+It runs on the UI thread after a short delay so the spinner can draw: about 0.1 s for two or three skills and about 1 s for six (`dart run benchmark/planner_benchmark.dart`).
 
 `GameData` precomputes `demonsByLevel` and `learnerCounts` (how many demons learn each skill) on first use.
 

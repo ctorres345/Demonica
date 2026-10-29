@@ -8,6 +8,7 @@ import '../design_system/tokens.dart';
 import '../features/compendium/compendium_screen.dart';
 import '../features/compendium/demon_detail_screen.dart';
 import '../features/onboarding/welcome_screen.dart';
+import '../features/planner/planner_screen.dart';
 import '../features/recipes/recipe_tree_screen.dart';
 import '../features/saved/saved_screen.dart';
 import '../features/saved/saved_store.dart';
@@ -51,6 +52,13 @@ final _routes = <RouteBase>[
         ],
       ),
       GoRoute(path: '/smt4/skills', builder: (context, state) => const SkillsScreen()),
+      GoRoute(
+        path: '/plan',
+        builder: (context, state) => PlannerScreen(
+          demonId: state.uri.queryParameters['demon'],
+          skills: state.uri.queryParameters['skills'],
+        ),
+      ),
       GoRoute(path: '/saved', builder: (context, state) => const SavedScreen()),
       GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
     ],
@@ -85,14 +93,16 @@ class AppShell extends ConsumerWidget {
   static const _tabs = [
     (path: '/smt4/demons', icon: Icons.auto_awesome_mosaic_outlined, label: 'DEMONS'),
     (path: '/smt4/skills', icon: Icons.bolt_outlined, label: 'SKILLS'),
+    (path: '/plan', icon: Icons.route_outlined, label: 'PLAN'),
     (path: '/saved', icon: Icons.bookmarks_outlined, label: 'SAVED'),
     (path: '/settings', icon: Icons.tune, label: 'SETTINGS'),
   ];
 
   int get _index {
     if (location.startsWith('/smt4/skills')) return 1;
-    if (location.startsWith('/saved')) return 2;
-    if (location.startsWith('/settings')) return 3;
+    if (location.startsWith('/plan')) return 2;
+    if (location.startsWith('/saved')) return 3;
+    if (location.startsWith('/settings')) return 4;
     return 0;
   }
 

@@ -3,7 +3,7 @@ description: "Demonica: a friendlier SMT IV fusion compendium with reverse recip
 publish_to: 'none'
 
 # Keep in sync with appVersion in lib/app/version.dart (a test checks it).
-version: 0.2.0+2
+version: 0.3.0+3
 
 environment:
   sdk: ^3.13.7

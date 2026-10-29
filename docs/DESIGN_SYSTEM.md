@@ -72,7 +72,7 @@ All in `lib/design_system/`. Reuse these before writing a new widget.
 
 ## Layout
 
-Below 840dp (`wideBreakpoint`): bottom navigation (Demons, Skills, Saved, Settings) and push navigation. At 840dp and above: navigation rail with the pixel helmet, compendium list (360dp) on the left, detail or tree on the right. The Saved tab shows a badge with the number of entries not ticked off. Web uses real paths: `/smt4/demons`, `/smt4/demon/lilith`, `/smt4/demon/lilith/tree`, `/smt4/skills`, `/saved`, `/settings`, `/welcome`.
+Below 840dp (`wideBreakpoint`): bottom navigation (Demons, Skills, Plan, Saved, Settings) and push navigation. At 840dp and above: navigation rail with the pixel helmet, compendium list (360dp) on the left, detail or tree on the right. The Saved tab shows a badge with the number of entries not ticked off. Web uses real paths: `/smt4/demons`, `/smt4/demon/lilith`, `/smt4/demon/lilith/tree`, `/smt4/skills`, `/plan`, `/saved`, `/settings`, `/welcome`.
 
 ## Prototypes
 

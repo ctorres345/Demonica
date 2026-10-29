@@ -22,10 +22,21 @@ class SavedStep {
     required this.kind,
     required this.macca,
     this.done = false,
+    this.skills = const [],
+    this.levelUps = const {},
   });
 
   factory SavedStep.fromRecipe(Recipe r, int macca) =>
       SavedStep(result: r.result, ingredients: r.ingredients, kind: r.kind, macca: macca);
+
+  factory SavedStep.fromPlan(FusionStep s) => SavedStep(
+    result: s.result,
+    ingredients: s.ingredients,
+    kind: s.recipe.kind,
+    macca: s.macca,
+    skills: s.skillsToPick,
+    levelUps: s.levelUps,
+  );
 
   final String result;
   final List<String> ingredients;
@@ -35,6 +46,12 @@ class SavedStep {
   final int macca;
   final bool done;
 
+  /// Planner only: skills to tick on the fusion screen for this step.
+  final List<String> skills;
+
+  /// Planner only: ingredients to level up first, name -> level.
+  final Map<String, int> levelUps;
+
   Recipe get recipe => Recipe(result: result, ingredients: ingredients, kind: kind);
 
   SavedStep copyWith({bool? done}) => SavedStep(
@@ -43,14 +60,20 @@ class SavedStep {
     kind: kind,
     macca: macca,
     done: done ?? this.done,
+    skills: skills,
+    levelUps: levelUps,
   );
 
+  // The planner fields are written only when set, so files from v0.2 and
+  // files with plain recipes look the same as before.
   Map<String, dynamic> toJson() => {
     'result': result,
     'ingredients': ingredients,
     'kind': kind.name,
     'macca': macca,
     'done': done,
+    if (skills.isNotEmpty) 'skills': skills,
+    if (levelUps.isNotEmpty) 'levelUps': levelUps,
   };
 
   static SavedStep fromJson(Map<String, dynamic> j) => SavedStep(
@@ -59,6 +82,10 @@ class SavedStep {
     kind: RecipeKind.values.byName(j['kind'] as String),
     macca: (j['macca'] as num?)?.toInt() ?? 0,
     done: j['done'] as bool? ?? false,
+    skills: ((j['skills'] as List?) ?? const []).cast<String>(),
+    levelUps: ((j['levelUps'] as Map<String, dynamic>?) ?? const {}).map(
+      (k, v) => MapEntry(k, (v as num).toInt()),
+    ),
   );
 }
 
@@ -91,7 +118,7 @@ class SavedEntry {
 
   /// [steps] are in fusion order: leaves first, the target last.
   factory SavedEntry.path(List<SavedStep> steps, {DateTime? at}) {
-    if (steps.length == 1) {
+    if (steps.length == 1 && steps.single.skills.isEmpty && steps.single.levelUps.isEmpty) {
       return SavedEntry.recipe(steps.single.recipe, steps.single.macca, at: at);
     }
     return SavedEntry(
@@ -107,8 +134,16 @@ class SavedEntry {
   /// importing a file with it, lands on the same entry.
   static String demonId(String name) => 'd:$name';
   static String recipeId(Recipe r) => 'r:${r.result}:${r.ingredients.join('+')}';
-  static String pathId(List<SavedStep> steps) =>
-      'p:${steps.last.result}:${steps.map((s) => s.ingredients.join('+')).join('|')}';
+  static String pathId(List<SavedStep> steps) {
+    final base = 'p:${steps.last.result}:${steps.map((s) => s.ingredients.join('+')).join('|')}';
+    // The same fusions picking different skills are different plans.
+    final skills = steps.last.skills;
+    return skills.isEmpty ? base : '$base#${skills.join('+')}';
+  }
+
+  /// A planner result as a saved plan.
+  static SavedEntry fromPlan(Plan p, {DateTime? at}) =>
+      SavedEntry.path([for (final s in p.steps) SavedStep.fromPlan(s)], at: at);
 
   final String id;
   final SavedType type;

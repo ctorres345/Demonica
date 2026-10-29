@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/providers.dart';
 import '../../design_system/components.dart';
 import '../../design_system/tokens.dart';
+import '../planner/planner_store.dart';
 import '../recipes/recipe_row.dart';
 import '../saved/save_button.dart';
 
@@ -113,6 +114,15 @@ class DemonDetailScreen extends ConsumerWidget {
             onPressed: () => context.go('/smt4/demon/${demon.id}/tree'),
             icon: const Icon(Icons.account_tree_outlined, size: 18),
             label: const Text('OPEN RECIPE TREE'),
+          ),
+          const SizedBox(height: Space.x2),
+          OutlinedButton.icon(
+            onPressed: () {
+              ref.read(plannerProvider.notifier).setTarget(demon.name);
+              context.go('/plan');
+            },
+            icon: const Icon(Icons.route_outlined, size: 18),
+            label: const Text('PLAN WITH SKILLS'),
           ),
         ],
         if (demon.evolvesFrom != null || demon.evolvesTo != null) ...[

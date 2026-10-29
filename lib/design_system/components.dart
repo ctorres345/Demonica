@@ -321,8 +321,13 @@ class SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.only(top: Space.x4, bottom: Space.x2),
       child: Row(
         children: [
-          Text(title.toUpperCase(), style: context.tt.labelSmall),
-          const Spacer(),
+          Expanded(
+            child: Text(
+              title.toUpperCase(),
+              style: context.tt.labelSmall,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
           if (trailing != null)
             Text(trailing!, style: context.tt.labelSmall?.copyWith(fontStyle: FontStyle.italic)),
         ],

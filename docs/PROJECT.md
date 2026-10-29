@@ -40,7 +40,7 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | --- | --- | --- |
 | MVP (done) | Scaffold, design system, data import, compendium + filters, demon detail, reverse recipes, expandable tree, skills lookup, settings | Recipes match the existing tool |
 | v0.2 Saved recipes (done) | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
-| v0.3 Planner | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Cesar confirms the inheritance rule in-game |
+| v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule (8 minus innate) still to be confirmed in-game (DEM-7); it is one function, `freeSkillSlots` |
 | v0.4 Locations | Curated `locations.json` (IGN demon locations as the main source), recruit flag in tree, route and spoiler tags | |
 | v1.0 Releases | GitHub Actions: Pages deploy, APK and unsigned IPA on releases, runbook | |
 
@@ -63,3 +63,10 @@ See the thread in the Demonica project. Defaults in use: skill slots = 8 minus i
 - Bookmark a demon (no recipe yet), a single recipe, or the open path of the tree as a plan. Ids are built from the content, so saving or importing the same thing twice merges.
 - The tree keeps one open recipe per demon, so the open part is always one path. A plan's steps are leaves first; each step's macca counts only ingredients that are bought, not ones fused earlier in the plan.
 - Stored in `shared_preferences` under `demonica.saved.v1` in the same JSON as the export file (`format: demonica.saved`, `version: 1`). Import rejects other files and newer versions, skips unknown demons, and replaces entries with the same id.
+
+## Planner (v0.3, as built)
+
+- Input is only a target demon and the wanted skills, plus a switch for leveling ingredients. Nothing about the player's level, party or Compendium.
+- Output is up to three plans, cheapest first. Each step: ingredients, result, skills to keep on the fusion screen, ingredients to level first, macca for the ingredients bought at that step.
+- A plan saves into the same `path` entry as v0.2 plans. Steps gain two optional fields, `skills` and `levelUps`, written only when set, so v0.2 files still read the same.
+- When there is no plan the screen says why: not fusable, unique skill, not enough free slots, or nothing within 3 fusions.

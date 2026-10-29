@@ -387,6 +387,29 @@ class _StepLine extends StatelessWidget {
   final String text;
   final ValueChanged<bool> onChanged;
 
+  Widget _stepText(BuildContext context) {
+    final dc = context.dc;
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: text),
+          TextSpan(
+            text: '  →  ',
+            style: TextStyle(color: dc.accent),
+          ),
+          TextSpan(
+            text: step.result,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+      style: context.tt.bodySmall?.copyWith(
+        color: step.done ? dc.textMuted : dc.text,
+        decoration: step.done ? TextDecoration.lineThrough : null,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dc = context.dc;
@@ -408,24 +431,18 @@ class _StepLine extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(text: text),
-                      TextSpan(
-                        text: '  →  ',
-                        style: TextStyle(color: dc.accent),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final e in step.levelUps.entries)
+                      Text(
+                        'First level ${e.key} to Lv ${e.value}',
+                        style: context.tt.labelSmall?.copyWith(color: dc.accent),
                       ),
-                      TextSpan(
-                        text: step.result,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                  style: context.tt.bodySmall?.copyWith(
-                    color: step.done ? dc.textMuted : dc.text,
-                    decoration: step.done ? TextDecoration.lineThrough : null,
-                  ),
+                    _stepText(context),
+                    if (step.skills.isNotEmpty)
+                      Text('Keep: ${step.skills.join(', ')}', style: context.tt.labelSmall),
+                  ],
                 ),
               ),
             ),

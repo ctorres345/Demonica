@@ -2,8 +2,11 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
-## Unreleased
+## 0.3.0 (2026-10-29)
 
+- Plan tab: pick a target demon and the skills it should end with. Demonica finds up to three fusion chains (up to 3 fusions deep), cheapest first, and says which skills to keep at each step and which ingredients to level up first. Ticking a step saves the plan to the Saved tab.
+- Demon page: "Plan with skills" button opens the Plan tab with that demon.
+- Saved plans show the skills to keep and the level-ups for each step.
 - Faster screens: recipe lists are cached, and changing the palette or theme no longer recomputes recipes. Opening one branch of the recipe tree no longer rebuilds the whole tree.
 - SMT IV light palette: darker orange accent so button text is readable (contrast 3.2:1 to 5.0:1).
 - Settings shows the app version from one place (`lib/app/version.dart`).
