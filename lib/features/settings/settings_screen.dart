@@ -156,7 +156,7 @@ class SettingsScreen extends ConsumerWidget {
 String _coverage(LocationData loc, GameData? data) {
   final n = loc.recruitable().length;
   final total = data?.demons.values.where((d) => !d.isEnemyOnly).length;
-  return '${total == null ? n : '$n of $total'} recruitable';
+  return 'areas known for ${total == null ? n : '$n of $total'} demons';
 }
 
 /// A pre-filled GitHub issue so a report carries the data version.

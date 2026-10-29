@@ -7,6 +7,12 @@ User-visible changes, newest first. Dates are when the change reached `main`.
 - Tutorial: five short pages after the welcome screen. Settings → "Show the tutorial again" reopens it.
 - Unlocks: the story, quest, New Game+, Fiend and DLC switches moved from Settings to their own page, as a checklist of what you have done. A locked demon's page shows its unlock condition with the same tick.
 - Settings: Help section with the tutorial, "Report a wrong recipe" and a contact address (demonica@cjtech.dev).
+- Easier to read, from a UX review: bigger captions and tab labels (12 px minimum), stronger outlines in the light palettes and SMT IV dark, a visible focus ring on desktop.
+- Demon page: tapping a skill now keeps the demon in the back stack; "+N more in the tree" is a link; the ¥ price is explained; "Used in" rows no longer split race from level.
+- Compendium: "Show locked demons" chip only appears when something is locked; races are listed alphabetically; the empty state has a "Clear search and filters" button; a wrong demon link shows a "Browse demons" button. The duplicate settings icon is gone.
+- Skills: "4 demons" instead of a bare number; skills nobody learns are dimmed.
+- Plan: "SHOW IN TREE", and "2 to inherit · 6 slots free".
+- Welcome screen says what the app is before asking for a palette.
 
 ## 1.0.0 (2026-10-29)
 

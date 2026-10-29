@@ -215,7 +215,7 @@ class ResistRow extends StatelessWidget {
                 children: [
                   Text(
                     elementLabels[e]!.toUpperCase(),
-                    style: context.tt.labelSmall?.copyWith(fontSize: 9),
+                    style: context.tt.labelSmall?.copyWith(fontSize: 10.5),
                   ),
                   const SizedBox(height: 3),
                   _ResistCell(resists[e] ?? Resist.none, dc),

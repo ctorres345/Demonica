@@ -68,24 +68,22 @@ class RecipeTreeScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: Space.x4, vertical: Space.x2),
               children: [
                 _chip(
-                  'Cheapest first',
+                  'Cheapest',
                   prefs.sort == RecipeSort.cheapest,
                   () => notifier.setSort(RecipeSort.cheapest),
                 ),
                 _chip(
-                  'Lowest level first',
+                  'Lowest Lv',
                   prefs.sort == RecipeSort.lowestLevel,
                   () => notifier.setSort(RecipeSort.lowestLevel),
                 ),
                 _chip(
-                  'Hide element recipes',
+                  'No element recipes',
                   prefs.hideElement,
                   () => notifier.setHideElement(!prefs.hideElement),
                 ),
                 _chip(
-                  prefs.maxLevel == null
-                      ? 'Max ingredient level'
-                      : 'Ingredients ≤ Lv ${prefs.maxLevel}',
+                  prefs.maxLevel == null ? 'Max Lv' : '≤ Lv ${prefs.maxLevel}',
                   prefs.maxLevel != null,
                   () => _pickMaxLevel(context, prefs.maxLevel, notifier.setMaxLevel),
                 ),

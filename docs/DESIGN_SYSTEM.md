@@ -4,7 +4,7 @@ Dark-first Material 3 with a light twin. The dark palette is modelled on the Str
 
 ## Color
 
-Three palettes, picked on the welcome screen at first start and in Settings, saved on the device (`Palette` in tokens.dart): **Strange Journey** (default, table below), **SMT IV** (bg #0D0D0D, surface #1E1E1E, outline #4A4A4A, accent orange #F7941D, danger red #D8232F, ok green #6FD621) and **Codex** (light by default: parchment #F3EFE6, surface #FBF8F1, outline #CFC6B2, ink #1D1A14, accent deep red #8F1D2C; its dark twin is ink on dark leather). Every palette has a dark and a light variant; `PaletteCard` in palette_card.dart draws the preview used by both screens.
+Three palettes, picked on the welcome screen at first start and in Settings, saved on the device (`Palette` in tokens.dart): **Strange Journey** (default, table below), **SMT IV** (bg #0D0D0D, surface #1E1E1E, outline #5E5E5E, accent orange #F7941D, danger red #D8232F, ok green #6FD621) and **Codex** (light by default: parchment #F3EFE6, surface #FBF8F1, outline #CFC6B2, ink #1D1A14, accent deep red #8F1D2C; its dark twin is ink on dark leather). Every palette has a dark and a light variant; `PaletteCard` in palette_card.dart draws the preview used by both screens.
 
 Strange Journey tokens (`DemonicaColors.strangeJourneyDark` / `strangeJourneyLight`):
 
@@ -13,7 +13,7 @@ Strange Journey tokens (`DemonicaColors.strangeJourneyDark` / `strangeJourneyLig
 | bg | #050B16 | #EEF3FA | page |
 | surface | #0C1C36 | #FFFFFF | cards, inputs, rows |
 | surfaceHigh | #173159 | #DCE7F5 | selected rows |
-| outline | #3F74B4 | #9DB7D8 | 1px borders (no shadows) |
+| outline | #3F74B4 | #7A96B8 | 1px borders (no shadows); about 3:1 against the background so the tree lines stay visible |
 | text | #F4F7FF | #0A1A33 | |
 | textMuted | #92B4E0 | #4A6A94 | captions, mono labels |
 | accent | #5CC8FF | #1F6FD0 | the one accent: selection, primary button, tree root |

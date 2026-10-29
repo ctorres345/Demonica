@@ -145,7 +145,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
   String _slotText(GameRules rules, Demon target, List<String> skills) {
     final own = {for (final l in target.skills) l.name};
     final inherit = skills.where((k) => !own.contains(k)).length;
-    return '$inherit of ${rules.freeSkillSlots(target)} free slots';
+    return '$inherit to inherit · ${rules.freeSkillSlots(target)} slots free';
   }
 
   Future<void> _pickDemon(BuildContext context, WidgetRef ref, GameData data) async {
@@ -378,7 +378,7 @@ class _ResultView extends ConsumerWidget {
                             .showSteps(entry.steps);
                         context.go('/smt4/demon/${target.id}/tree');
                       },
-                      child: const Text('TREE'),
+                      child: const Text('SHOW IN TREE'),
                     ),
                     IconButton(
                       tooltip: saved == null ? 'Save this plan' : 'Remove from Saved',

@@ -34,6 +34,11 @@ class WelcomeScreen extends ConsumerWidget {
                 Text('Pick your look', style: context.tt.displaySmall),
                 const SizedBox(height: Space.x2),
                 Text(
+                  'Fusion recipes, recipe trees and skill plans for Shin Megami Tensei IV.',
+                  style: context.tt.bodyMedium,
+                ),
+                const SizedBox(height: Space.x2),
+                Text(
                   'Each palette copies the menus of one game. Tap one to try it; '
                   'the screen changes right away. You can change it later in Settings.',
                   style: context.tt.bodyMedium?.copyWith(color: dc.textMuted),

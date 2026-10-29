@@ -43,7 +43,8 @@ class RecipeRow extends ConsumerWidget {
       final name = recipe.ingredients[i];
       final d = data.demons[name];
       if (i > 0) {
-        spans.add(TextSpan(text: '  ×  ', style: context.tt.labelMedium));
+        // Non-breaking spaces keep the × with the second name when the row wraps.
+        spans.add(TextSpan(text: '\u00A0 ×\u00A0', style: context.tt.labelMedium));
       }
       spans.add(
         WidgetSpan(

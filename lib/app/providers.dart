@@ -240,6 +240,7 @@ class CompendiumFilterNotifier extends Notifier<CompendiumFilter> {
   void setSkill(String? skill) => state = state.copyWith(skill: () => skill);
   void setShowDisabled(bool v) => state = state.copyWith(showDisabled: v);
   void clear() => state = CompendiumFilter(query: state.query);
+  void clearAll() => state = const CompendiumFilter();
 }
 
 final compendiumFilterProvider = NotifierProvider<CompendiumFilterNotifier, CompendiumFilter>(

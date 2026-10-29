@@ -84,7 +84,12 @@ class _SkillsScreenState extends ConsumerState<SkillsScreen> {
                     learnedAt: null,
                     trailing: Padding(
                       padding: const EdgeInsets.only(left: 10),
-                      child: Text('$n', style: context.tt.labelMedium),
+                      child: Text(
+                        n == 1 ? '1 demon' : '$n demons',
+                        style: context.tt.labelMedium?.copyWith(
+                          color: n == 0 ? context.dc.outline : null,
+                        ),
+                      ),
                     ),
                     onTap: n == 0
                         ? null

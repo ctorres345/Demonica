@@ -25,8 +25,20 @@ class DemonDetailScreen extends ConsumerWidget {
     final demon = data.demonsById[demonId];
     if (demon == null) {
       return Scaffold(
-        appBar: AppBar(),
-        body: Center(child: Text('No demon called "$demonId".')),
+        appBar: AppBar(title: const Text('NOT FOUND')),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('No demon called "$demonId".'),
+              const SizedBox(height: Space.x4),
+              FilledButton(
+                onPressed: () => context.go('/smt4/demons'),
+                child: const Text('BROWSE DEMONS'),
+              ),
+            ],
+          ),
+        ),
       );
     }
     final dc = context.dc;
@@ -72,13 +84,22 @@ class DemonDetailScreen extends ConsumerWidget {
               skill: data.skill(s.name),
               learnedAt: s.level,
               onTap: () {
+                // push, so back returns to this demon.
                 ref.read(compendiumFilterProvider.notifier).setSkill(s.name);
-                context.go('/smt4/demons');
+                context.push('/smt4/demons');
               },
             ),
           ),
         _WhereToFind(demon),
         SectionHeader('How to get', trailing: _howToGetTrailing(demon, recipes.length)),
+        if (recipes.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.x2),
+            child: Text(
+              '¥ is the macca to re-summon both ingredients from the Compendium.',
+              style: context.tt.bodySmall,
+            ),
+          ),
         // The unlock row already says the condition, so the note is only for
         // prerequisites that are not unlocks.
         if (demon.prereq case final prereq? when prereq != unlock?.condition)
@@ -115,9 +136,15 @@ class DemonDetailScreen extends ConsumerWidget {
           if (recipes.length > 5)
             Padding(
               padding: const EdgeInsets.only(top: Space.x1, bottom: Space.x2),
-              child: Text(
-                '+${recipes.length - 5} more in the tree',
-                style: context.tt.labelMedium?.copyWith(color: dc.accent),
+              child: InkWell(
+                onTap: () => context.go('/smt4/demon/${demon.id}/tree'),
+                child: Text(
+                  '+${recipes.length - 5} more in the tree',
+                  style: context.tt.labelMedium?.copyWith(
+                    color: dc.accent,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
               ),
             ),
           const SizedBox(height: Space.x2),
@@ -150,7 +177,7 @@ class DemonDetailScreen extends ConsumerWidget {
             ),
         ],
         const SizedBox(height: Space.x4),
-        Text('Re-summon from Compendium: ${macca(demon.price)}', style: context.tt.labelMedium),
+        Text('Re-summon price: ${macca(demon.price)}', style: context.tt.labelMedium),
       ],
     );
 
@@ -338,7 +365,7 @@ class _StatsGrid extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(label, style: context.tt.labelSmall?.copyWith(fontSize: 9)),
+                    Text(label, style: context.tt.labelSmall?.copyWith(fontSize: 10.5)),
                     Text(
                       '$v',
                       style: TextStyle(
@@ -559,16 +586,26 @@ class _ForwardRow extends StatelessWidget {
         border: Border.all(color: dc.outline),
         borderRadius: Radii.borderSmall,
       ),
-      child: Row(
+      // Two lines, so race and level never split from the name on a phone.
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('+ ', style: context.tt.labelMedium),
-          Flexible(child: name(partner)),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Space.x2),
-            child: Icon(Icons.arrow_forward, size: 14, color: dc.accent),
+          Row(
+            children: [
+              Text('+ ', style: context.tt.labelMedium),
+              Expanded(child: name(partner)),
+            ],
           ),
-          Expanded(child: name(result)),
-          Text(macca(cost), style: context.tt.labelMedium),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: Space.x2),
+                child: Icon(Icons.arrow_forward, size: 14, color: dc.accent),
+              ),
+              Expanded(child: name(result)),
+              Text(macca(cost), style: context.tt.labelMedium),
+            ],
+          ),
         ],
       ),
     );

@@ -58,17 +58,19 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
                   Text('COMPENDIUM'),
                 ],
               ),
-              actions: [
-                IconButton(
-                  tooltip: 'Settings',
-                  icon: const Icon(Icons.tune),
-                  onPressed: () => context.push('/settings'),
-                ),
-              ],
             ),
       body: data.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Could not load data: $e')),
+        error: (e, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(Space.x6),
+            child: Text(
+              'Could not load the demon data. Reload the page or reinstall the app.\n\n$e',
+              style: context.tt.bodySmall,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
         data: (gd) => Column(
           children: [
             Padding(
@@ -121,18 +123,19 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
                         ? filter.races.first
                         : '${filter.races.length} races',
                     selected: filter.races.isNotEmpty,
-                    onTap: () => showRacePicker(context, ref, gd.races),
+                    onTap: () => showRacePicker(context, ref, [...gd.races]..sort()),
                     onClear: filter.races.isEmpty
                         ? null
                         : () => ref.read(compendiumFilterProvider.notifier).setRaces({}),
                   ),
-                  _chip(
-                    label: 'Show disabled',
-                    selected: filter.showDisabled,
-                    onTap: () => ref
-                        .read(compendiumFilterProvider.notifier)
-                        .setShowDisabled(!filter.showDisabled),
-                  ),
+                  if (ref.watch(fusionSettingsProvider).disabledDemons.isNotEmpty)
+                    _chip(
+                      label: 'Show locked demons',
+                      selected: filter.showDisabled,
+                      onTap: () => ref
+                          .read(compendiumFilterProvider.notifier)
+                          .setShowDisabled(!filter.showDisabled),
+                    ),
                 ],
               ),
             ),
@@ -158,9 +161,24 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
                   ? Center(
                       child: Padding(
                         padding: const EdgeInsets.all(Space.x6),
-                        child: Text(
-                          'No demon matches. Try fewer filters.',
-                          style: context.tt.bodySmall,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              filter.query.isEmpty
+                                  ? 'No demon matches these filters.'
+                                  : 'No demon matches "${filter.query}".',
+                              style: context.tt.bodySmall,
+                            ),
+                            const SizedBox(height: Space.x2),
+                            TextButton(
+                              onPressed: () {
+                                _search.clear();
+                                ref.read(compendiumFilterProvider.notifier).clearAll();
+                              },
+                              child: const Text('Clear search and filters'),
+                            ),
+                          ],
                         ),
                       ),
                     )

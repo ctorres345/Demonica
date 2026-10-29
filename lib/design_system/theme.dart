@@ -44,6 +44,8 @@ ThemeData demonicaTheme(Brightness brightness, {Palette palette = Palette.strang
   );
 
   return base.copyWith(
+    // A visible ring when tabbing with a keyboard.
+    focusColor: c.accent.withValues(alpha: 0.35),
     scaffoldBackgroundColor: c.bg,
     canvasColor: c.bg,
     dividerColor: c.outline,
@@ -60,7 +62,7 @@ ThemeData demonicaTheme(Brightness brightness, {Palette palette = Palette.strang
       titleSmall: display(13, weight: FontWeight.w500),
       labelSmall: TextStyle(
         fontFamily: Fonts.mono,
-        fontSize: 10.5,
+        fontSize: 12,
         letterSpacing: 0.8,
         color: c.textMuted,
         fontWeight: FontWeight.w500,
@@ -120,7 +122,7 @@ ThemeData demonicaTheme(Brightness brightness, {Palette palette = Palette.strang
       indicatorColor: c.accent.withValues(alpha: 0.16),
       surfaceTintColor: Colors.transparent,
       labelTextStyle: WidgetStatePropertyAll(
-        TextStyle(fontFamily: Fonts.mono, fontSize: 10.5, letterSpacing: 0.6, color: c.textMuted),
+        TextStyle(fontFamily: Fonts.mono, fontSize: 11.5, letterSpacing: 0.6, color: c.textMuted),
       ),
       iconTheme: WidgetStateProperty.resolveWith(
         (s) => IconThemeData(
@@ -134,10 +136,10 @@ ThemeData demonicaTheme(Brightness brightness, {Palette palette = Palette.strang
       indicatorColor: c.accent.withValues(alpha: 0.16),
       selectedIconTheme: IconThemeData(color: c.accent),
       unselectedIconTheme: IconThemeData(color: c.textMuted),
-      selectedLabelTextStyle: TextStyle(fontFamily: Fonts.mono, fontSize: 10.5, color: c.accent),
+      selectedLabelTextStyle: TextStyle(fontFamily: Fonts.mono, fontSize: 11.5, color: c.accent),
       unselectedLabelTextStyle: TextStyle(
         fontFamily: Fonts.mono,
-        fontSize: 10.5,
+        fontSize: 11.5,
         color: c.textMuted,
       ),
     ),
