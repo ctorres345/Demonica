@@ -48,10 +48,18 @@ void main() {
     await tester.scrollUntilVisible(
       find.text('OPEN RECIPE TREE'),
       200,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: find
+          .descendant(of: find.byType(ListView), matching: find.byType(Scrollable))
+          .first,
     );
     expect(find.text('OPEN RECIPE TREE'), findsOneWidget);
     expect(find.textContaining('Black Maria'), findsWidgets);
+
+    // Forward fusions live in their own tab.
+    await tester.tap(find.textContaining('USED IN'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('fusions use Lilith'), findsOneWidget);
+    expect(find.text('Lowest result first'), findsOneWidget);
   });
 
   testWidgets('filtered demons react to the skill filter', (tester) async {

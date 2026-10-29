@@ -32,125 +32,135 @@ class DemonDetailScreen extends ConsumerWidget {
     final recipes = ref.watch(recipesProvider(demon.name));
     final enabled = settings.fusion.isEnabled(demon.name);
     final freeSlots = rules.freeSkillSlots(demon);
-    final usedIn = rules.forwardRecipes(demon, settings.fusion).length;
+    final usedIn = demon.isEnemyOnly
+        ? const <Recipe>[]
+        : rules.forwardRecipes(demon, settings.fusion);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: embedded
-            ? null
-            : BackButton(
-                onPressed: () => context.canPop() ? context.pop() : context.go('/smt4/demons'),
-              ),
-        automaticallyImplyLeading: !embedded,
-        title: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(text: 'Compendium / ', style: context.tt.labelMedium),
-              TextSpan(text: demon.name),
-            ],
-          ),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, Space.x8),
-        children: [
+    final overview = ListView(
+      padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, Space.x8),
+      children: [
+        _StatusLine(demon),
+        if (demon.fusion != FusionKind.normal || demon.unlockCategory != null || !enabled) ...[
+          const SizedBox(height: Space.x2),
           Wrap(
             spacing: Space.x2,
             runSpacing: Space.x1,
-            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Text('${demon.race} · Lv ${demon.level}'.toUpperCase(), style: context.tt.labelSmall),
-              AlignmentTag(demon.alignment, full: true),
               FusionTag(demon),
               if (!enabled) Tag('Disabled in settings', color: dc.danger),
             ],
           ),
+        ],
+        const SizedBox(height: Space.x3),
+        _StatsGrid(demon.stats),
+        const SizedBox(height: Space.x3),
+        ResistRow(resists: demon.resists, order: data.resistElements),
+        if (demon.ailments.values.any((r) => r != Resist.none)) ...[
           const SizedBox(height: Space.x2),
-          Text(demon.name, style: context.tt.displaySmall),
-          const SizedBox(height: Space.x3),
-          _StatsGrid(demon.stats),
-          const SizedBox(height: Space.x3),
-          ResistRow(resists: demon.resists, order: data.resistElements),
-          if (demon.ailments.values.any((r) => r != Resist.none)) ...[
-            const SizedBox(height: Space.x2),
-            _AilmentLine(demon.ailments),
-          ],
-          SectionHeader(
-            'Skills',
-            trailing: demon.isEnemyOnly
-                ? null
-                : '${demon.innateSkillCount} innate · $freeSlots free slots',
+          _AilmentLine(demon.ailments),
+        ],
+        SectionHeader(
+          'Skills',
+          trailing: demon.isEnemyOnly
+              ? null
+              : '${demon.innateSkillCount} innate · $freeSlots free slots',
+        ),
+        for (final s in demon.skills)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.x1),
+            child: SkillRow(
+              skill: data.skill(s.name),
+              learnedAt: s.level,
+              onTap: () {
+                ref.read(compendiumFilterProvider.notifier).setSkill(s.name);
+                context.go('/smt4/demons');
+              },
+            ),
           ),
-          for (final s in demon.skills)
+        SectionHeader('How to get', trailing: _howToGetTrailing(demon, recipes.length)),
+        if (demon.prereq != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.x2),
+            child: _Note(demon.prereq!),
+          ),
+        if (demon.fusion == FusionKind.accident)
+          const _Note(
+            'Fusion accidents are random. They cannot be planned, so this demon has no recipe tree.',
+          )
+        else if (demon.isEnemyOnly)
+          const _Note('This demon only appears as an enemy. It cannot be fused or recruited.')
+        else if (recipes.isEmpty)
+          const _Note('No recipe with the current settings. Enable more demons in Settings.')
+        else ...[
+          for (final r in recipes.take(5))
             Padding(
               padding: const EdgeInsets.only(bottom: Space.x1),
-              child: SkillRow(
-                skill: data.skill(s.name),
-                learnedAt: s.level,
-                onTap: () {
-                  ref.read(compendiumFilterProvider.notifier).setSkill(s.name);
-                  context.go('/smt4/demons');
-                },
-              ),
+              child: RecipeRow(recipe: r, data: data, cost: rules.recipeCost(r)),
             ),
-          SectionHeader('How to get', trailing: _howToGetTrailing(demon, recipes.length)),
-          if (demon.prereq != null)
+          if (recipes.length > 5)
             Padding(
-              padding: const EdgeInsets.only(bottom: Space.x2),
-              child: _Note(demon.prereq!),
+              padding: const EdgeInsets.only(top: Space.x1, bottom: Space.x2),
+              child: Text(
+                '+${recipes.length - 5} more in the tree',
+                style: context.tt.labelMedium?.copyWith(color: dc.accent),
+              ),
             ),
-          if (demon.fusion == FusionKind.accident)
-            const _Note(
-              'Fusion accidents are random. They cannot be planned, so this demon has no recipe tree.',
-            )
-          else if (demon.isEnemyOnly)
-            const _Note('This demon only appears as an enemy. It cannot be fused or recruited.')
-          else if (recipes.isEmpty)
-            const _Note('No recipe with the current settings. Enable more demons in Settings.')
-          else ...[
-            for (final r in recipes.take(5))
-              Padding(
-                padding: const EdgeInsets.only(bottom: Space.x1),
-                child: RecipeRow(recipe: r, data: data, cost: rules.recipeCost(r)),
-              ),
-            if (recipes.length > 5)
-              Padding(
-                padding: const EdgeInsets.only(top: Space.x1, bottom: Space.x2),
-                child: Text(
-                  '+${recipes.length - 5} more in the tree',
-                  style: context.tt.labelMedium?.copyWith(color: dc.accent),
-                ),
-              ),
-            const SizedBox(height: Space.x2),
-            FilledButton.icon(
-              onPressed: () => context.go('/smt4/demon/${demon.id}/tree'),
-              icon: const Icon(Icons.account_tree_outlined, size: 18),
-              label: const Text('OPEN RECIPE TREE'),
-            ),
-          ],
-          if (demon.evolvesFrom != null || demon.evolvesTo != null) ...[
-            const SectionHeader('Evolution'),
-            if (demon.evolvesFrom != null)
-              _LinkLine(
-                'Evolves from ${demon.evolvesFrom}',
-                () => context.go('/smt4/demon/${slugify(demon.evolvesFrom!)}'),
-              ),
-            if (demon.evolvesTo != null)
-              _LinkLine(
-                'Evolves into ${demon.evolvesTo} at level ${demon.evolvesAtLevel}',
-                () => context.go('/smt4/demon/${slugify(demon.evolvesTo!)}'),
-              ),
-          ],
-          if (!demon.isEnemyOnly) ...[
-            const SectionHeader('Used in fusions'),
-            Text(
-              '$usedIn fusions use ${demon.name} as an ingredient.',
-              style: context.tt.bodySmall,
-            ),
-          ],
-          const SizedBox(height: Space.x4),
-          Text('Re-summon from Compendium: ${macca(demon.price)}', style: context.tt.labelMedium),
+          const SizedBox(height: Space.x2),
+          FilledButton.icon(
+            onPressed: () => context.go('/smt4/demon/${demon.id}/tree'),
+            icon: const Icon(Icons.account_tree_outlined, size: 18),
+            label: const Text('OPEN RECIPE TREE'),
+          ),
         ],
+        if (demon.evolvesFrom != null || demon.evolvesTo != null) ...[
+          const SectionHeader('Evolution'),
+          if (demon.evolvesFrom != null)
+            _LinkLine(
+              'Evolves from ${demon.evolvesFrom}',
+              () => context.go('/smt4/demon/${slugify(demon.evolvesFrom!)}'),
+            ),
+          if (demon.evolvesTo != null)
+            _LinkLine(
+              'Evolves into ${demon.evolvesTo} at level ${demon.evolvesAtLevel}',
+              () => context.go('/smt4/demon/${slugify(demon.evolvesTo!)}'),
+            ),
+        ],
+        const SizedBox(height: Space.x4),
+        Text('Re-summon from Compendium: ${macca(demon.price)}', style: context.tt.labelMedium),
+      ],
+    );
+
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: embedded
+              ? null
+              : BackButton(
+                  onPressed: () => context.canPop() ? context.pop() : context.go('/smt4/demons'),
+                ),
+          automaticallyImplyLeading: !embedded,
+          title: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: 'Compendium / ', style: context.tt.labelMedium),
+                TextSpan(text: demon.name),
+              ],
+            ),
+          ),
+          bottom: TabBar(
+            tabs: [
+              const Tab(text: 'OVERVIEW'),
+              Tab(text: 'USED IN (${usedIn.length})'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            overview,
+            _UsedInTab(demon: demon, recipes: usedIn),
+          ],
+        ),
       ),
     );
   }
@@ -268,4 +278,165 @@ class _LinkLine extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// "LV 75  NIGHT  Lilith  [NEUTRAL-CHAOS]" in one line, like the status
+/// screen in the game.
+class _StatusLine extends StatelessWidget {
+  const _StatusLine(this.demon);
+  final Demon demon;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    return Wrap(
+      spacing: Space.x3,
+      runSpacing: Space.x1,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: 'LV ',
+                style: context.tt.labelSmall?.copyWith(color: dc.accent),
+              ),
+              TextSpan(
+                text: '${demon.level}',
+                style: TextStyle(
+                  fontFamily: Fonts.mono,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                  color: dc.text,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(demon.race.toUpperCase(), style: context.tt.labelLarge?.copyWith(color: dc.textMuted)),
+        Text(demon.name, style: context.tt.displaySmall),
+        AlignmentTag(demon.alignment, full: true),
+      ],
+    );
+  }
+}
+
+/// Forward fusions: every demon this one makes, with which partner.
+class _UsedInTab extends ConsumerStatefulWidget {
+  const _UsedInTab({required this.demon, required this.recipes});
+  final Demon demon;
+  final List<Recipe> recipes;
+
+  @override
+  ConsumerState<_UsedInTab> createState() => _UsedInTabState();
+}
+
+class _UsedInTabState extends ConsumerState<_UsedInTab> {
+  bool _highestFirst = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final data = ref.watch(gameDataProvider).value!;
+    final rules = ref.watch(rulesProvider)!;
+    final dc = context.dc;
+    if (widget.recipes.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(Space.x4),
+        child: Text(
+          widget.demon.isEnemyOnly
+              ? 'Enemy-only demons cannot be used in fusions.'
+              : 'No fusion uses ${widget.demon.name} with the current settings.',
+          style: context.tt.bodySmall,
+        ),
+      );
+    }
+    final sorted = [...widget.recipes]
+      ..sort((a, b) {
+        final c = data.demon(a.result).level.compareTo(data.demon(b.result).level);
+        return _highestFirst ? -c : c;
+      });
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(Space.x4, Space.x2, Space.x4, Space.x8),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${sorted.length} fusions use ${widget.demon.name}.',
+                style: context.tt.bodySmall,
+              ),
+            ),
+            FilterChip(
+              label: Text(_highestFirst ? 'Highest result first' : 'Lowest result first'),
+              selected: true,
+              showCheckmark: false,
+              avatar: Icon(
+                _highestFirst ? Icons.arrow_downward : Icons.arrow_upward,
+                size: 14,
+                color: dc.accent,
+              ),
+              onSelected: (_) => setState(() => _highestFirst = !_highestFirst),
+            ),
+          ],
+        ),
+        const SizedBox(height: Space.x2),
+        for (final r in sorted)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.x1),
+            child: _ForwardRow(
+              partner: data.demon(r.ingredients.firstWhere((n) => n != widget.demon.name)),
+              result: data.demon(r.result),
+              cost: rules.recipeCost(r),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// "+ Partner (Race 12)  →  Result (Race 20)   1 020 ¥".
+class _ForwardRow extends StatelessWidget {
+  const _ForwardRow({required this.partner, required this.result, required this.cost});
+  final Demon partner;
+  final Demon result;
+  final int cost;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    Widget name(Demon d) => InkWell(
+      onTap: () => context.go('/smt4/demon/${d.id}'),
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: d.name,
+              style: context.tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            ),
+            TextSpan(text: ' ${d.race} ${d.level}', style: context.tt.labelMedium),
+          ],
+        ),
+      ),
+    );
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: dc.surface,
+        border: Border.all(color: dc.outline),
+        borderRadius: Radii.borderSmall,
+      ),
+      child: Row(
+        children: [
+          Text('+ ', style: context.tt.labelMedium),
+          Flexible(child: name(partner)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Space.x2),
+            child: Icon(Icons.arrow_forward, size: 14, color: dc.accent),
+          ),
+          Expanded(child: name(result)),
+          Text(macca(cost), style: context.tt.labelMedium),
+        ],
+      ),
+    );
+  }
 }

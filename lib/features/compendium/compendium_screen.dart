@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../../design_system/components.dart';
+import '../../design_system/pixel_icon.dart';
 import '../../design_system/tokens.dart';
 import 'filter_sheets.dart';
 
@@ -49,7 +50,13 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
       appBar: widget.embedded
           ? null
           : AppBar(
-              title: const Text('COMPENDIUM'),
+              title: const Row(
+                children: [
+                  PixelHelmet(size: 24),
+                  SizedBox(width: Space.x2),
+                  Text('COMPENDIUM'),
+                ],
+              ),
               actions: [
                 IconButton(
                   tooltip: 'Settings',

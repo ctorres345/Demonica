@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/providers.dart';
 import '../../design_system/components.dart';
@@ -93,6 +94,15 @@ class SettingsScreen extends ConsumerWidget {
             '${data == null ? '' : ', commit ${data.sourceCommit.substring(0, 8)}'}.',
             style: context.tt.bodySmall,
           ),
+          const SizedBox(height: Space.x2),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => launchUrl(_reportUrl(data?.sourceCommit)),
+              icon: const Icon(Icons.flag_outlined, size: 18),
+              label: const Text('Report a wrong recipe'),
+            ),
+          ),
           const SizedBox(height: Space.x4),
           Text('demonica · MVP', style: context.tt.labelSmall?.copyWith(color: dc.textMuted)),
         ],
@@ -100,3 +110,11 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 }
+
+/// A pre-filled GitHub issue so a report carries the data version.
+Uri _reportUrl(String? commit) => Uri.https('github.com', '/ctorres345/Demonica/issues/new', {
+  'title': 'Wrong recipe: <demon name>',
+  'body':
+      'Demon:\nRecipe shown in Demonica:\nWhat the game does instead:\n\n'
+      'Data commit: ${commit ?? 'unknown'}',
+});

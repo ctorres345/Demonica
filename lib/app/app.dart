@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../design_system/pixel_icon.dart';
 import '../design_system/theme.dart';
 import '../design_system/tokens.dart';
 import '../features/compendium/compendium_screen.dart';
@@ -103,7 +104,7 @@ class AppShell extends StatelessWidget {
               labelType: NavigationRailLabelType.all,
               leading: Padding(
                 padding: const EdgeInsets.only(bottom: Space.x4, top: Space.x2),
-                child: Text('D', style: context.tt.displaySmall?.copyWith(color: dc.accent)),
+                child: const PixelHelmet(size: 36),
               ),
               onDestinationSelected: (i) => context.go(_tabs[i].path),
               destinations: [
