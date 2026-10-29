@@ -1,5 +1,5 @@
 {
- "source": {"name": "GamerGuides Shin Megami Tensei IV walkthrough, \"Local Demon Bestiary\" tables", "url": "https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough", "checked": "2026-10-29", "note": "Facts only (which demon appears where). Curated by hand; check against the game when in doubt."},
+ "source": {"name": "GamerGuides Shin Megami Tensei IV walkthrough, \"Local Demon Bestiary\" tables", "url": "https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough", "checked": "2026-10-29", "note": "Facts only (which demon appears where), compiled by hand with these tables as a reference. Check against the game when in doubt."},
  "phases": ["Mikado", "Early Tokyo", "Mid Tokyo", "Late Tokyo", "Alternate Tokyos", "Endgame"],
  "areas": [
   {"id": "naraku", "name": "Naraku", "phase": 0, "routes": [], "spoiler": false},

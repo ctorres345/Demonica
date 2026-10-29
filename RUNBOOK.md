@@ -50,7 +50,7 @@ Everything runs on your Mac with one script. GitHub Actions is not used (no free
 2. Try it first: `tool/release.sh --dry-run`. It runs `tool/check.sh`, builds the APK and the unsigned IPA into `build/release/`, writes the release notes, and publishes nothing.
 3. Release: `tool/release.sh`. It tags `vX.Y.Z`, creates the GitHub Release with the CHANGELOG section as notes and the APK and IPA attached, then deploys the web app.
 
-Options: `--skip-web`, `--skip-android`, `--skip-ios`. The script stops before publishing if you are not on an up-to-date, clean `main`, the tag exists, the CHANGELOG has no heading for the version, or `gh` is not signed in.
+Options: `--skip-web`, `--skip-android`, `--skip-ios`. A real release refuses to run without the Android signing key (see "Android signing"); `--allow-debug-key` overrides that for test builds only. The script stops before publishing if you are not on an up-to-date, clean `main`, the tag exists, the CHANGELOG has no heading for the version, or `gh` is not signed in.
 
 Needs: Flutter, the Android SDK (Android Studio), Xcode for the IPA, and the GitHub CLI signed in once (`brew install gh`, then `gh auth login`).
 
@@ -58,17 +58,13 @@ Needs: Flutter, the Android SDK (Android Studio), Xcode for the IPA, and the Git
 
 `tool/deploy_web.sh` builds the web app with `--base-href /Demonica/` and force-pushes it to the `gh-pages` branch, which only ever holds the latest build. `tool/release.sh` runs it; run it alone to redeploy without a new version. Add `--dry-run` to build without pushing.
 
-One-time setup in the repository (Pages on the free plan needs a **public** repository):
-
-1. Settings → General → Danger zone → Change visibility → Public.
-2. Run `tool/deploy_web.sh` once so the `gh-pages` branch exists.
-3. Settings → Pages → Build and deployment → Source: "Deploy from a branch", Branch: `gh-pages`, folder `/ (root)`, Save.
+Repository setup (done on 2026-10-29; Pages on the free plan needs a public repository): Settings → Pages → Source: "Deploy from a branch", Branch `gh-pages`, folder `/ (root)`.
 
 The app is then at https://ctorres345.github.io/Demonica/ a minute or two after each deploy.
 
 ## Android signing
 
-Release APKs are signed with the key described in `android/key.properties`. Without that file they are signed with the debug key, which works for a first install but cannot update an APK signed with a different key. Create the key once and **back up the `.jks` file and passwords**: losing them means users have to uninstall to update.
+Release APKs are signed with the key described in `android/key.properties`. Without that file, `flutter build apk` signs with the debug key and `tool/release.sh` stops, because an APK signed with one key cannot update an APK signed with another. Create the key once and **back up the `.jks` file and passwords**: losing them means users have to uninstall to update.
 
 ```sh
 keytool -genkey -v -keystore ~/keys/demonica-upload.jks -keyalg RSA -keysize 2048 -validity 10000 -alias demonica
@@ -92,4 +88,4 @@ Before every push, run `tool/check.sh` (format, `flutter analyze`, `dart analyze
 ## Known limits
 
 - iOS without a paid Apple developer account: install the web app from Safari ("Add to Home Screen"); see "iOS" above.
-- The existing tool's website is blocked from the cloud build environment, so recipe cross-checks are against an independent port of its code plus in-browser spot checks.
+- Recipe cross-checks are against an independent port of megaten-fusion-tool's code plus in-browser spot checks.

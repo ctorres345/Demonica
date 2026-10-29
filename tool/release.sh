@@ -8,10 +8,13 @@
 # CONTRIBUTING.md, "Releasing a version"), commit, and push main.
 #
 # Usage: tool/release.sh [--dry-run] [--skip-web] [--skip-android] [--skip-ios]
+#                        [--allow-debug-key]
 #   --dry-run       build everything, but do not tag, push, release or deploy
 #   --skip-web      do not deploy the web app
 #   --skip-android  do not build or attach the APK
 #   --skip-ios      do not build or attach the unsigned IPA
+#   --allow-debug-key  publish an APK signed with the debug key (not for real
+#                   releases: users could not update it to a properly signed one)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -19,12 +22,14 @@ dry_run=false
 web=true
 android=true
 ios=true
+allow_debug_key=false
 for arg in "$@"; do
   case "$arg" in
     --dry-run) dry_run=true ;;
     --skip-web) web=false ;;
     --skip-android) android=false ;;
     --skip-ios) ios=false ;;
+    --allow-debug-key) allow_debug_key=true ;;
     *) echo "Unknown option: $arg" >&2; exit 2 ;;
   esac
 done
@@ -46,6 +51,15 @@ git fetch -q origin main --tags
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] || fail "main is not the same as origin/main (push or pull first)"
 git rev-parse -q --verify "refs/tags/$tag" >/dev/null && fail "tag $tag already exists (bump the version)"
 grep -q "^## $version (" CHANGELOG.md || fail "CHANGELOG.md has no '## $version (date)' heading"
+if $android && [[ ! -f android/key.properties ]]; then
+  # The first published APK fixes the signing key for good: an APK signed
+  # with another key cannot update it.
+  if $dry_run || $allow_debug_key; then
+    warn "android/key.properties missing: the APK is signed with the debug key"
+  else
+    fail "android/key.properties missing (RUNBOOK.md, 'Android signing'), or pass --allow-debug-key"
+  fi
+fi
 if ! $dry_run; then
   command -v gh >/dev/null || fail "GitHub CLI not found (brew install gh)"
   gh auth status >/dev/null 2>&1 || fail "GitHub CLI is not signed in (gh auth login)"
@@ -73,7 +87,6 @@ EOF
 
 if $android; then
   step 'android apk'
-  [[ -f android/key.properties ]] || warn "android/key.properties missing: the APK is signed with the debug key, so it cannot update an APK signed with your release key (RUNBOOK.md, 'Android signing')"
   flutter build apk --release
   cp build/app/outputs/flutter-apk/app-release.apk "$out/demonica-$version.apk"
   assets+=("$out/demonica-$version.apk")
@@ -103,12 +116,12 @@ if $dry_run; then
   exit 0
 fi
 
-step "tag $tag"
-git tag -a "$tag" -m "Demonica $version"
-git push -q origin "$tag"
-
-step 'github release'
-gh release create "$tag" ${assets[@]+"${assets[@]}"} --title "Demonica $version" --notes-file "$out/notes.md"
+# gh creates the tag on GitHub together with the release, so a failed
+# upload leaves no tag behind to clean up.
+step "github release $tag"
+gh release create "$tag" ${assets[@]+"${assets[@]}"} --target "$(git rev-parse HEAD)" \
+  --title "Demonica $version" --notes-file "$out/notes.md"
+git fetch -q origin --tags
 
 if $web; then
   step 'web deploy'

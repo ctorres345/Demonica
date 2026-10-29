@@ -33,7 +33,10 @@ self.addEventListener('fetch', (event) => {
       const cache = await caches.open(CACHE);
       try {
         const response = await fetch(request);
-        if (response.ok || isPage) await cache.put(key, response.clone());
+        // A redirected response cannot be served for a later navigation.
+        if ((response.ok || isPage) && !response.redirected) {
+          await cache.put(key, response.clone());
+        }
         return response;
       } catch (error) {
         const cached = await cache.match(key, { ignoreSearch: true });

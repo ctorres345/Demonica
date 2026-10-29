@@ -2,10 +2,14 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
-## Unreleased
+## 1.0.0 (2026-10-29)
 
-- Web app works offline after the first visit, and can be added to the home screen on iPhone and Android.
-- Releases: each version on GitHub has the Android APK (and an unsigned iOS IPA) attached, built with `tool/release.sh`.
+First public release.
+
+- Web app at https://ctorres345.github.io/Demonica/. It works offline after the first visit, and can be added to the home screen on iPhone and Android.
+- Android APK (and an unsigned iOS IPA) attached to each GitHub Release, built with `tool/release.sh`.
+- Settings: privacy note and an "Open source licences" page listing Flutter, the packages and the fonts.
+- MIT licence for the code. README: install table, offline use, how-to steps, roadmap with other games, credits.
 
 ## 0.4.0 (2026-10-29)
 

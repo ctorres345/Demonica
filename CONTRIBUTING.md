@@ -42,7 +42,7 @@ flowchart LR
 1. Pick the number. `0.x.0` for each roadmap phase (v0.3 Planner, v0.4 Locations), `0.x.y` for fixes.
 2. Set it in **two** places: `version:` in `pubspec.yaml` (also bump the `+build` number) and `appVersion` in `lib/app/version.dart`. `test/version_test.dart` fails if they differ.
 3. Move the **Unreleased** lines in `CHANGELOG.md` under the new version with today's date.
-4. Run `tool/check.sh`, commit `Release 0.x.0` and push `main`.
+4. Run `tool/check.sh`, commit `DEM-n: Release 0.x.0` (the release story's key) and push `main`.
 5. Run `tool/release.sh --dry-run`, then `tool/release.sh`. It tags `v0.x.0`, creates the GitHub Release with the APK (and an unsigned IPA on a Mac), and deploys the web app (RUNBOOK.md, "Release").
 
 ## Chores

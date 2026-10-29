@@ -106,6 +106,11 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: Space.x2),
           Text(
+            'Privacy: your settings and saved recipes stay on this device. Demonica sends nothing anywhere.',
+            style: context.tt.bodySmall,
+          ),
+          const SizedBox(height: Space.x2),
+          Text(
             'Fusion data comes from aqiu384\'s megaten-fusion-tool (public domain, Unlicense)'
             '${data == null ? '' : ', commit ${data.sourceCommit.substring(0, 8)}'}.',
             style: context.tt.bodySmall,
@@ -113,7 +118,7 @@ class SettingsScreen extends ConsumerWidget {
           if (loc != null) ...[
             const SizedBox(height: Space.x2),
             Text(
-              'Demon locations come from the ${loc.sourceName} (facts only, collected by hand).',
+              'Demon locations were compiled by hand, using the ${loc.sourceName} as a reference (facts only).',
               style: context.tt.bodySmall,
             ),
           ],
@@ -124,6 +129,20 @@ class SettingsScreen extends ConsumerWidget {
               onPressed: () => launchUrl(_reportUrl(data?.sourceCommit)),
               icon: const Icon(Icons.flag_outlined, size: 18),
               label: const Text('Report a wrong recipe'),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => showLicensePage(
+                context: context,
+                applicationName: 'Demonica',
+                applicationVersion: appVersion,
+                applicationLegalese:
+                    'MIT License. Fusion data: Unlicense. Fonts: SIL Open Font License 1.1.',
+              ),
+              icon: const Icon(Icons.description_outlined, size: 18),
+              label: const Text('Open source licences'),
             ),
           ),
           const SizedBox(height: Space.x4),

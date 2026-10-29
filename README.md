@@ -24,7 +24,8 @@
   <a href="#project-layout">Project layout</a> ·
   <a href="#roadmap">Roadmap</a> ·
   <a href="#support-the-project">Support</a> ·
-  <a href="#data-and-credits">Credits</a>
+  <a href="#data-and-credits">Credits</a> ·
+  <a href="#licence">Licence</a>
 </p>
 
 > Unofficial fan tool. Not affiliated with Atlus or Sega. Demon names and numbers belong to their owners, and no game art is included.
@@ -45,6 +46,23 @@ The fusion data for SMT IV is great, but most tools show it as long tables. When
 | **iPhone / iPad** | Open the link above in Safari, tap **Share**, then **Add to Home Screen**. It opens full screen and works offline after the first visit. |
 | **Android** | Download `demonica-x.y.z.apk` from the [latest release](https://github.com/ctorres345/Demonica/releases/latest) and open it. Allow installs from your browser when asked. Or add the web app to the home screen from Chrome. |
 | **Desktop** | Use the web app. In Chrome or Edge, the install icon in the address bar adds it as an app. |
+
+### Use it offline
+
+Everything Demonica needs, including all the game data, is inside the app. Nothing is downloaded while you use it.
+
+- **Android APK:** works offline from the first launch.
+- **Web app (iPhone, Android, desktop):** open it once while online. After that it opens and works with no connection, including links to a specific demon. Adding it to the home screen keeps it one tap away. When you are online again, it picks up the newest version on the next launch.
+- Your saved recipes stay on your device. Use the export button on **Saved** to keep a copy or move them to another device.
+
+## How to use it
+
+1. **Find the demon you want.** On **Demons**, type a name, or filter by race, level or a skill it should learn.
+2. **Open its page.** You see stats, resistances, skills, where to recruit it, and every recipe that makes it, cheapest first.
+3. **Follow the tree.** Tap **Open recipe tree**, then tap any ingredient to see how to make that one too. Keep going until every ingredient is a demon you have or can recruit (green speech bubble).
+4. **Want specific skills?** Tap **Plan with skills** (or the **Plan** tab), add the skills you want (up to the number of free slots), and tap **Find fusions**. You get numbered steps that say which skills to keep at each fusion.
+5. **Save it.** The bookmark icon saves a demon, a recipe or the whole path. Tick steps off in **Saved** as you fuse.
+6. **Match your game.** In **Settings**, turn DLC, quest, New Game+ and Fiend demons on or off so recipes only use what you can get, and hide late-game areas if you want to avoid spoilers.
 
 ## What it does
 
@@ -76,6 +94,11 @@ Demonica is a companion: it never reads your save file and does not need your le
     <td align="center"><img src="docs/screenshots/phone-skills.png" width="240" alt="Skill list filtered to Ice skills"><br><sub>Skill lookup</sub></td>
     <td align="center"><img src="docs/screenshots/phone-saved.png" width="240" alt="Saved demons and recipes with notes"><br><sub>Saved recipes</sub></td>
     <td align="center"><img src="docs/screenshots/phone-smt4-palette.png" width="240" alt="Scathach's page in the SMT IV palette"><br><sub>SMT IV palette</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/phone-plan.png" width="240" alt="Plan tab: Scathach with Mabufula, Mediarama and Life Bonus in four numbered fusion steps"><br><sub>Plan with skills</sub></td>
+    <td align="center"><img src="docs/screenshots/phone-where-to-find.png" width="240" alt="Jack Frost's page: recruitable in Shinjuku, recipes with green recruit bubbles"><br><sub>Where to find</sub></td>
+    <td></td>
   </tr>
 </table>
 
@@ -134,9 +157,14 @@ More detail:
 
 ## Roadmap
 
-- **Releases:** Android and iOS builds on GitHub.
+| When | What |
+|---|---|
+| Done | SMT IV compendium, recipe tree, skills, saved recipes, skill planner, demon locations, offline web app, Android APK |
+| Next | v1.0 release on GitHub, fixes from player reports |
+| Later: more games | The fusion engine keeps each game's rules behind one interface, so a new game needs a rules adapter and an import script. Candidates, roughly in order: **SMT IV Apocalypse**, **SMT V: Vengeance**, **Strange Journey Redux**, **Persona 5 Royal**. Tell us which one you want in an issue. |
+| Ideas | Share a fusion path as a link, compare two recipes side by side, Spanish translation |
 
-Found a wrong recipe or a bug? Use **Report a problem** in Settings, or [open an issue](https://github.com/ctorres345/Demonica/issues/new).
+Found a wrong recipe or a bug? Use **Report a wrong recipe** in Settings, or [open an issue](https://github.com/ctorres345/Demonica/issues/new).
 
 ## Support the project
 
@@ -150,6 +178,24 @@ Reporting a wrong recipe or telling a friend who is playing SMT IV helps just as
 
 ## Data and credits
 
-- **Fusion data:** [aqiu384/megaten-fusion-tool](https://github.com/aqiu384/megaten-fusion-tool), released into the public domain (Unlicense). Thank you. The import script pins the upstream commit it reads from and decodes it once; the app never touches the raw files.
-- **Demon locations:** collected by hand from the "Local Demon Bestiary" tables of the [GamerGuides SMT IV walkthrough](https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough). Facts only, no text copied.
-- **Fonts:** Chakra Petch, Inter and JetBrains Mono, all under the SIL Open Font License.
+Demonica stands on the work of other fans. Thank you.
+
+- **Fusion data and rules:** [aqiu384/megaten-fusion-tool](https://github.com/aqiu384/megaten-fusion-tool) ([live tool](https://aqiu384.github.io/megaten-fusion-tool/smt4/demons)) by aqiu384, released into the public domain (Unlicense). It covers many Megami Tensei games and was the starting point for this project. Demonica's import script reads its SMT IV data at a pinned commit, and the recipe tests are checked against a port of its code.
+- **Demon locations:** compiled by hand, using the "Local Demon Bestiary" tables of the [GamerGuides SMT IV walkthrough](https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough) as a reference. Only facts (which demon appears where), no text copied.
+- **Fonts:** [Chakra Petch](https://fonts.google.com/specimen/Chakra+Petch), [Inter](https://rsms.me/inter/) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/), all under the SIL Open Font License 1.1.
+- **Built with** [Flutter](https://flutter.dev), [Riverpod](https://riverpod.dev) and [go_router](https://pub.dev/packages/go_router). Settings → **Open source licences** lists every package and its licence.
+
+## Licence
+
+| Part | Licence |
+|---|---|
+| Demonica's code | [MIT](LICENSE) |
+| Game data in `assets/data/smt4/` (from megaten-fusion-tool) | Unlicense (public domain) |
+| `assets/data/smt4/locations.json` (our own list) | MIT, same as the code |
+| Fonts in `assets/fonts/` | SIL Open Font License 1.1 (texts next to the fonts) |
+
+Shin Megami Tensei, Atlus and Sega names are trademarks of their owners and are used only to say which game this tool is for.
+
+## Privacy
+
+Demonica has no account, no ads and no analytics. Your settings and saved recipes are stored on your device only, and the app sends nothing anywhere. The web version is hosted on GitHub Pages, which keeps standard server logs like any website ([GitHub's privacy statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)).

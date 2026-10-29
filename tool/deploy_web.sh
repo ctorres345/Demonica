@@ -20,8 +20,9 @@ remote_url=$(git remote get-url origin)
 # Works for https://github.com/owner/repo(.git) and git@github.com:owner/repo.git
 owner=$(sed -E 's#(\.git)?/*$##; s#.*[:/]([^/]+)/[^/]+$#\1#' <<<"$remote_url")
 repo_name=$(sed -E 's#(\.git)?/*$##; s#.*/##' <<<"$remote_url")
-author_name=$(git config user.name || echo Demonica)
-author_email=$(git config user.email || echo demonica@localhost)
+# A fixed author, so the public gh-pages branch never shows a local email.
+author_name="Demonica deploy"
+author_email="$owner@users.noreply.github.com"
 commit=$(git rev-parse --short HEAD)
 version=$(sed -nE 's/^version:[[:space:]]*([0-9.]+).*/\1/p' pubspec.yaml)
 

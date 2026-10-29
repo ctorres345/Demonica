@@ -40,23 +40,24 @@ Reverse recipes run the same rules backwards and are checked against an independ
 | --- | --- | --- |
 | MVP (done) | Scaffold, design system, data import, compendium + filters, demon detail, reverse recipes, expandable tree, skills lookup, settings | Recipes match the existing tool |
 | v0.2 Saved recipes (done) | Bookmark a recipe or a whole fusion path, add a note, tick it off when done, export/import as a file. No level or owned-demon tracking (SMT IV shows fusions above your level and sells apps to fuse past the cap) | |
-| v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule confirmed in-game by Cesar (DEM-7, 2026-10-29): at most 8 skills, so free slots = 8 minus innate |
+| v0.3 Planner (done) | Target + wanted skills, bounded search over recipes, step checklist with macca totals | Inheritance rule confirmed in-game (DEM-7, 2026-10-29): at most 8 skills, so free slots = 8 minus innate |
 | v0.4 Locations (done) | Curated `locations.json` (GamerGuides walkthrough as the source), "Where to find" on the demon page, recruit flag in lists and the tree, route and spoiler tags | |
-| v1.0 Releases | Local `tool/release.sh` (no Actions): Pages deploy via `gh-pages` branch, APK and unsigned IPA on releases, offline web app, runbook | |
+| v1.0 Releases (done) | Local `tool/release.sh` (no Actions): Pages deploy via `gh-pages` branch, APK and unsigned IPA on releases, offline web app, runbook | |
 
 ## Risks
 
 | Risk | Handling |
 | --- | --- |
-| Recipe differs from the existing tool | Golden tests; the existing tool's site could not be reached from the build environment, so the cross-check is against an independent port of its code. Spot-check in the browser |
+| Recipe differs from the existing tool | Golden tests against an independent port of the existing tool's code. Spot-check in the browser |
 | Inheritance rule detail is wrong | Planner waits for the in-game check |
 | Curating locations is slow | Done once from one source; a validation test catches typos; corrections are one line each in the JSON |
 | iOS without a paid Apple account | PWA is the iOS path |
-| Atlus IP | Names and numbers only, disclaimer, GitHub-only distribution |
+| Atlus IP | Names and numbers only, disclaimer, GitHub-only distribution, no game art. The icon is original low-res pixel art inspired by the Demonica suit; swap it if asked |
+| Location data source | Facts only, compiled by hand with GamerGuides as a reference, credited; corrections welcome |
 
 ## Open questions
 
-See the thread in the Demonica project. Defaults in use: skill slots = 8 minus innate, DLC off, recipes sorted by cheapest macca with a switch, one Jira epic per phase.
+None open. Defaults in use: skill slots = 8 minus innate, DLC off, recipes sorted by cheapest macca with a switch, one Jira epic per phase.
 
 ## Saved recipes (v0.2, as built)
 
@@ -73,7 +74,7 @@ See the thread in the Demonica project. Defaults in use: skill slots = 8 minus i
 
 ## Locations (v0.4, as built)
 
-- **Source.** aqiu384's tool has no SMT IV location data (only unlock conditions such as "Defeat in Naraku", which the demon page already shows under "How to get"). Locations come from the "Local Demon Bestiary" tables in the [GamerGuides SMT IV walkthrough](https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough), read on 2026-10-29. IGN, the Megami Tensei wikis, GameFAQs and SuperCheats could not be reached from the build environment.
+- **Source.** aqiu384's tool has no SMT IV location data (only unlock conditions such as "Defeat in Naraku", which the demon page already shows under "How to get"). Locations come from the "Local Demon Bestiary" tables in the [GamerGuides SMT IV walkthrough](https://www.gamerguides.com/shin-megami-tensei-iv/guide/walkthrough), read on 2026-10-29.
 - **Licence.** The guide's text is copyrighted by GamerGuides. We copy no text, only facts (which demon appears in which area and whether it can be recruited), which are not copyrightable, and credit the source in Settings and the README. If GamerGuides ever objects, the file is ours to rewrite from another source.
 - **File.** `assets/data/smt4/locations.json` is hand-curated, unlike the other files in that folder. One encounter per line: `{demon, kind, area}`, with `kind` = `recruit`, `horde` or `enemy` (appears but cannot be recruited there). Areas carry a story `phase`, `routes` (empty = every route) and `spoiler`. Names use our spelling (the guide's "Carnazotz" is `Camazotz`, "Raiju" is `Raijuu` and so on); `packages/fusion_core/test/locations_test.dart` fails on any unknown name.
 - **Coverage.** 21 areas, 268 encounters, 190 recruitable demons: every demon the guide's full enemy bestiary marks as recruitable. The other 236 non-enemy demons are fusion-only (or come from quests and bosses, see "How to get").
