@@ -59,11 +59,13 @@ mkdir -p "$out"
 assets=()
 
 # Release notes: the CHANGELOG section for this version.
+# Blank lines at the start and end of the section are dropped.
 awk -v v="$version" '
   $0 ~ "^## " v " \\(" { on = 1; next }
   on && /^## / { exit }
-  on { print }
-' CHANGELOG.md | sed -e '/./,$!d' >"$out/notes.md"
+  on && !NF { blank++; next }
+  on { if (seen) for (i = 0; i < blank; i++) print ""; blank = 0; seen = 1; print }
+' CHANGELOG.md >"$out/notes.md"
 cat >>"$out/notes.md" <<EOF
 
 **Install:** Android: download the APK below and open it (allow installs from your browser when asked). iPhone and desktop: use the web app and add it to your home screen, see the README.
