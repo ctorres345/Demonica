@@ -9,6 +9,7 @@ import '../../app/version.dart';
 import '../../design_system/components.dart';
 import '../../design_system/palette_card.dart';
 import '../../design_system/tokens.dart';
+import 'unlocks_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -61,43 +62,45 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.showSpoilers,
             onChanged: notifier.setShowSpoilers,
           ),
-          const SectionHeader('Demons that count for fusion'),
-          Text(
-            'Turn off demons you have not unlocked yet. They disappear from recipes and from the tree.',
-            style: context.tt.bodySmall,
+          const SectionHeader('Unlocks'),
+          ListTile(
+            key: const Key('settings-unlocks'),
+            contentPadding: EdgeInsets.zero,
+            title: Text('What you have unlocked in your game', style: context.tt.bodyMedium),
+            subtitle: Text(
+              '${data == null ? '' : '${unlockSummary(data, fusion)}. '}'
+              'Demons behind bosses, quests, New Game+ or DLC stay out of recipes until you tick them.',
+              style: context.tt.bodySmall,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.go('/settings/unlocks'),
           ),
-          if (data != null)
-            for (final cat in data.unlocks) ...[
-              Padding(
-                padding: const EdgeInsets.only(top: Space.x4, bottom: Space.x1),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(cat.category, style: context.tt.titleMedium)),
-                    TextButton(
-                      onPressed: () => notifier.setDemonsEnabled([
-                        for (final e in cat.entries) ...e.demons,
-                      ], true),
-                      child: const Text('All on'),
-                    ),
-                    TextButton(
-                      onPressed: () => notifier.setDemonsEnabled([
-                        for (final e in cat.entries) ...e.demons,
-                      ], false),
-                      child: const Text('All off'),
-                    ),
-                  ],
-                ),
-              ),
-              for (final e in cat.entries)
-                SwitchListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(e.demons.join(', '), style: context.tt.bodyMedium),
-                  subtitle: Text(e.condition, style: context.tt.bodySmall),
-                  value: e.demons.every(fusion.isEnabled),
-                  onChanged: (v) => notifier.setDemonsEnabled(e.demons, v),
-                ),
-            ],
+          const SectionHeader('Help'),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              key: const Key('settings-tutorial'),
+              onPressed: () => context.push('/tutorial'),
+              icon: const Icon(Icons.school_outlined, size: 18),
+              label: const Text('Show the tutorial again'),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => launchUrl(_reportUrl(data?.sourceCommit)),
+              icon: const Icon(Icons.flag_outlined, size: 18),
+              label: const Text('Report a wrong recipe'),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => launchUrl(_contactUrl),
+              icon: const Icon(Icons.mail_outline, size: 18),
+              label: const Text('Contact: demonica@cjtech.dev'),
+            ),
+          ),
           const SectionHeader('About'),
           Text(
             'Demonica is an unofficial fan tool for Shin Megami Tensei IV. It is not affiliated with Atlus or Sega. '
@@ -123,14 +126,6 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ],
           const SizedBox(height: Space.x2),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              onPressed: () => launchUrl(_reportUrl(data?.sourceCommit)),
-              icon: const Icon(Icons.flag_outlined, size: 18),
-              label: const Text('Report a wrong recipe'),
-            ),
-          ),
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
@@ -165,6 +160,12 @@ String _coverage(LocationData loc, GameData? data) {
 }
 
 /// A pre-filled GitHub issue so a report carries the data version.
+final _contactUrl = Uri(
+  scheme: 'mailto',
+  path: 'demonica@cjtech.dev',
+  query: 'subject=Demonica v$appVersion',
+);
+
 Uri _reportUrl(String? commit) => Uri.https('github.com', '/ctorres345/Demonica/issues/new', {
   'title': 'Wrong recipe: <demon name>',
   'body':

@@ -2,6 +2,12 @@
 
 User-visible changes, newest first. Dates are when the change reached `main`.
 
+## Unreleased
+
+- Tutorial: five short pages after the welcome screen. Settings → "Show the tutorial again" reopens it.
+- Unlocks: the story, quest, New Game+, Fiend and DLC switches moved from Settings to their own page, as a checklist of what you have done. A locked demon's page shows its unlock condition with the same tick.
+- Settings: Help section with the tutorial, "Report a wrong recipe" and a contact address (demonica@cjtech.dev).
+
 ## 1.0.0 (2026-10-29)
 
 First public release.

@@ -53,7 +53,7 @@ lib/
     saved/                   saved model + file format, store, Saved screen, bookmark buttons
     skills/                  skill lookup
     settings/                palette, theme, unlock toggles, about
-    onboarding/              welcome screen (first start)
+    onboarding/              welcome screen (first start) and the tutorial
 packages/fusion_core/
   lib/src/model/             models.dart (Demon, Skill, Recipe, FusionSettings), game_data.dart,
                              locations.dart (Area, Encounter, LocationData)
@@ -124,6 +124,7 @@ Storage keys end in `.v1`. If a stored shape ever changes in a way old code cann
 | Path | Phone | Wide (840dp and up) |
 | --- | --- | --- |
 | `/welcome` | first-start screen (redirected to until onboarded) | same |
+| `/tutorial` | five-page tutorial (redirected to once after the welcome screen; Settings reopens it) | same |
 | `/smt4/demons` | compendium | list + "pick a demon" |
 | `/smt4/demon/:id` | demon detail | list + detail |
 | `/smt4/demon/:id/tree` | recipe tree | list + tree |
@@ -131,6 +132,7 @@ Storage keys end in `.v1`. If a stored shape ever changes in a way old code cann
 | `/plan` | planner | same |
 | `/saved` | saved | same |
 | `/settings` | settings | same |
+| `/settings/unlocks` | checklist of unlock conditions; unticked rows disable demons for fusion | same |
 
 `:id` is `slugify(name)`, for example `jack-frost`. The web build copies `index.html` to `404.html` so these paths load directly on GitHub Pages, and `web/sw.js` treats every page load as the same app shell so they also open offline.
 

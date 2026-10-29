@@ -46,6 +46,16 @@ class GameData {
   Demon demon(String name) => demons[name] ?? (throw ArgumentError('unknown demon "$name"'));
   Skill skill(String name) => skills[name] ?? (throw ArgumentError('unknown skill "$name"'));
 
+  /// The unlock condition that gates this demon, or null when it is always available.
+  UnlockEntry? unlockFor(String demon) {
+    for (final cat in unlocks) {
+      for (final e in cat.entries) {
+        if (e.demons.contains(demon)) return e;
+      }
+    }
+    return null;
+  }
+
   /// Demon names that are toggled by an unlock category, with their default.
   Map<String, bool> get unlockDefaults => {
     for (final cat in unlocks)

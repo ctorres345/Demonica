@@ -62,7 +62,9 @@ Everything Demonica needs, including all the game data, is inside the app. Nothi
 3. **Follow the tree.** Tap **Open recipe tree**, then tap any ingredient to see how to make that one too. Keep going until every ingredient is a demon you have or can recruit (green speech bubble).
 4. **Want specific skills?** Tap **Plan with skills** (or the **Plan** tab), add the skills you want (up to the number of free slots), and tap **Find fusions**. You get numbered steps that say which skills to keep at each fusion.
 5. **Save it.** The bookmark icon saves a demon, a recipe or the whole path. Tick steps off in **Saved** as you fuse.
-6. **Match your game.** In **Settings**, turn DLC, quest, New Game+ and Fiend demons on or off so recipes only use what you can get, and hide late-game areas if you want to avoid spoilers.
+6. **Match your game.** Some demons unlock after a boss, a quest, New Game+ or DLC. In **Settings → Unlocks**, tick what you have done; demons behind unticked rows stay out of recipes. Late-game areas stay hidden from "Where to find" until you turn spoilers on.
+
+A short tutorial shows these steps on the first start. **Settings → Show the tutorial again** reopens it.
 
 ## What it does
 
@@ -76,7 +78,7 @@ Everything Demonica needs, including all the game data, is inside the app. Nothi
 | **Skills** | Pick a skill and see which demons learn it, and at what level. |
 | **Plan** | Pick a target and the skills it should end with. Get numbered fusion steps: which skills to keep at each step, which ingredients to level up first, and the macca total. |
 | **Saved** | Bookmark a demon, one recipe or a whole fusion path. Add a note, tick steps off as you fuse, and export or import it as a file. |
-| **Your unlocks** | Turn story, quest, New Game+, Fiend and DLC demons on or off, so recipes only use what you have. |
+| **Unlocks** | A checklist of the bosses, quests, New Game+ and DLC that unlock demons. Tick what you have done, and locked demons stay out of recipes. |
 | **Palettes** | Strange Journey (default), SMT IV and Codex looks, plus light and dark. |
 | **Offline** | All game data ships inside the app. No account, no tracking. |
 
@@ -164,7 +166,7 @@ More detail:
 | Later: more games | The fusion engine keeps each game's rules behind one interface, so a new game needs a rules adapter and an import script. Candidates, roughly in order: **SMT IV Apocalypse**, **SMT V: Vengeance**, **Strange Journey Redux**, **Persona 5 Royal**. Tell us which one you want in an issue. |
 | Ideas | Share a fusion path as a link, compare two recipes side by side, Spanish translation |
 
-Found a wrong recipe or a bug? Use **Report a wrong recipe** in Settings, or [open an issue](https://github.com/ctorres345/Demonica/issues/new).
+Found a wrong recipe or a bug? Use **Report a wrong recipe** in Settings, or [open an issue](https://github.com/ctorres345/Demonica/issues/new). For anything else, write to [demonica@cjtech.dev](mailto:demonica@cjtech.dev).
 
 ## Support the project
 

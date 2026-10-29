@@ -59,6 +59,7 @@ class AppSettings {
     this.palette = Palette.strangeJourney,
     this.disabledDemons = const {},
     this.onboarded = false,
+    this.tutorialSeen = false,
     this.showSpoilers = false,
     this.loaded = false,
   });
@@ -68,6 +69,9 @@ class AppSettings {
 
   /// True once the user has been through the welcome screen.
   final bool onboarded;
+
+  /// True once the tutorial has been finished or skipped.
+  final bool tutorialSeen;
   final Set<String> disabledDemons;
 
   /// Show late-game areas (Blasted Tokyo onwards) in "Where to find".
@@ -81,12 +85,14 @@ class AppSettings {
     Palette? palette,
     Set<String>? disabledDemons,
     bool? onboarded,
+    bool? tutorialSeen,
     bool? showSpoilers,
     bool? loaded,
   }) => AppSettings(
     themeMode: themeMode ?? this.themeMode,
     palette: palette ?? this.palette,
     onboarded: onboarded ?? this.onboarded,
+    tutorialSeen: tutorialSeen ?? this.tutorialSeen,
     disabledDemons: disabledDemons ?? this.disabledDemons,
     showSpoilers: showSpoilers ?? this.showSpoilers,
     loaded: loaded ?? this.loaded,
@@ -116,6 +122,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
       palette: Palette.values.byName(j['palette'] as String? ?? Palette.strangeJourney.name),
       onboarded:
           j['onboarded'] as bool? ?? true, // settings saved before the welcome screen existed
+      tutorialSeen: j['tutorialSeen'] as bool? ?? false,
       disabledDemons: ((j['disabledDemons'] as List?) ?? const []).cast<String>().toSet(),
       showSpoilers: j['showSpoilers'] as bool? ?? false,
       loaded: true,
@@ -130,6 +137,7 @@ class SettingsNotifier extends Notifier<AppSettings> {
         'themeMode': state.themeMode.name,
         'palette': state.palette.name,
         'onboarded': state.onboarded,
+        'tutorialSeen': state.tutorialSeen,
         'disabledDemons': state.disabledDemons.toList(),
         'showSpoilers': state.showSpoilers,
       }),
@@ -148,6 +156,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   void setOnboarded(bool v) {
     state = state.copyWith(onboarded: v);
+    _save();
+  }
+
+  void setTutorialSeen(bool v) {
+    state = state.copyWith(tutorialSeen: v);
     _save();
   }
 

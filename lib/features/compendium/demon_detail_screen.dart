@@ -34,6 +34,7 @@ class DemonDetailScreen extends ConsumerWidget {
     final recipes = ref.watch(recipesProvider(demon.name));
     final usedIn = ref.watch(usedInProvider(demon.name));
     final freeSlots = rules.freeSkillSlots(demon);
+    final unlock = data.unlockFor(demon.name);
 
     final overview = ListView(
       padding: const EdgeInsets.fromLTRB(Space.x4, Space.x3, Space.x4, Space.x8),
@@ -46,7 +47,7 @@ class DemonDetailScreen extends ConsumerWidget {
             runSpacing: Space.x1,
             children: [
               FusionTag(demon),
-              if (!enabled) Tag('Disabled in settings', color: dc.danger),
+              if (!enabled) Tag('Locked: not unlocked yet', color: dc.danger),
             ],
           ),
         ],
@@ -78,10 +79,19 @@ class DemonDetailScreen extends ConsumerWidget {
           ),
         _WhereToFind(demon),
         SectionHeader('How to get', trailing: _howToGetTrailing(demon, recipes.length)),
-        if (demon.prereq != null)
+        // The unlock row already says the condition, so the note is only for
+        // prerequisites that are not unlocks.
+        if (demon.prereq case final prereq? when prereq != unlock?.condition)
           Padding(
             padding: const EdgeInsets.only(bottom: Space.x2),
-            child: _Note(demon.prereq!),
+            child: _Note(prereq),
+          ),
+        if (unlock != null)
+          _UnlockRow(
+            unlock: unlock,
+            done: enabled,
+            onChanged: (v) =>
+                ref.read(settingsProvider.notifier).setDemonsEnabled(unlock.demons, v),
           ),
         if (demon.fusion == FusionKind.accident)
           const _Note(
@@ -90,7 +100,7 @@ class DemonDetailScreen extends ConsumerWidget {
         else if (demon.isEnemyOnly)
           const _Note('This demon only appears as an enemy. It cannot be fused or recruited.')
         else if (recipes.isEmpty)
-          const _Note('No recipe with the current settings. Enable more demons in Settings.')
+          const _Note('No recipe with what you have unlocked. Tick more in Settings > Unlocks.')
         else ...[
           for (final (r, cost) in recipes.take(5).map((r) => (r, rules.recipeCost(r))))
             Padding(
@@ -559,6 +569,51 @@ class _ForwardRow extends StatelessWidget {
           ),
           Expanded(child: name(result)),
           Text(macca(cost), style: context.tt.labelMedium),
+        ],
+      ),
+    );
+  }
+}
+
+/// "Unlocks after: Defeat in Naraku" with a tick that marks it done, the same
+/// tick as in Settings > Unlocks.
+class _UnlockRow extends StatelessWidget {
+  const _UnlockRow({required this.unlock, required this.done, required this.onChanged});
+  final UnlockEntry unlock;
+  final bool done;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    return Container(
+      margin: const EdgeInsets.only(bottom: Space.x2),
+      padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
+      decoration: BoxDecoration(
+        border: Border.all(color: done ? dc.outline : dc.danger),
+        borderRadius: Radii.borderSmall,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Unlocks after: ${unlock.condition}', style: context.tt.bodySmall),
+                Text(
+                  done
+                      ? 'Done. It counts in recipes.'
+                      : 'Not done yet, so it is left out of recipes.',
+                  style: context.tt.labelSmall?.copyWith(color: done ? dc.textMuted : dc.danger),
+                ),
+              ],
+            ),
+          ),
+          Checkbox(
+            key: const Key('unlock-done'),
+            value: done,
+            onChanged: (v) => onChanged(v ?? false),
+          ),
         ],
       ),
     );

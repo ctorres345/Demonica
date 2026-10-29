@@ -7,16 +7,19 @@ import '../design_system/theme.dart';
 import '../design_system/tokens.dart';
 import '../features/compendium/compendium_screen.dart';
 import '../features/compendium/demon_detail_screen.dart';
+import '../features/onboarding/tutorial_screen.dart';
 import '../features/onboarding/welcome_screen.dart';
 import '../features/planner/planner_screen.dart';
 import '../features/recipes/recipe_tree_screen.dart';
 import '../features/saved/saved_screen.dart';
 import '../features/saved/saved_store.dart';
 import '../features/settings/settings_screen.dart';
+import '../features/settings/unlocks_screen.dart';
 import '../features/skills/skills_screen.dart';
 import 'providers.dart';
 
-/// The router watches settings so the first start lands on the welcome screen.
+/// The router watches settings so the first start lands on the welcome
+/// screen, then on the tutorial.
 final routerProvider = Provider<GoRouter>((ref) {
   final settings = ValueNotifier(ref.read(settingsProvider));
   ref.listen(settingsProvider, (_, next) => settings.value = next);
@@ -26,8 +29,11 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: settings,
     redirect: (context, state) {
       final s = settings.value;
-      if (!s.loaded || s.onboarded) return null;
-      return state.uri.path == '/welcome' ? null : '/welcome';
+      if (!s.loaded) return null;
+      final path = state.uri.path;
+      if (!s.onboarded) return path == '/welcome' ? null : '/welcome';
+      if (!s.tutorialSeen) return path == '/tutorial' || path == '/welcome' ? null : '/tutorial';
+      return null;
     },
     routes: _routes,
   );
@@ -35,6 +41,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
 final _routes = <RouteBase>[
   GoRoute(path: '/welcome', builder: (context, state) => const WelcomeScreen()),
+  GoRoute(path: '/tutorial', builder: (context, state) => const TutorialScreen()),
   ShellRoute(
     builder: (context, state, child) => AppShell(location: state.uri.path, child: child),
     routes: [
@@ -60,7 +67,11 @@ final _routes = <RouteBase>[
         ),
       ),
       GoRoute(path: '/saved', builder: (context, state) => const SavedScreen()),
-      GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+        routes: [GoRoute(path: 'unlocks', builder: (context, state) => const UnlocksScreen())],
+      ),
     ],
   ),
 ];

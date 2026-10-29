@@ -9,7 +9,8 @@ import '../../design_system/tokens.dart';
 
 /// First-start screen: pick a palette and dark or light, then enter the app.
 /// The whole app repaints live as the user taps, so the choice is never a
-/// guess. Settings can reopen it at any time.
+/// guess. Settings can reopen it at any time. The first time, START
+/// continues to the tutorial.
 class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
 
@@ -50,7 +51,7 @@ class WelcomeScreen extends ConsumerWidget {
                   key: const Key('welcome-start'),
                   onPressed: () {
                     notifier.setOnboarded(true);
-                    context.go('/smt4/demons');
+                    context.go(settings.tutorialSeen ? '/smt4/demons' : '/tutorial');
                   },
                   icon: const Icon(Icons.arrow_forward),
                   label: const Text('START'),
