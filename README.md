@@ -84,14 +84,13 @@ flutter run -d chrome          # web
 flutter run                    # a connected phone or emulator
 ```
 
-Before pushing a change, run the checks (there is no automatic CI):
+Before pushing a change, run every check with one command (there is no automatic CI, so this is the gate):
 
 ```sh
-flutter analyze
-flutter test                             # widget tests
-(cd packages/fusion_core && dart test)   # fusion engine and golden recipes
-flutter build web --release --no-web-resources-cdn
+tool/check.sh
 ```
+
+It runs `flutter pub get`, `dart format`, `flutter analyze`, the fusion engine tests in `packages/fusion_core`, the widget tests and a release web build, and stops at the first failure.
 
 Building for each platform, refreshing the game data and deploying to GitHub Pages are in [RUNBOOK.md](RUNBOOK.md).
 
@@ -104,10 +103,21 @@ assets/data/smt4/       the game data the app ships
 lib/design_system/      colour tokens, palettes, Material 3 theme, shared widgets
 lib/features/           compendium, demon page, recipe tree, skills, saved, settings, welcome
 lib/app/                routes (go_router), state (Riverpod), adaptive phone/desktop shell
-docs/                   project plan and design system
+tool/check.sh           every pre-push check in one command
+docs/                   plan, architecture, coding guidelines, design system, screenshots
 ```
 
-More detail: [docs/PROJECT.md](docs/PROJECT.md) (plan and roadmap) and [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) (colours, type, components).
+More detail:
+
+| Document | What it covers |
+|---|---|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How changes land, what to run, and the regular maintenance chores |
+| [CHANGELOG.md](CHANGELOG.md) | What changed in each version |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Layers, folders, providers, routing, caching, performance budget |
+| [docs/CODING_GUIDELINES.md](docs/CODING_GUIDELINES.md) | Where code goes, state, UI, style, tests, dependencies |
+| [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) | Colours, palettes, type and components |
+| [docs/PROJECT.md](docs/PROJECT.md) | What the app is for, decisions, roadmap, fusion rules |
+| [RUNBOOK.md](RUNBOOK.md) | Building, refreshing game data, deploying |
 
 ## Roadmap
 
