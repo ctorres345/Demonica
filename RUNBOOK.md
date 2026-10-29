@@ -56,7 +56,7 @@ Needs: Flutter, the Android SDK (Android Studio), Xcode for the IPA, and the Git
 
 ## Deploy to GitHub Pages
 
-`tool/deploy_web.sh` builds the web app with `--base-href /Demonica/` and force-pushes it to the `gh-pages` branch, which only ever holds the latest build. `tool/release.sh` runs it; run it alone to redeploy without a new version. Add `--dry-run` to build without pushing.
+`tool/deploy_web.sh` builds the web app with `--base-href /Demonica/` and force-pushes it to the `gh-pages` branch, which only ever holds the latest build. `tool/release.sh` runs it; run it alone to redeploy without a new version. Add `--dry-run` to build without pushing. The push sets `http.postBuffer` to 500 MB for that one command, because the 45 MB build fails with "HTTP 400, remote end hung up" on git's default buffer.
 
 Repository setup (done on 2026-10-29; Pages on the free plan needs a public repository): Settings → Pages → Source: "Deploy from a branch", Branch `gh-pages`, folder `/ (root)`.
 

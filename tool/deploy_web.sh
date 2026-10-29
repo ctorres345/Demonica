@@ -47,7 +47,9 @@ cp -R build/web/. "$staging"
   if $dry_run; then
     echo "Dry run: would force-push $(git rev-parse --short HEAD) to gh-pages on $remote_url"
   else
-    git push -q --force "$remote_url" gh-pages:gh-pages
+    # The build is about 45 MB; git's default 1 MB HTTPS buffer fails with
+    # "HTTP 400, remote end hung up" on a push that size.
+    git -c http.postBuffer=524288000 push -q --force "$remote_url" gh-pages:gh-pages
     echo "Pushed. Live in a minute or two at https://$owner.github.io/$repo_name/"
   fi
 )
