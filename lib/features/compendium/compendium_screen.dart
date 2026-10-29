@@ -143,9 +143,11 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
               padding: const EdgeInsets.fromLTRB(Space.x4, Space.x1, Space.x4, Space.x1),
               child: Row(
                 children: [
-                  Text(
-                    '${demons.length} demons · sorted by level'.toUpperCase(),
-                    style: context.tt.labelSmall,
+                  Text('${demons.length} demons'.toUpperCase(), style: context.tt.labelSmall),
+                  const SizedBox(width: Space.x2),
+                  _SortButton(
+                    sort: filter.sort,
+                    onSelected: ref.read(compendiumFilterProvider.notifier).setSort,
                   ),
                   const Spacer(),
                   if (filter.isActive)
@@ -226,6 +228,40 @@ class _CompendiumScreenState extends ConsumerState<CompendiumScreen> {
         onSelected: (_) => onTap(),
         deleteIcon: onClear == null ? null : const Icon(Icons.close, size: 14),
         onDeleted: onClear,
+      ),
+    );
+  }
+}
+
+/// "Sort: Level ▾" next to the count line. Opens a menu of [DemonSort]s.
+class _SortButton extends StatelessWidget {
+  const _SortButton({required this.sort, required this.onSelected});
+  final DemonSort sort;
+  final ValueChanged<DemonSort> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    return PopupMenuButton<DemonSort>(
+      tooltip: 'Change sort order',
+      initialValue: sort,
+      onSelected: onSelected,
+      itemBuilder: (_) => [
+        for (final s in DemonSort.values) PopupMenuItem(value: s, child: Text(s.label)),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: Space.x2, vertical: Space.x1),
+        decoration: BoxDecoration(
+          border: Border.all(color: dc.outline),
+          borderRadius: Radii.borderSmall,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Sort: ${sort.label}'.toUpperCase(), style: context.tt.labelSmall),
+            Icon(Icons.arrow_drop_down, size: 16, color: dc.textMuted),
+          ],
+        ),
       ),
     );
   }
