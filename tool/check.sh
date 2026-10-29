@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Runs every check that must pass before a push to main. There is no CI on
+# Runs every check that must pass before every push. There is no CI on
 # the free GitHub tier, so this script is the gate. Usage: tool/check.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."

@@ -56,7 +56,7 @@ All in `lib/design_system/`. Reuse these before writing a new widget.
 | `SkillRow` | components.dart | element dot, name, element + MP, learn level, unique tag |
 | `SectionHeader` | components.dart | uppercase mono caption with optional trailing note |
 | `SheetHeader` | components.dart | bottom sheet title with Clear and Done |
-| `showLevelSheet` | components.dart | bottom sheet with a 1 to 99 level slider (compendium filter, tree filter) |
+| `showLevelSheet` | components.dart | bottom sheet to pick a level 1 to 99: -/+ buttons, number field and slider (compendium filter, tree filter) |
 | `macca()` | components.dart | `36710` -> `36 710 ¥` |
 | `PaletteCard`, `PalettePicker`, `ThemeModePicker` | palette_card.dart | palette previews and the dark/light switch (welcome screen and Settings) |
 | `PixelHelmet` | pixel_icon.dart | the 12x12 pixel helmet, drawn crisp at any size |

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fusion_core/fusion_core.dart';
 
 import 'tokens.dart';
@@ -382,8 +383,9 @@ class SheetHeader extends StatelessWidget {
   }
 }
 
-/// Opens a bottom sheet with a 1 to 99 level slider. [onChanged] gets the
-/// level when the slider is released, and null when the user taps Clear.
+/// Opens a bottom sheet to pick a level from 1 to 99 with -/+ buttons, a
+/// number field or a slider. [onChanged] gets each new level (the slider
+/// reports on release), and null when the user taps Clear.
 Future<void> showLevelSheet(
   BuildContext context, {
   required String title,
@@ -393,8 +395,12 @@ Future<void> showLevelSheet(
 }) {
   return showModalBottomSheet(
     context: context,
-    builder: (ctx) =>
-        _LevelSheet(title: title, help: help, initial: current ?? 99, onChanged: onChanged),
+    // Lets the sheet move above the keyboard while the number field is used.
+    isScrollControlled: true,
+    builder: (ctx) => Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom),
+      child: _LevelSheet(title: title, help: help, initial: current ?? 99, onChanged: onChanged),
+    ),
   );
 }
 
@@ -415,7 +421,22 @@ class _LevelSheet extends StatefulWidget {
 }
 
 class _LevelSheetState extends State<_LevelSheet> {
-  late double _v = widget.initial.toDouble();
+  late int _v = widget.initial;
+  late final _field = TextEditingController(text: '$_v');
+
+  @override
+  void dispose() {
+    _field.dispose();
+    super.dispose();
+  }
+
+  /// Sets the level from the buttons or the slider, and reports it.
+  void _set(int v, {bool report = true, bool syncField = true}) {
+    final next = v.clamp(1, 99);
+    setState(() => _v = next);
+    if (syncField) _field.text = '$next';
+    if (report) widget.onChanged(next);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -433,23 +454,56 @@ class _LevelSheetState extends State<_LevelSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Space.x4),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: Slider(
-                    value: _v,
-                    min: 1,
-                    max: 99,
-                    divisions: 98,
-                    onChanged: (v) => setState(() => _v = v),
-                    onChangeEnd: (v) => widget.onChanged(v.round()),
+                IconButton.outlined(
+                  tooltip: 'Level down',
+                  icon: const Icon(Icons.remove),
+                  onPressed: _v > 1 ? () => _set(_v - 1) : null,
+                ),
+                const SizedBox(width: Space.x3),
+                SizedBox(
+                  width: 72,
+                  child: TextField(
+                    key: const Key('level-field'),
+                    controller: _field,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(2),
+                    ],
+                    decoration: const InputDecoration(labelText: 'Lv', isDense: true),
+                    onChanged: (t) {
+                      final n = int.tryParse(t);
+                      if (n != null && n >= 1) _set(n, syncField: n > 99);
+                    },
+                    onSubmitted: (_) => Navigator.pop(context),
                   ),
                 ),
-                SizedBox(width: 56, child: LevelBadge(_v.round(), size: 22)),
+                const SizedBox(width: Space.x3),
+                IconButton.outlined(
+                  tooltip: 'Level up',
+                  icon: const Icon(Icons.add),
+                  onPressed: _v < 99 ? () => _set(_v + 1) : null,
+                ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(Space.x4),
+            padding: const EdgeInsets.symmetric(horizontal: Space.x4),
+            child: Slider(
+              value: _v.toDouble(),
+              min: 1,
+              max: 99,
+              divisions: 98,
+              label: '$_v',
+              onChanged: (v) => _set(v.round(), report: false),
+              onChangeEnd: (v) => widget.onChanged(v.round()),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Space.x4, 0, Space.x4, Space.x4),
             child: Text(widget.help, style: context.tt.bodySmall),
           ),
         ],

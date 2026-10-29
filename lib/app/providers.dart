@@ -208,9 +208,20 @@ final fusionSettingsProvider = Provider<FusionSettings>(
       FusionSettings(disabledDemons: ref.watch(settingsProvider.select((s) => s.disabledDemons))),
 );
 
+/// How the compendium list is ordered.
+enum DemonSort {
+  level('Level'),
+  name('Name'),
+  race('Race');
+
+  const DemonSort(this.label);
+  final String label;
+}
+
 /// Compendium filters.
 class CompendiumFilter {
   const CompendiumFilter({
+    this.sort = DemonSort.level,
     this.query = '',
     this.races = const {},
     this.maxLevel,
@@ -218,6 +229,7 @@ class CompendiumFilter {
     this.showDisabled = false,
   });
 
+  final DemonSort sort;
   final String query;
   final Set<String> races;
   final int? maxLevel;
@@ -229,12 +241,14 @@ class CompendiumFilter {
   bool get isActive => races.isNotEmpty || maxLevel != null || skill != null;
 
   CompendiumFilter copyWith({
+    DemonSort? sort,
     String? query,
     Set<String>? races,
     int? Function()? maxLevel,
     String? Function()? skill,
     bool? showDisabled,
   }) => CompendiumFilter(
+    sort: sort ?? this.sort,
     query: query ?? this.query,
     races: races ?? this.races,
     maxLevel: maxLevel != null ? maxLevel() : this.maxLevel,
@@ -247,6 +261,7 @@ class CompendiumFilterNotifier extends Notifier<CompendiumFilter> {
   @override
   CompendiumFilter build() => const CompendiumFilter();
 
+  void setSort(DemonSort s) => state = state.copyWith(sort: s);
   void setQuery(String q) => state = state.copyWith(query: q);
   void toggleRace(String race) {
     final s = {...state.races};
@@ -258,22 +273,23 @@ class CompendiumFilterNotifier extends Notifier<CompendiumFilter> {
   void setMaxLevel(int? lvl) => state = state.copyWith(maxLevel: () => lvl);
   void setSkill(String? skill) => state = state.copyWith(skill: () => skill);
   void setShowDisabled(bool v) => state = state.copyWith(showDisabled: v);
-  void clear() => state = CompendiumFilter(query: state.query);
-  void clearAll() => state = const CompendiumFilter();
+  void clear() => state = CompendiumFilter(query: state.query, sort: state.sort);
+  void clearAll() => state = CompendiumFilter(sort: state.sort);
 }
 
 final compendiumFilterProvider = NotifierProvider<CompendiumFilterNotifier, CompendiumFilter>(
   CompendiumFilterNotifier.new,
 );
 
-/// Demons matching the current filter, sorted by level.
+/// Demons matching the current filter, in the chosen order. Name and race
+/// order fall back to level, so each race reads from weakest to strongest.
 final filteredDemonsProvider = Provider<List<Demon>>((ref) {
   final data = ref.watch(gameDataProvider).value;
   if (data == null) return const [];
   final f = ref.watch(compendiumFilterProvider);
   final fusion = ref.watch(fusionSettingsProvider);
   final q = f.query.trim().toLowerCase();
-  return [
+  final list = [
     for (final d in data.demonsByLevel)
       if ((f.showDisabled || fusion.isEnabled(d.name)) &&
           (q.isEmpty || d.name.toLowerCase().contains(q) || d.race.toLowerCase().contains(q)) &&
@@ -282,6 +298,19 @@ final filteredDemonsProvider = Provider<List<Demon>>((ref) {
           (f.skill == null || d.skills.any((s) => s.name == f.skill)))
         d,
   ];
+  switch (f.sort) {
+    case DemonSort.level:
+      break; // demonsByLevel is already in level order.
+    case DemonSort.name:
+      list.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    case DemonSort.race:
+      // List.sort is not stable, so compare levels explicitly.
+      list.sort((a, b) {
+        final byRace = a.race.compareTo(b.race);
+        return byRace != 0 ? byRace : a.level.compareTo(b.level);
+      });
+  }
+  return list;
 });
 
 /// Tree view preferences.

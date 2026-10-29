@@ -17,15 +17,16 @@ Demonica is a one-person project. This page is the checklist for keeping it heal
 
 ```mermaid
 flowchart LR
-  a["Jira story<br/>DEM-n"] --> b["Code + tests<br/>on main"] --> c["tool/check.sh<br/>all green"] --> d["Commit<br/>DEM-n: summary"] --> e["git push origin main"]
+  a["Jira story<br/>DEM-n"] --> b["Code + tests<br/>on a branch"] --> c["tool/check.sh<br/>all green"] --> d["Commit<br/>DEM-n: summary"] --> e["Pull request"] --> f["Cesar merges"]
 ```
 
 1. Pick the story in Jira (project **DEM**).
-2. Work on `main`. No pull requests: it is a solo project and GitHub Actions minutes are not available on the free tier.
+2. Work on a branch named `cesar/DEM-<n>`, one per story. `main` only takes changes through a pull request, and Cesar reviews and merges each one. There is no CI, so `tool/check.sh` is the gate.
 3. Run `tool/check.sh`. It runs format, analyze (app and engine), engine tests, app tests and the release web build. **Do not push if it fails.**
 4. Commit with the story key first: `DEM-12: Export saved recipes to a file`. The body lists what changed in plain words.
-5. Push: `git push origin main`.
+5. Push the branch and open a pull request to `main` with the template (`.github/pull_request_template.md`). UI changes need before/after screenshots, light and dark. Put them on a throwaway `cesar/DEM-<n>-screenshots` branch and link them as `blob/<branch>/<path>?raw=true`.
 6. If the change is visible to users, add a line under **Unreleased** in `CHANGELOG.md`.
+7. After Cesar merges: deploy the web app if needed, move the Jira story to Done, and delete `cesar/DEM-<n>`. Keep the `-screenshots` branch, or the PR's images stop loading.
 
 ## Docs to touch with a change
 
@@ -42,8 +43,9 @@ flowchart LR
 1. Pick the number. `0.x.0` for each roadmap phase (v0.3 Planner, v0.4 Locations), `0.x.y` for fixes.
 2. Set it in **two** places: `version:` in `pubspec.yaml` (also bump the `+build` number) and `appVersion` in `lib/app/version.dart`. `test/version_test.dart` fails if they differ.
 3. Move the **Unreleased** lines in `CHANGELOG.md` under the new version with today's date.
-4. Run `tool/check.sh`, commit `DEM-n: Release 0.x.0` (the release story's key) and push `main`.
-5. Run `tool/release.sh --dry-run`, then `tool/release.sh`. It tags `v0.x.0`, creates the GitHub Release with the APK (and an unsigned IPA on a Mac), and deploys the web app (RUNBOOK.md, "Release").
+4. Run `tool/check.sh`, commit `DEM-n: Release 0.x.0` (the release story's key) on `cesar/DEM-n` and open a PR.
+5. After Cesar merges it: `git checkout main && git pull`.
+6. Run `tool/release.sh --dry-run`, then `tool/release.sh`. It tags `v0.x.0`, creates the GitHub Release with the APK (and an unsigned IPA on a Mac), and deploys the web app (RUNBOOK.md, "Release").
 
 ## Chores
 

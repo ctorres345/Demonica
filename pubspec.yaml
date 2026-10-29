@@ -34,6 +34,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/smt4/
+    # Screenshots on the tutorial pages (lib/features/onboarding).
+    - assets/tutorial/
     # Font licences, shown on the licences page (lib/main.dart).
     - assets/fonts/OFL-ChakraPetch.txt
     - assets/fonts/OFL-Inter.txt

@@ -46,7 +46,7 @@ The web app works offline after the first visit: `web/sw.js` is a small service 
 
 Everything runs on your Mac with one script. GitHub Actions is not used (no free minutes left).
 
-1. Bump the version and move the CHANGELOG lines (CONTRIBUTING.md, "Releasing a version"). Commit and push `main`.
+1. Bump the version and move the CHANGELOG lines (CONTRIBUTING.md, "Releasing a version"). Open a PR. After Cesar merges it, run `git checkout main && git pull`.
 2. Try it first: `tool/release.sh --dry-run`. It runs `tool/check.sh`, builds the APK and the unsigned IPA into `build/release/`, writes the release notes, and publishes nothing.
 3. Release: `tool/release.sh`. It tags `vX.Y.Z`, creates the GitHub Release with the CHANGELOG section as notes and the APK and IPA attached, then deploys the web app.
 
@@ -57,6 +57,8 @@ Needs: Flutter, the Android SDK (Android Studio), Xcode for the IPA, and the Git
 ## Deploy to GitHub Pages
 
 `tool/deploy_web.sh` builds the web app with `--base-href /Demonica/` and force-pushes it to the `gh-pages` branch, which only ever holds the latest build. `tool/release.sh` runs it; run it alone to redeploy without a new version. Add `--dry-run` to build without pushing. The push sets `http.postBuffer` to 500 MB for that one command, because the 45 MB build fails with "HTTP 400, remote end hung up" on git's default buffer.
+
+`main` has a GitHub ruleset that requires a pull request (Settings → Rules). A direct `git push origin main` is refused with GH013.
 
 Repository setup (done on 2026-10-29; Pages on the free plan needs a public repository): Settings → Pages → Source: "Deploy from a branch", Branch `gh-pages`, folder `/ (root)`.
 
