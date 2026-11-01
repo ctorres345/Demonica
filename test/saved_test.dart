@@ -160,6 +160,39 @@ void main() {
     expect(stored.length, 2);
   });
 
+  testWidgets('Saved empty state shows real recipes and fits a small phone', (tester) async {
+    final c = ProviderContainer();
+    addTearDown(c.dispose);
+    await loadData(tester, c);
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    for (final brightness in Brightness.values) {
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: c,
+          child: MaterialApp(theme: demonicaTheme(brightness), home: const SavedScreen()),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      expect(find.textContaining('1. Centaur × Fuxi → Angel', findRichText: true), findsOneWidget);
+      expect(find.textContaining('2. Angel × Tam Lin', findRichText: true), findsOneWidget);
+    }
+  });
+
+  testWidgets('Saved empty state example uses recipes from the game data', (tester) async {
+    final c = ProviderContainer();
+    addTearDown(c.dispose);
+    await loadData(tester, c);
+
+    bool hasRecipe(String result, List<String> pair) =>
+        c.read(recipesProvider(result)).any((r) => pair.every(r.ingredients.contains));
+    expect(hasRecipe('Angel', ['Centaur', 'Fuxi']), isTrue);
+    expect(hasRecipe('Senri', ['Angel', 'Tam Lin']), isTrue);
+  });
+
   testWidgets('Saved screen shows the empty state, then a plan with steps', (tester) async {
     final c = ProviderContainer();
     addTearDown(c.dispose);

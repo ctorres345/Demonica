@@ -149,24 +149,118 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dc = context.dc;
+    final tt = context.tt;
+    final divider = Divider(height: 1, thickness: 1, color: dc.outline);
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(Space.x6),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: Space.x4, vertical: Space.x6),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(Icons.bookmark_border, size: 40, color: dc.accent),
-              const SizedBox(height: Space.x3),
-              Text('Nothing saved yet', style: context.tt.titleLarge),
-              const SizedBox(height: Space.x2),
-              Text(
-                'Tap the bookmark next to any recipe, or on a demon\'s page, to keep it here. '
-                'In the recipe tree, SAVE PATH in the bar at the top saves the whole open path as a '
-                'step-by-step plan.',
-                textAlign: TextAlign.center,
-                style: context.tt.bodySmall,
+              _Panel(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: Space.x4, vertical: Space.x2),
+                      color: dc.surfaceHigh,
+                      child: Row(
+                        children: [
+                          Icon(Icons.bookmark_border, size: Space.x4, color: dc.accent),
+                          const SizedBox(width: Space.x2),
+                          Expanded(
+                            child: Text(
+                              'FUSION CHECKLIST',
+                              style: tt.labelSmall?.copyWith(color: dc.accent),
+                            ),
+                          ),
+                          const Tag('0 SAVED'),
+                        ],
+                      ),
+                    ),
+                    divider,
+                    Padding(
+                      padding: const EdgeInsets.all(Space.x4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Nothing saved yet', style: tt.headlineSmall),
+                          const SizedBox(height: Space.x2),
+                          Text(
+                            'Keep demons, recipes, and multi-step fusion plans here. '
+                            'Tick off each step as you fuse, and add notes for skills or levels.',
+                            style: tt.bodySmall,
+                          ),
+                          const SizedBox(height: Space.x3),
+                          SizedBox(
+                            width: double.infinity,
+                            child: _Panel(
+                              color: dc.bg,
+                              radius: Radii.borderSmall,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Space.x3,
+                                vertical: Space.x2,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'EXAMPLE',
+                                    style: tt.labelSmall?.copyWith(color: dc.textMuted),
+                                  ),
+                                  const SizedBox(height: Space.x1),
+                                  const _ExampleStep(
+                                    done: true,
+                                    pair: '1. Centaur × Fuxi',
+                                    result: 'Angel',
+                                  ),
+                                  const SizedBox(height: Space.x1),
+                                  const _ExampleStep(
+                                    done: false,
+                                    pair: '2. Angel × Tam Lin',
+                                    result: 'Senri',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SectionHeader('How to save'),
+              _Panel(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const _HowToSaveRow(
+                      icon: Icons.bookmark_border,
+                      title: 'Demon or recipe',
+                      tag: 'BOOKMARK',
+                      body: 'Tap the bookmark icon on a demon page or next to any recipe.',
+                    ),
+                    divider,
+                    const _HowToSaveRow(
+                      icon: Icons.account_tree_outlined,
+                      title: 'Recipe tree path',
+                      tag: 'SAVE PATH',
+                      body:
+                          'Open a fusion chain in the recipe tree, then tap SAVE PATH at the top.',
+                    ),
+                    divider,
+                    const _HowToSaveRow(
+                      icon: Icons.route_outlined,
+                      title: 'Skill plan',
+                      tag: 'PLAN',
+                      body: 'Find fusions in Plan, then bookmark the result or tick any step.',
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: Space.x4),
               FilledButton.icon(
@@ -177,6 +271,126 @@ class _EmptyState extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A bordered box for the empty state's cards.
+class _Panel extends StatelessWidget {
+  const _Panel({required this.child, this.color, this.radius, this.padding});
+
+  final Widget child;
+  final Color? color;
+  final BorderRadius? radius;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: color ?? dc.surface,
+        border: Border.all(color: dc.outline),
+        borderRadius: radius ?? Radii.borderMedium,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: child,
+    );
+  }
+}
+
+/// One line of the empty state's sample plan. It only illustrates; nothing taps.
+class _ExampleStep extends StatelessWidget {
+  const _ExampleStep({required this.done, required this.pair, required this.result});
+
+  final bool done;
+  final String pair;
+  final String result;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    final style = context.tt.labelMedium?.copyWith(
+      color: done ? dc.textMuted : dc.text,
+      decoration: done ? TextDecoration.lineThrough : null,
+    );
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          done ? Icons.check_box : Icons.check_box_outline_blank,
+          size: Space.x4,
+          color: done ? dc.accent : dc.textMuted,
+        ),
+        const SizedBox(width: Space.x2),
+        Expanded(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: pair),
+                TextSpan(
+                  text: ' → ',
+                  style: done ? null : style?.copyWith(color: dc.accent),
+                ),
+                TextSpan(text: result),
+              ],
+            ),
+            style: style,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HowToSaveRow extends StatelessWidget {
+  const _HowToSaveRow({
+    required this.icon,
+    required this.title,
+    required this.tag,
+    required this.body,
+  });
+
+  final IconData icon;
+  final String title;
+  final String tag;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final dc = context.dc;
+    final tt = context.tt;
+    return Padding(
+      padding: const EdgeInsets.all(Space.x3),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _Panel(
+            color: dc.surfaceHigh,
+            radius: Radii.borderSmall,
+            padding: const EdgeInsets.all(Space.x2),
+            child: Icon(icon, size: Space.x4, color: dc.accent),
+          ),
+          const SizedBox(width: Space.x3),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(title, style: tt.titleMedium)),
+                    const SizedBox(width: Space.x2),
+                    Tag(tag),
+                  ],
+                ),
+                const SizedBox(height: Space.x1),
+                Text(body, style: tt.bodySmall),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
