@@ -135,7 +135,7 @@ class _Page extends StatelessWidget {
               borderRadius: Radii.borderMedium,
             ),
             clipBehavior: Clip.antiAlias,
-            child: Image.asset(page.image, fit: BoxFit.contain, semanticLabel: page.imageLabel),
+            child: TutorialImage(image: page.image, label: page.imageLabel),
           ),
         ),
         const SizedBox(height: Space.x4),
@@ -155,6 +155,28 @@ class _Page extends StatelessWidget {
           ),
         if (page.asksStoryStage) const _StoryQuestion(),
       ],
+    );
+  }
+}
+
+/// A tutorial screenshot. Falls back to its label when it cannot load, such as
+/// on the web when offline, since the service worker only has what was fetched.
+class TutorialImage extends StatelessWidget {
+  const TutorialImage({required this.image, required this.label, super.key});
+
+  final String image;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      image,
+      fit: BoxFit.contain,
+      semanticLabel: label,
+      errorBuilder: (context, error, stack) => Padding(
+        padding: const EdgeInsets.all(Space.x4),
+        child: Text(label, textAlign: TextAlign.center, style: context.tt.bodyMedium),
+      ),
     );
   }
 }

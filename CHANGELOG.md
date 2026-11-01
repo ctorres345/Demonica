@@ -4,6 +4,8 @@ User-visible changes, newest first. Dates are when the change reached `main`.
 
 ## Unreleased
 
+- Level sheet: pressing Done on an empty or zero level keeps the sheet open and shows the level in use, instead of closing as if it had changed.
+- Tutorial: a screenshot that can't load, such as offline on the web, now shows a short description instead of an empty box.
 - Recipe tree: a bar above the tree says how many recipes are open ("Path: 2 steps") and has a SAVE PATH button. It replaces the bookmark icon at the top and the help text under the tree.
 - Saved: only the tick box and the step text tick a step, so taps while scrolling no longer tick things by accident. "Add note" and "Open in tree" are buttons on each card; the bin icon removes it (with Undo).
 - Compendium: "Sort: Level / Name / Race" next to the demon count. Race order lists each race from weakest to strongest.

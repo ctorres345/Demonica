@@ -113,6 +113,38 @@ void main() {
     await tester.enterText(find.byKey(const Key('level-field')), 'ab');
     await tester.pump();
     expect(picked, 72);
+
+    // An empty or zero level keeps the sheet open and shows the real level.
+    for (final bad in ['', '0']) {
+      await tester.enterText(find.byKey(const Key('level-field')), bad);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(picked, 72);
+      expect(tester.widget<TextField>(find.byKey(const Key('level-field'))).controller!.text, '72');
+    }
+
+    // A valid level closes it.
+    await tester.enterText(find.byKey(const Key('level-field')), '50');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(picked, 50);
+    expect(find.byKey(const Key('level-field')), findsNothing);
+  });
+
+  testWidgets('tutorial image shows its label when it cannot load', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: demonicaTheme(Brightness.dark),
+        home: const Scaffold(
+          body: TutorialImage(image: 'assets/tutorial/missing.jpg', label: 'A demon page'),
+        ),
+      ),
+    );
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pump();
+
+    expect(find.text('A demon page'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('tree strip shows the open path and saves it', (tester) async {

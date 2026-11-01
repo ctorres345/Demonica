@@ -430,6 +430,12 @@ class _LevelSheetState extends State<_LevelSheet> {
     super.dispose();
   }
 
+  /// The typed level, or null when the field is empty or below 1.
+  int? _parseLevel(String text) {
+    final n = int.tryParse(text);
+    return n != null && n >= 1 ? n : null;
+  }
+
   /// Sets the level from the buttons or the slider, and reports it.
   void _set(int v, {bool report = true, bool syncField = true}) {
     final next = v.clamp(1, 99);
@@ -475,10 +481,17 @@ class _LevelSheetState extends State<_LevelSheet> {
                     ],
                     decoration: const InputDecoration(labelText: 'Lv', isDense: true),
                     onChanged: (t) {
-                      final n = int.tryParse(t);
-                      if (n != null && n >= 1) _set(n, syncField: n > 99);
+                      final n = _parseLevel(t);
+                      if (n != null) _set(n, syncField: n > 99);
                     },
-                    onSubmitted: (_) => Navigator.pop(context),
+                    onSubmitted: (t) {
+                      if (_parseLevel(t) != null) {
+                        Navigator.pop(context);
+                      } else {
+                        // Keep the sheet open and show the level still in use.
+                        _field.text = '$_v';
+                      }
+                    },
                   ),
                 ),
                 const SizedBox(width: Space.x3),
