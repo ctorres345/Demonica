@@ -4,6 +4,8 @@ User-visible changes, newest first. Dates are when the change reached `main`.
 
 ## Unreleased
 
+- The empty Saved screen now shows a sample checklist and how to save a demon, a recipe or a plan.
+
 - Level sheet: pressing Done on an empty or zero level keeps the sheet open and shows the level in use, instead of closing as if it had changed.
 - Tutorial: a screenshot that can't load, such as offline on the web, now shows a short description instead of an empty box.
 - Recipe tree: a bar above the tree says how many recipes are open ("Path: 2 steps") and has a SAVE PATH button. It replaces the bookmark icon at the top and the help text under the tree.
