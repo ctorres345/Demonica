@@ -85,7 +85,7 @@ storeFile=/Users/<you>/keys/demonica-upload.jks
 
 Without a paid Apple developer account there is no way to install a native build directly, so iPhone users get the web app: open the Pages URL in Safari, tap Share → "Add to Home Screen". It opens full screen with the Demonica icon and works offline after the first visit. The release also attaches an unsigned IPA for people who re-sign apps themselves (AltStore, Sideloadly).
 
-Before every push, run `tool/check.sh` (gitleaks secret scan, format, `flutter analyze`, `dart analyze` and `dart test` in `packages/fusion_core`, `flutter test`, `flutter build web --release --no-web-resources-cdn`). The CI workflow does the same and can be run by hand, but it spends Actions minutes.
+Before every push, run `tool/check.sh` (gitleaks secret scan, format, `flutter analyze`, `dart analyze` and `dart test` in `packages/fusion_core`, `flutter test`, `flutter build web --release --no-web-resources-cdn`). The CI workflow does the same, minus the secret scan (gitleaks is not installed there), and can be run by hand, but it spends Actions minutes.
 
 ## Known limits
 
