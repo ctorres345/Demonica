@@ -77,7 +77,7 @@ Below 840dp (`wideBreakpoint`): bottom navigation (Demons, Skills, Plan, Saved, 
 
 ## Prototypes
 
-The three explored directions (Terminal, Gauntlet, Codex) were explored in private design prototypes. The implemented palette started from Terminal and was retuned to the Strange Journey / SMT I colors; the other two are token swaps.
+The three directions (Terminal, Gauntlet, Codex) were explored in private design prototypes. The implemented palette started from Terminal and was retuned to the Strange Journey / SMT I colors; the other two are token swaps.
 
 ## Icon
 
