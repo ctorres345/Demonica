@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Flutter stable 3.47 or newer (3.47.8 was used on 2026-10-29) (`flutter --version`). Chrome for the web target. Android Studio or an emulator for Android. Xcode for iOS.
+Flutter stable 3.47 or newer (3.47.8 was used on 2026-10-29) (`flutter --version`). Chrome for the web target. Android Studio or an emulator for Android. Xcode for iOS. gitleaks for the secret scan in `tool/check.sh` (`brew install gitleaks`).
 
 ## Develop
 
@@ -11,7 +11,7 @@ flutter pub get
 (cd packages/fusion_core && dart pub get)   # needed once, or analyze reports errors in the engine tests
 flutter run -d chrome                 # web, hot reload
 flutter run -d <device>               # phone or emulator
-tool/check.sh                         # every pre-push check: format, analyze, tests, web build
+tool/check.sh                         # every pre-push check: secrets, format, analyze, tests, web build
 ```
 
 Engine speed check after touching the fusion rules:
@@ -85,7 +85,7 @@ storeFile=/Users/<you>/keys/demonica-upload.jks
 
 Without a paid Apple developer account there is no way to install a native build directly, so iPhone users get the web app: open the Pages URL in Safari, tap Share → "Add to Home Screen". It opens full screen with the Demonica icon and works offline after the first visit. The release also attaches an unsigned IPA for people who re-sign apps themselves (AltStore, Sideloadly).
 
-Before every push, run `tool/check.sh` (format, `flutter analyze`, `dart analyze` and `dart test` in `packages/fusion_core`, `flutter test`, `flutter build web --release --no-web-resources-cdn`). The CI workflow does the same and can be run by hand, but it spends Actions minutes.
+Before every push, run `tool/check.sh` (gitleaks secret scan, format, `flutter analyze`, `dart analyze` and `dart test` in `packages/fusion_core`, `flutter test`, `flutter build web --release --no-web-resources-cdn`). The CI workflow does the same and can be run by hand, but it spends Actions minutes.
 
 ## Known limits
 

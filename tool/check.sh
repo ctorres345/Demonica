@@ -10,6 +10,13 @@ step 'packages'
 flutter pub get
 (cd packages/fusion_core && dart pub get)
 
+step 'secrets'
+if command -v gitleaks >/dev/null; then
+  gitleaks git --no-banner --redact .
+else
+  echo 'WARNING: gitleaks is not installed, skipping. Install: brew install gitleaks'
+fi
+
 step 'scripts'
 for script in tool/*.sh; do bash -n "$script"; done
 

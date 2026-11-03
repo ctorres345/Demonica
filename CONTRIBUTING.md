@@ -22,7 +22,7 @@ flowchart LR
 
 1. Pick the story in Jira (project **DEM**).
 2. Work on a branch named `cesar/DEM-<n>`, one per story. `main` only takes changes through a pull request, and Cesar reviews and merges each one. There is no CI, so `tool/check.sh` is the gate.
-3. Run `tool/check.sh`. It runs format, analyze (app and engine), engine tests, app tests and the release web build. **Do not push if it fails.**
+3. Run `tool/check.sh`. It runs a secret scan, format, analyze (app and engine), engine tests, app tests and the release web build. **Do not push if it fails.**
 4. Commit with the story key first: `DEM-12: Export saved recipes to a file`. The body lists what changed in plain words.
 5. Push the branch and open a pull request to `main` with the template (`.github/pull_request_template.md`). UI changes need before/after screenshots, light and dark. Put them on a throwaway `cesar/DEM-<n>-screenshots` branch and link them as `blob/<branch>/<path>?raw=true`.
 6. If the change is visible to users, add a line under **Unreleased** in `CHANGELOG.md`.

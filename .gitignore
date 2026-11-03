@@ -12,6 +12,12 @@
 .swiftpm/
 migrate_working_dir/
 
+# Secrets and signing files. Android keys are ignored in android/.gitignore.
+.env*
+*.p12
+*.pem
+*.mobileprovision
+
 # IntelliJ related
 *.iml
 *.ipr
