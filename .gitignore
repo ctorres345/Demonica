@@ -12,6 +12,17 @@
 .swiftpm/
 migrate_working_dir/
 
+# Secrets and signing files, anywhere in the repo.
+.env
+.env.*
+!.env.example
+*.p12
+*.pem
+*.mobileprovision
+*.p8
+*.jks
+*.keystore
+
 # IntelliJ related
 *.iml
 *.ipr
