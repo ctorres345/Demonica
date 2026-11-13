@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # Notes for AI assistants
 
 Demonica is a Flutter companion app for Shin Megami Tensei IV fusions. Start with CONTRIBUTING.md; it links every other doc.
