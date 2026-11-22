@@ -430,7 +430,6 @@ class _LevelSheetState extends State<_LevelSheet> {
     super.dispose();
   }
 
-  /// The typed level, or null when the field is empty or below 1.
   int? _parseLevel(String text) {
     final n = int.tryParse(text);
     return n != null && n >= 1 ? n : null;
