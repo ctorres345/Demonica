@@ -54,7 +54,6 @@ Future<void> main(List<String> args) async {
   final skillRankPrices = (config['skillRankPrices'] as List).cast<num>();
   final races = (config['races'] as List).cast<String>();
 
-  // ---- skills -------------------------------------------------------------
   // Upstream row: a = [name, element, target], b = [rank, cost, power, minHits,
   // maxHits, accuracy, crit, modifier], c = [effect, condition, skillCard].
   // Rank >= 900 marks a unique skill (cannot be inherited).
@@ -97,7 +96,6 @@ Future<void> main(List<String> args) async {
     };
   }
 
-  // ---- demons -------------------------------------------------------------
   final alignments = (raw['alignments.json'] as Map).cast<String, String>();
   final prereqs = (raw['fusion-prereqs.json'] as Map).cast<String, String>();
   final specials = (raw['special-recipes.json'] as Map).map(
@@ -253,7 +251,6 @@ Future<void> main(List<String> args) async {
     };
   }
 
-  // ---- fusion chart --------------------------------------------------------
   // Upstream table is lower-triangular: row r lists results for races[r] x
   // races[0..r]. We expand it to a full symmetric map.
   final chart = raw['fusion-chart.json'] as Map<String, dynamic>;

@@ -221,7 +221,6 @@ class _SkillChip extends StatelessWidget {
   }
 }
 
-/// A bottom sheet with a search field over a list.
 class _SearchSheet extends StatefulWidget {
   const _SearchSheet({
     required this.title,

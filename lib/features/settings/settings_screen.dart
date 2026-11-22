@@ -173,7 +173,6 @@ String _coverage(LocationData loc, GameData? data) {
   return 'areas known for ${total == null ? n : '$n of $total'} demons';
 }
 
-/// A pre-filled GitHub issue so a report carries the data version.
 final _contactUrl = Uri(
   scheme: 'mailto',
   path: 'demonica@cjtech.dev',
