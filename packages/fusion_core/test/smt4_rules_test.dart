@@ -188,7 +188,6 @@ void main() {
         rules.reverseRecipes(d, settings);
       }
       sw.stop();
-      // 454 demons, every recipe, in well under a few seconds.
       expect(sw.elapsedMilliseconds, lessThan(10000));
     });
   });
